@@ -37,7 +37,8 @@ public class AllAppsTask extends AsyncTask<Void,Void,List<AppData>> {
             app.setAppPackageName(applicationInfo.packageName);
             app.setAppIcon(applicationInfo.loadIcon(packageManager));
             appDataList.add(app);
-            //TODO: check if canceled
+            if (isCancelled())
+                break;
         }
         return appDataList;
     }

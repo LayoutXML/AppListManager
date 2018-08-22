@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         AllAppsListener allAppsListener = new AllAppsListener() {
             @Override
             public void allAppsListener(List<AppData> appDataList) {
@@ -31,5 +30,11 @@ public class MainActivity extends AppCompatActivity{
 
         AppList.getAllApps(getApplicationContext(),allAppsListener);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppList.stop(getApplicationContext());
     }
 }
