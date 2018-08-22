@@ -1,4 +1,4 @@
-package com.layoutxml.applistmanagerlibrary;
+package com.layoutxml.applistmanagerlibrary.objects;
 
 import android.graphics.drawable.Drawable;
 
