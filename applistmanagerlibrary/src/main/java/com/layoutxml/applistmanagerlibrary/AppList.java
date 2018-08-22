@@ -6,6 +6,10 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.layoutxml.applistmanagerlibrary.interfaces.AllAppsListener;
+import com.layoutxml.applistmanagerlibrary.objects.AppData;
+import com.layoutxml.applistmanagerlibrary.tasks.AllAppsTask;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +18,14 @@ import java.util.List;
  */
 public class AppList {
 
-    public void getAllApps(){
+    private static final String TAG = "AppList";
+
+    public static void getAllApps(Context context, AllAppsListener allAppsListener){
         //Returns a list of all installed packages
-//        final PackageManager packageManager = context.getPackageManager();
-//        final List<ApplicationInfo> ApplicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
+        AllAppsTask allAppsTask = new AllAppsTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), allAppsListener);
 
+        allAppsTask.execute();
 
     }
 }
