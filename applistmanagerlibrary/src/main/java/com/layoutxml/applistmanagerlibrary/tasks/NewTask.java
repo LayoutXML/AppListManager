@@ -3,8 +3,8 @@ package com.layoutxml.applistmanagerlibrary.tasks;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import com.layoutxml.applistmanagerlibrary.interfaces.AllAppsListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.AllNewAppsListener;
+
+import com.layoutxml.applistmanagerlibrary.interfaces.NewListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.lang.ref.WeakReference;
@@ -12,31 +12,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by LayoutXML on 22/08/2018
+ * Created by LayoutXML on 23/08/2018
  */
-public class AllAppsTask extends AsyncTask<Void,Void,List<AppData>> {
+public class NewTask extends AsyncTask<List,Void,List<AppData>>{
 
-    private static final String TAG = "AllAppsTask";
+    private static final String TAG = "NewTask";
 
-    private final WeakReference<AllAppsListener> allAppsListener;
+    private final WeakReference<NewListener> allNewAppsListener;
     private PackageManager packageManager;
     private List<ApplicationInfo> applicationInfoList;
 
-    public AllAppsTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, AllAppsListener allAppsListener) {
+    public NewTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, NewListener newListener) {
         this.packageManager = packageManager;
         this.applicationInfoList = applicationInfoList;
-        this.allAppsListener = new WeakReference<>(allAppsListener);
+        this.allNewAppsListener = new WeakReference<>(newListener);
     }
 
     @Override
-    protected List<AppData> doInBackground(Void... voids){
+    protected final List<AppData> doInBackground(List... appDataLists){
+        List receivedAppList = appDataLists[0];
         List<AppData> appDataList = new ArrayList<>();
         for (ApplicationInfo applicationInfo:applicationInfoList) {
             AppData app = new AppData();
             app.setAppName(applicationInfo.loadLabel(packageManager).toString());
             app.setAppPackageName(applicationInfo.packageName);
             app.setAppIcon(applicationInfo.loadIcon(packageManager));
-            appDataList.add(app);
+            if (receivedAppList!=null) {
+                if (!receivedAppList.contains(app))
+                    appDataList.add(app);
+            }
             if (isCancelled())
                 break;
         }
@@ -45,9 +49,9 @@ public class AllAppsTask extends AsyncTask<Void,Void,List<AppData>> {
 
     @Override
     protected void onPostExecute(List<AppData> appDataList) {
-        final AllAppsListener listener = allAppsListener.get();
+        final NewListener listener = allNewAppsListener.get();
         if (listener!=null) {
-            listener.allAppsListener(appDataList);
+            listener.newListener(appDataList);
         }
     }
 

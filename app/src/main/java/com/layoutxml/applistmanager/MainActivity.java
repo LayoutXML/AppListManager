@@ -7,9 +7,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.layoutxml.applistmanagerlibrary.AppList;
-import com.layoutxml.applistmanagerlibrary.interfaces.AllAppsListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.AllNewAppsListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.AllUninstalledAppsListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.AllListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.util.List;
@@ -37,17 +37,17 @@ public class MainActivity extends AppCompatActivity{
         getNewText = findViewById(R.id.getNewTxt);
         getUninstalledTxt = findViewById(R.id.getUninstalledTxt);
 
-        final AllAppsListener allAppsListener = new AllAppsListener() {
+        final AllListener allListener = new AllListener() {
             @Override
-            public void allAppsListener(List<AppData> appDataList) {
+            public void allListener(List<AppData> appDataList) {
                 getAllText.setText("There are now "+appDataList.size()+" apps installed.");
                 AllAppsList = appDataList;
             }
         };
 
-        final AllNewAppsListener allNewAppsListener = new AllNewAppsListener() {
+        final NewListener newListener = new NewListener() {
             @Override
-            public void allNewAppsListener(List<AppData> appDataList) {
+            public void newListener(List<AppData> appDataList) {
                 getNewText.setText(appDataList.size()+" new apps installed.");
                 if (AllAppsList!=null) {
                     AllAppsList.addAll(appDataList);
@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity{
             }
         };
 
-        final AllUninstalledAppsListener allUninstalledAppsListener = new AllUninstalledAppsListener() {
+        final UninstalledListener uninstalledListener = new UninstalledListener() {
             @Override
-            public void allUninstalledAppsListener(List<AppData> appDataList) {
+            public void uninstalledListener(List<AppData> appDataList) {
                 getUninstalledTxt.setText(appDataList.size()+" apps uninstaleld.");
                 if (AllAppsList!=null) {
                     AllAppsList.removeAll(appDataList);
@@ -70,21 +70,21 @@ public class MainActivity extends AppCompatActivity{
         getAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getAllApps(getApplicationContext(),allAppsListener);
+                AppList.getAll(getApplicationContext(), allListener);
             }
         });
 
         getNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getAllNewApps(getApplicationContext(), allNewAppsListener, AllAppsList);
+                AppList.getNew(getApplicationContext(), newListener, AllAppsList);
             }
         });
 
         getUninstalledButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getAllUninstalledApps(getApplicationContext(),allUninstalledAppsListener, AllAppsList);
+                AppList.getUninstalled(getApplicationContext(), uninstalledListener, AllAppsList);
             }
         });
 

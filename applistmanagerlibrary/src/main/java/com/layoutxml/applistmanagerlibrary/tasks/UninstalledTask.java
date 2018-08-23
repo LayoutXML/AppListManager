@@ -4,7 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
-import com.layoutxml.applistmanagerlibrary.interfaces.AllUninstalledAppsListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.lang.ref.WeakReference;
@@ -14,19 +14,19 @@ import java.util.List;
 /**
  * Created by LayoutXML on 23/08/2018
  */
-public class AllUninstalledAppsTask extends AsyncTask<Void,Void,List<AppData>>{
+public class UninstalledTask extends AsyncTask<Void,Void,List<AppData>>{
 
-    private static final String TAG = "AllUninstalledAppsTask";
+    private static final String TAG = "UninstalledTask";
 
-    private final WeakReference<AllUninstalledAppsListener> allUninstalledAppsListener;
+    private final WeakReference<UninstalledListener> allUninstalledAppsListener;
     private PackageManager packageManager;
     private List<ApplicationInfo> applicationInfoList;
     private List<AppData> receivedAppList;
 
-    public AllUninstalledAppsTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, AllUninstalledAppsListener allUninstalledAppsListener, List<AppData> receivedAppList) {
+    public UninstalledTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, UninstalledListener uninstalledListener, List<AppData> receivedAppList) {
         this.packageManager = packageManager;
         this.applicationInfoList = applicationInfoList;
-        this.allUninstalledAppsListener = new WeakReference<>(allUninstalledAppsListener);
+        this.allUninstalledAppsListener = new WeakReference<>(uninstalledListener);
         this.receivedAppList = receivedAppList;
     }
 
@@ -57,9 +57,9 @@ public class AllUninstalledAppsTask extends AsyncTask<Void,Void,List<AppData>>{
 
     @Override
     protected void onPostExecute(List<AppData> appDataList){
-        final AllUninstalledAppsListener listener = allUninstalledAppsListener.get();
+        final UninstalledListener listener = allUninstalledAppsListener.get();
         if (listener!=null) {
-            listener.allUninstalledAppsListener(appDataList);
+            listener.uninstalledListener(appDataList);
         }
     }
 

@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * Created by LayoutXML on 23/08/2018
  */
-public interface AllNewAppsListener {
-    void allNewAppsListener(List<AppData> appDataList);
+public interface NewListener {
+    void newListener(List<AppData> appDataList);
 }

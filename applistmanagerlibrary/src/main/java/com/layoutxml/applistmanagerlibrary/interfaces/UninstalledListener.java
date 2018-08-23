@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * Created by LayoutXML on 23/08/2018
  */
-public interface AllUninstalledAppsListener {
-    void allUninstalledAppsListener(List<AppData> appDataList);
+public interface UninstalledListener {
+    void uninstalledListener(List<AppData> appDataList);
 }
