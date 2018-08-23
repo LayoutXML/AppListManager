@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.layoutxml.applistmanagerlibrary.AppList;
 import com.layoutxml.applistmanagerlibrary.interfaces.AllAppsListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.AllNewAppsListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.AllUninstalledAppsListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.util.List;
@@ -18,8 +19,10 @@ public class MainActivity extends AppCompatActivity{
     private static final String TAG = "MainActivity";
     private Button getAllButton;
     private Button getNewButton;
+    private Button getUninstalledButton;
     private TextView getAllText;
     private TextView getNewText;
+    private TextView getUninstalledTxt;
     private List<AppData> AllAppsList;
 
     @Override
@@ -29,8 +32,10 @@ public class MainActivity extends AppCompatActivity{
 
         getAllButton = findViewById(R.id.getAllBtn);
         getNewButton = findViewById(R.id.getNewBtn);
+        getUninstalledButton = findViewById(R.id.getUninstalledBtn);
         getAllText = findViewById(R.id.getAllTxt);
         getNewText = findViewById(R.id.getNewTxt);
+        getUninstalledTxt = findViewById(R.id.getUninstalledTxt);
 
         final AllAppsListener allAppsListener = new AllAppsListener() {
             @Override
@@ -43,10 +48,21 @@ public class MainActivity extends AppCompatActivity{
         final AllNewAppsListener allNewAppsListener = new AllNewAppsListener() {
             @Override
             public void allNewAppsListener(List<AppData> appDataList) {
-                getNewText.setText("There were "+appDataList.size()+" new apps installed.");
+                getNewText.setText(appDataList.size()+" new apps installed.");
                 if (AllAppsList!=null) {
                     AllAppsList.addAll(appDataList);
-                    getAllText.setText(getAllText.getText() + "\n+" + appDataList.size() + " (" + AllAppsList.size() + " total)");
+                    getAllText.setText(getAllText.getText()+"\n+ "+appDataList.size()+" ("+AllAppsList.size()+" total).");
+                }
+            }
+        };
+
+        final AllUninstalledAppsListener allUninstalledAppsListener = new AllUninstalledAppsListener() {
+            @Override
+            public void allUninstalledAppsListener(List<AppData> appDataList) {
+                getUninstalledTxt.setText(appDataList.size()+" apps uninstaleld.");
+                if (AllAppsList!=null) {
+                    AllAppsList.removeAll(appDataList);
+                    getAllText.setText(getAllText.getText()+"\n- "+appDataList.size()+" ("+AllAppsList.size()+" total).");
                 }
             }
         };
@@ -62,6 +78,13 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 AppList.getAllNewApps(getApplicationContext(), allNewAppsListener, AllAppsList);
+            }
+        });
+
+        getUninstalledButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppList.getAllUninstalledApps(getApplicationContext(),allUninstalledAppsListener, AllAppsList);
             }
         });
 

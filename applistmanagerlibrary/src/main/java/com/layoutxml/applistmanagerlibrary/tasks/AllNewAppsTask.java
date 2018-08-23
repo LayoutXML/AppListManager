@@ -27,10 +27,9 @@ public class AllNewAppsTask extends AsyncTask<List,Void,List<AppData>>{
         this.allNewAppsListener = allNewAppsListener;
     }
 
-    @SafeVarargs
     @Override
     protected final List<AppData> doInBackground(List... appDataLists){
-        List<AppData> receivedAppList = appDataLists[0];
+        List receivedAppList = appDataLists[0];
         List<AppData> appDataList = new ArrayList<>();
         for (ApplicationInfo applicationInfo:applicationInfoList) {
             AppData app = new AppData();
