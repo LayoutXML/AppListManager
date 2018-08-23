@@ -3,8 +3,6 @@ package com.layoutxml.applistmanagerlibrary.tasks;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.util.Log;
-
 import com.layoutxml.applistmanagerlibrary.interfaces.AllAppsListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 

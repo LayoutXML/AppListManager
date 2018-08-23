@@ -1,7 +1,5 @@
 package com.layoutxml.applistmanagerlibrary.interfaces;
 
-import android.content.pm.PackageManager;
-
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.util.List;

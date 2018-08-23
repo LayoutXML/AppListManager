@@ -1,9 +1,7 @@
 package com.layoutxml.applistmanager;
 
-import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,7 +10,6 @@ import com.layoutxml.applistmanagerlibrary.AppList;
 import com.layoutxml.applistmanagerlibrary.interfaces.AllAppsListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.AllNewAppsListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
-import com.layoutxml.applistmanagerlibrary.tasks.AllAppsTask;
 
 import java.util.List;
 
@@ -34,7 +31,6 @@ public class MainActivity extends AppCompatActivity{
         getNewButton = findViewById(R.id.getNewBtn);
         getAllText = findViewById(R.id.getAllTxt);
         getNewText = findViewById(R.id.getNewTxt);
-
 
         final AllAppsListener allAppsListener = new AllAppsListener() {
             @Override
