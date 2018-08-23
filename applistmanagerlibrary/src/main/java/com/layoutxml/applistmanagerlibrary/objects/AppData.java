@@ -33,4 +33,13 @@ public class AppData {
     public void setAppIcon(Drawable appIcon) {
         this.appIcon = appIcon;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof AppData){
+            AppData p = (AppData) o;
+            return this.getAppPackageName().equals(p.getAppPackageName());
+        } else
+            return false;
+    }
 }
