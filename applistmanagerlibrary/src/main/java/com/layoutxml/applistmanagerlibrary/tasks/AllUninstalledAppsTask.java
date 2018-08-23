@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import com.layoutxml.applistmanagerlibrary.interfaces.AllUninstalledAppsListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class AllUninstalledAppsTask extends AsyncTask<Void,Void,List<AppData>>{
 
     private static final String TAG = "AllUninstalledAppsTask";
 
-    private AllUninstalledAppsListener allUninstalledAppsListener;
+    private final WeakReference<AllUninstalledAppsListener> allUninstalledAppsListener;
     private PackageManager packageManager;
     private List<ApplicationInfo> applicationInfoList;
     private List<AppData> receivedAppList;
@@ -25,7 +26,7 @@ public class AllUninstalledAppsTask extends AsyncTask<Void,Void,List<AppData>>{
     public AllUninstalledAppsTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, AllUninstalledAppsListener allUninstalledAppsListener, List<AppData> receivedAppList) {
         this.packageManager = packageManager;
         this.applicationInfoList = applicationInfoList;
-        this.allUninstalledAppsListener = allUninstalledAppsListener;
+        this.allUninstalledAppsListener = new WeakReference<>(allUninstalledAppsListener);
         this.receivedAppList = receivedAppList;
     }
 
@@ -56,8 +57,9 @@ public class AllUninstalledAppsTask extends AsyncTask<Void,Void,List<AppData>>{
 
     @Override
     protected void onPostExecute(List<AppData> appDataList){
-        if (allUninstalledAppsListener!=null) {
-            allUninstalledAppsListener.allUninstalledAppsListener(appDataList);
+        final AllUninstalledAppsListener listener = allUninstalledAppsListener.get();
+        if (listener!=null) {
+            listener.allUninstalledAppsListener(appDataList);
         }
     }
 

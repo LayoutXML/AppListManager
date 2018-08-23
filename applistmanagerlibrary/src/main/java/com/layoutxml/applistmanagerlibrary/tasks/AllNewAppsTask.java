@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import com.layoutxml.applistmanagerlibrary.interfaces.AllNewAppsListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +18,14 @@ public class AllNewAppsTask extends AsyncTask<List,Void,List<AppData>>{
 
     private static final String TAG = "AllNewAppsTask";
 
-    private AllNewAppsListener allNewAppsListener;
+    private final WeakReference<AllNewAppsListener> allNewAppsListener;
     private PackageManager packageManager;
     private List<ApplicationInfo> applicationInfoList;
 
     public AllNewAppsTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, AllNewAppsListener allNewAppsListener) {
         this.packageManager = packageManager;
         this.applicationInfoList = applicationInfoList;
-        this.allNewAppsListener = allNewAppsListener;
+        this.allNewAppsListener = new WeakReference<>(allNewAppsListener);
     }
 
     @Override
@@ -48,8 +49,9 @@ public class AllNewAppsTask extends AsyncTask<List,Void,List<AppData>>{
 
     @Override
     protected void onPostExecute(List<AppData> appDataList) {
-        if (allNewAppsListener!=null) {
-            allNewAppsListener.allNewAppsListener(appDataList);
+        final AllNewAppsListener listener = allNewAppsListener.get();
+        if (listener!=null) {
+            listener.allNewAppsListener(appDataList);
         }
     }
 
