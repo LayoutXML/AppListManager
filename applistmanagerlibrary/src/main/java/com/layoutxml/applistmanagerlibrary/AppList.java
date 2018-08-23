@@ -21,6 +21,8 @@ import com.layoutxml.applistmanagerlibrary.tasks.UninstalledTask;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -36,6 +38,10 @@ public class AppList extends BroadcastReceiver{
     private static WeakReference<NewListener> newListener;
     private static WeakReference<UninstalledListener> uninstalledListener;
     public static IntentFilter intentFilter = new IntentFilter();
+    public static final Integer BY_APPNAME = 0;
+    public static final Integer BY_PACKAGENAME = 1;
+    public static final Integer IN_ASCENDING = 0;
+    public static final Integer IN_DESCENDING = 1;
 
     public static void start(AllListener allListener, NewListener newListener, UninstalledListener uninstalledListener) {
         AppList.allListener = new WeakReference<>(allListener);
@@ -63,6 +69,39 @@ public class AppList extends BroadcastReceiver{
         //Returns a list of all uninstalled packages that are in a given list
         uninstalledTask = new UninstalledTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, uninstalledListener);
         uninstalledTask.execute();
+    }
+
+    public static List<AppData> sort(List<AppData> appDataList, Integer sortBy, Integer inOrder) {
+        if (sortBy.equals(BY_APPNAME) && inOrder.equals(IN_ASCENDING)) {
+            Collections.sort(appDataList, new Comparator<AppData>() {
+                @Override
+                public int compare(AppData t0, AppData t1) {
+                    return t0.getAppName().compareTo(t1.getAppName());
+                }
+            });
+        } else if (sortBy.equals(BY_APPNAME) && inOrder.equals(IN_DESCENDING)) {
+            Collections.sort(appDataList, new Comparator<AppData>() {
+                @Override
+                public int compare(AppData t0, AppData t1) {
+                    return t1.getAppName().compareTo(t0.getAppName());
+                }
+            });
+        } else if (sortBy.equals(BY_PACKAGENAME) && inOrder.equals(IN_ASCENDING)) {
+            Collections.sort(appDataList, new Comparator<AppData>() {
+                @Override
+                public int compare(AppData t0, AppData t1) {
+                    return t0.getAppPackageName().compareTo(t1.getAppPackageName());
+                }
+            });
+        } else if (sortBy.equals(BY_PACKAGENAME) && inOrder.equals(IN_DESCENDING)) {
+            Collections.sort(appDataList, new Comparator<AppData>() {
+                @Override
+                public int compare(AppData t0, AppData t1) {
+                    return t1.getAppPackageName().compareTo(t0.getAppPackageName());
+                }
+            });
+        }
+        return appDataList;
     }
 
     public static void stop() {
