@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
         getUninstalledTxt = findViewById(R.id.getUninstalledTxt);
 
         AppList.start(MainActivity.this,MainActivity.this,MainActivity.this);
+        registerReceiver(new AppList(),AppList.intentFilter);
 
         getAllButton.setOnClickListener(new View.OnClickListener() {
             @Override

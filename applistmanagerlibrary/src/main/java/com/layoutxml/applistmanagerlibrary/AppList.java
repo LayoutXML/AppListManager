@@ -3,6 +3,7 @@ package com.layoutxml.applistmanagerlibrary;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -34,12 +35,17 @@ public class AppList extends BroadcastReceiver{
     private static WeakReference<AllListener> allListener;
     private static WeakReference<NewListener> newListener;
     private static WeakReference<UninstalledListener> uninstalledListener;
+    public static IntentFilter intentFilter = new IntentFilter();
 
     public static void start(AllListener allListener, NewListener newListener, UninstalledListener uninstalledListener) {
         AppList.allListener = new WeakReference<>(allListener);
         AppList.newListener = new WeakReference<>(newListener);
         AppList.uninstalledListener = new WeakReference<>(uninstalledListener);
-    }
+
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        intentFilter.addDataScheme("package");
+        }
 
     public static void getAll(Context context){
         //Returns a list of all installed packages
