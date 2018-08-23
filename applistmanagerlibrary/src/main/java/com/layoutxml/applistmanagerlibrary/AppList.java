@@ -18,6 +18,7 @@ import com.layoutxml.applistmanagerlibrary.tasks.AllTask;
 import com.layoutxml.applistmanagerlibrary.tasks.NewTask;
 import com.layoutxml.applistmanagerlibrary.tasks.UninstalledTask;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,26 +31,33 @@ public class AppList extends BroadcastReceiver{
     private static AllTask allTask;
     private static NewTask newTask;
     private static UninstalledTask uninstalledTask;
-    private static NewListener newListenerCopy;
-    private static UninstalledListener uninstalledListenerCopy;
+    private static WeakReference<AllListener> allListener;
+    private static WeakReference<NewListener> newListener;
+    private static WeakReference<UninstalledListener> uninstalledListener;
 
-    public static void getAll(Context context, AllListener allListener){
+    public AppList(){}
+
+    public AppList(AllListener allListener, NewListener newListener, UninstalledListener uninstalledListener) {
+        AppList.allListener = new WeakReference<>(allListener);
+        AppList.newListener = new WeakReference<>(newListener);
+        AppList.uninstalledListener = new WeakReference<>(uninstalledListener);
+    }
+
+    public static void getAll(Context context){
         //Returns a list of all installed packages
-        allTask = new AllTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), allListener);
+        allTask = new AllTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA),allListener);
         allTask.execute();
     }
 
-    public static void getNew(Context context, NewListener newListener, List<AppData> appDataList) {
+    public static void getNew(Context context, List<AppData> appDataList) {
         //Returns a list of installed packages that are not in the given list
-        newListenerCopy = newListener;
-        newTask = new NewTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), newListener);
-        newTask.execute(appDataList);
+        newTask = new NewTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, newListener);
+        newTask.execute();
     }
 
-    public static void getUninstalled(Context context, UninstalledListener uninstalledListener, List<AppData> appDataList) {
+    public static void getUninstalled(Context context, List<AppData> appDataList) {
         //Returns a list of all uninstalled packages that are in a given list
-        uninstalledListenerCopy = uninstalledListener;
-        uninstalledTask = new UninstalledTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), uninstalledListener, appDataList);
+        uninstalledTask = new UninstalledTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, uninstalledListener);
         uninstalledTask.execute();
     }
 
@@ -81,34 +89,38 @@ public class AppList extends BroadcastReceiver{
         //Returns empty (not null) app name and transparent icon if uninstalled
         final String action = intent.getAction();
         if (action!=null && context!=null) {
-            if (action.equals(Intent.ACTION_PACKAGE_ADDED) && newListenerCopy !=null) {
-                Uri data = intent.getData();
-                List<AppData> newApp = new ArrayList<>();
-                AppData app = new AppData();
-                if (data!=null) {
-                    app.setAppPackageName(data.getEncodedSchemeSpecificPart());
-                    try {
-                        final PackageManager packageManager = context.getPackageManager();
-                        final ApplicationInfo applicationInfo = packageManager.getApplicationInfo(app.getAppPackageName(), 0);
-                        app.setAppIcon(applicationInfo.loadIcon(packageManager));
-                        app.setAppName(applicationInfo.loadLabel(packageManager).toString());
-                        newApp.add(app);
-                        newListenerCopy.newListener(newApp);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
+            if (action.equals(Intent.ACTION_PACKAGE_ADDED) && newListener!=null) {
+                if (newListener.get()!=null) {
+                    Uri data = intent.getData();
+                    List<AppData> newApp = new ArrayList<>();
+                    AppData app = new AppData();
+                    if (data != null) {
+                        app.setAppPackageName(data.getEncodedSchemeSpecificPart());
+                        try {
+                            final PackageManager packageManager = context.getPackageManager();
+                            final ApplicationInfo applicationInfo = packageManager.getApplicationInfo(app.getAppPackageName(), 0);
+                            app.setAppIcon(applicationInfo.loadIcon(packageManager));
+                            app.setAppName(applicationInfo.loadLabel(packageManager).toString());
+                            newApp.add(app);
+                            newListener.get().newListener(newApp);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
-            else if (action.equals(Intent.ACTION_PACKAGE_REMOVED) && uninstalledListenerCopy !=null) {
-                Uri data = intent.getData();
-                List<AppData> newApp = new ArrayList<>();
-                AppData app = new AppData();
-                if (data!=null) {
-                    app.setAppPackageName(data.getEncodedSchemeSpecificPart());
-                    app.setAppIcon(new ColorDrawable(Color.TRANSPARENT));
-                    app.setAppName("");
-                    newApp.add(app);
-                    uninstalledListenerCopy.uninstalledListener(newApp);
+            else if (action.equals(Intent.ACTION_PACKAGE_REMOVED) && uninstalledListener!=null) {
+                if (uninstalledListener.get()!=null) {
+                    Uri data = intent.getData();
+                    List<AppData> newApp = new ArrayList<>();
+                    AppData app = new AppData();
+                    if (data != null) {
+                        app.setAppPackageName(data.getEncodedSchemeSpecificPart());
+                        app.setAppIcon(new ColorDrawable(Color.TRANSPARENT));
+                        app.setAppName("");
+                        newApp.add(app);
+                        uninstalledListener.get().uninstalledListener(newApp);
+                    }
                 }
             }
         }

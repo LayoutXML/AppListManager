@@ -14,23 +14,24 @@ import java.util.List;
 /**
  * Created by LayoutXML on 23/08/2018
  */
-public class NewTask extends AsyncTask<List,Void,List<AppData>>{
+public class NewTask extends AsyncTask<Void,Void,List<AppData>>{
 
     private static final String TAG = "NewTask";
 
     private final WeakReference<NewListener> allNewAppsListener;
     private PackageManager packageManager;
     private List<ApplicationInfo> applicationInfoList;
+    private List<AppData> receivedAppList;
 
-    public NewTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, NewListener newListener) {
+    public NewTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, List<AppData> receivedAppList, WeakReference<NewListener> newListener) {
         this.packageManager = packageManager;
         this.applicationInfoList = applicationInfoList;
-        this.allNewAppsListener = new WeakReference<>(newListener);
+        this.allNewAppsListener = newListener;
+        this.receivedAppList = receivedAppList;
     }
 
     @Override
-    protected final List<AppData> doInBackground(List... appDataLists){
-        List receivedAppList = appDataLists[0];
+    protected final List<AppData> doInBackground(Void... voids){
         List<AppData> appDataList = new ArrayList<>();
         for (ApplicationInfo applicationInfo:applicationInfoList) {
             AppData app = new AppData();

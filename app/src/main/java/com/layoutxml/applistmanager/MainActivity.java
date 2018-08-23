@@ -14,7 +14,7 @@ import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements AllListener, NewListener, UninstalledListener{
 
     private static final String TAG = "MainActivity";
     private Button getAllButton;
@@ -37,54 +37,26 @@ public class MainActivity extends AppCompatActivity{
         getNewText = findViewById(R.id.getNewTxt);
         getUninstalledTxt = findViewById(R.id.getUninstalledTxt);
 
-        final AllListener allListener = new AllListener() {
-            @Override
-            public void allListener(List<AppData> appDataList) {
-                getAllText.setText("There are now "+appDataList.size()+" apps installed.");
-                AllAppsList = appDataList;
-            }
-        };
-
-        final NewListener newListener = new NewListener() {
-            @Override
-            public void newListener(List<AppData> appDataList) {
-                getNewText.setText(appDataList.size()+" new apps installed.");
-                if (AllAppsList!=null) {
-                    AllAppsList.addAll(appDataList);
-                    getAllText.setText(getAllText.getText()+"\n+ "+appDataList.size()+" ("+AllAppsList.size()+" total).");
-                }
-            }
-        };
-
-        final UninstalledListener uninstalledListener = new UninstalledListener() {
-            @Override
-            public void uninstalledListener(List<AppData> appDataList) {
-                getUninstalledTxt.setText(appDataList.size()+" apps uninstaleld.");
-                if (AllAppsList!=null) {
-                    AllAppsList.removeAll(appDataList);
-                    getAllText.setText(getAllText.getText()+"\n- "+appDataList.size()+" ("+AllAppsList.size()+" total).");
-                }
-            }
-        };
+        final AppList appList = new AppList(MainActivity.this,MainActivity.this,MainActivity.this);
 
         getAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getAll(getApplicationContext(), allListener);
+                appList.getAll(getApplicationContext());
             }
         });
 
         getNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getNew(getApplicationContext(), newListener, AllAppsList);
+                appList.getNew(getApplicationContext(), AllAppsList);
             }
         });
 
         getUninstalledButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getUninstalled(getApplicationContext(), uninstalledListener, AllAppsList);
+                appList.getUninstalled(getApplicationContext(), AllAppsList);
             }
         });
 
@@ -94,5 +66,29 @@ public class MainActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         AppList.stop();
+    }
+
+    @Override
+    public void allListener(List<AppData> appDataList) {
+        getAllText.setText("There are now "+appDataList.size()+" apps installed.");
+        AllAppsList = appDataList;
+    }
+
+    @Override
+    public void newListener(List<AppData> appDataList) {
+        getNewText.setText(appDataList.size()+" new apps installed.");
+        if (AllAppsList!=null) {
+            AllAppsList.addAll(appDataList);
+            getAllText.setText(getAllText.getText()+"\n+ "+appDataList.size()+" ("+AllAppsList.size()+" total).");
+        }
+    }
+
+    @Override
+    public void uninstalledListener(List<AppData> appDataList) {
+        getUninstalledTxt.setText(appDataList.size()+" apps uninstaleld.");
+        if (AllAppsList!=null) {
+            AllAppsList.removeAll(appDataList);
+            getAllText.setText(getAllText.getText()+"\n- "+appDataList.size()+" ("+AllAppsList.size()+" total).");
+        }
     }
 }

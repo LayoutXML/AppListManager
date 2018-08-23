@@ -21,10 +21,10 @@ public class AllTask extends AsyncTask<Void,Void,List<AppData>> {
     private PackageManager packageManager;
     private List<ApplicationInfo> applicationInfoList;
 
-    public AllTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, AllListener allListener) {
+    public AllTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, WeakReference<AllListener> allListener) {
         this.packageManager = packageManager;
         this.applicationInfoList = applicationInfoList;
-        this.allAppsListener = new WeakReference<>(allListener);
+        this.allAppsListener = allListener;
     }
 
     @Override

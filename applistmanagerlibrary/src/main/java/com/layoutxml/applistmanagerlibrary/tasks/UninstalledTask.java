@@ -23,10 +23,10 @@ public class UninstalledTask extends AsyncTask<Void,Void,List<AppData>>{
     private List<ApplicationInfo> applicationInfoList;
     private List<AppData> receivedAppList;
 
-    public UninstalledTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, UninstalledListener uninstalledListener, List<AppData> receivedAppList) {
+    public UninstalledTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, List<AppData> receivedAppList, WeakReference<UninstalledListener> uninstalledListener) {
         this.packageManager = packageManager;
         this.applicationInfoList = applicationInfoList;
-        this.allUninstalledAppsListener = new WeakReference<>(uninstalledListener);
+        this.allUninstalledAppsListener = uninstalledListener;
         this.receivedAppList = receivedAppList;
     }
 
