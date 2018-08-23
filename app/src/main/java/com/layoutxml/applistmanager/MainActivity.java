@@ -37,26 +37,26 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
         getNewText = findViewById(R.id.getNewTxt);
         getUninstalledTxt = findViewById(R.id.getUninstalledTxt);
 
-        final AppList appList = new AppList(MainActivity.this,MainActivity.this,MainActivity.this);
+        AppList.start(MainActivity.this,MainActivity.this,MainActivity.this);
 
         getAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                appList.getAll(getApplicationContext());
+                AppList.getAll(getApplicationContext());
             }
         });
 
         getNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                appList.getNew(getApplicationContext(), AllAppsList);
+                AppList.getNew(getApplicationContext(), AllAppsList);
             }
         });
 
         getUninstalledButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                appList.getUninstalled(getApplicationContext(), AllAppsList);
+                AppList.getUninstalled(getApplicationContext(), AllAppsList);
             }
         });
 

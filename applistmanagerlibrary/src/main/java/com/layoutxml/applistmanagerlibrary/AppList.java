@@ -35,9 +35,7 @@ public class AppList extends BroadcastReceiver{
     private static WeakReference<NewListener> newListener;
     private static WeakReference<UninstalledListener> uninstalledListener;
 
-    public AppList(){}
-
-    public AppList(AllListener allListener, NewListener newListener, UninstalledListener uninstalledListener) {
+    public static void start(AllListener allListener, NewListener newListener, UninstalledListener uninstalledListener) {
         AppList.allListener = new WeakReference<>(allListener);
         AppList.newListener = new WeakReference<>(newListener);
         AppList.uninstalledListener = new WeakReference<>(uninstalledListener);
