@@ -6,6 +6,9 @@ import android.graphics.drawable.Drawable;
  * Created by LayoutXML on 22/08/2018
  */
 public class AppData {
+
+    private static final String TAG = "AppData";
+
     private String appName;
     private String appPackageName;
     private Drawable appIcon;

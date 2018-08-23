@@ -106,7 +106,7 @@ public class AppList extends BroadcastReceiver{
                 if (data!=null) {
                     app.setAppPackageName(data.getEncodedSchemeSpecificPart());
                     app.setAppIcon(new ColorDrawable(Color.TRANSPARENT));
-                    app.setAppPackageName("");
+                    app.setAppName("");
                     newApp.add(app);
                     allUninstalledAppsListenerCopy.allUninstalledAppsListener(newApp);
                 }
