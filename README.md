@@ -4,31 +4,31 @@ App List Manager is easy to use Android library, which minimizes developing time
 
 ## Table of Contents
 
-1. Quick Overview
-    1. Listeners
-    2. "AppData"
-    3. Other Functionality
-2. Usage
-    1. Adding Dependency
-    2. Registering Receiver
-    3. Starting Functionality
-    4. Stopping Functionality
-    5. Adding Listeners
-        1. "allListener"
-        2. "newListener"
-        3. "uninstalledListener"
-        4. "sortListener"
-    6. Invoking Listeners
-        1. "allListener"
-        2. "newListener"
-        3. "uninstalledListener"
-        4. "sortListener"
-    7. Accessing "AppData" Contents
-    8. Other Functionality
-        1. Comparing
-        2. Flags
-            1. Setting Flags
-            1. Checking Flags
+1. [Quick Overview](https://github.com/LayoutXML/AppListManager#quick-overview)
+    1. [Listeners](https://github.com/LayoutXML/AppListManager#1-listeners)
+    2. ["AppData"](https://github.com/LayoutXML/AppListManager#2-appdata)
+    3. [Other Functionality](https://github.com/LayoutXML/AppListManager#3-other-functionality)
+2. [Usage](https://github.com/LayoutXML/AppListManager#usage)
+    1. [Adding Dependency](https://github.com/LayoutXML/AppListManager#1-adding-dependency)
+    2. [Registering Receiver](https://github.com/LayoutXML/AppListManager#2-registering-receiver)
+    3. [Starting Functionality](https://github.com/LayoutXML/AppListManager#3-starting-functionality)
+    4. [Stopping Functionality](https://github.com/LayoutXML/AppListManager#4-stopping-functionality)
+    5. [Adding Listeners](https://github.com/LayoutXML/AppListManager#5-adding-listeners)
+        1. ["allListener"](https://github.com/LayoutXML/AppListManager#alllistener)
+        2. ["newListener"](https://github.com/LayoutXML/AppListManager#newlistener)
+        3. ["uninstalledListener"](https://github.com/LayoutXML/AppListManager#uninstalledlistener)
+        4. ["sortListener"](https://github.com/LayoutXML/AppListManager#sortlistener)
+    6. [Invoking Listeners](https://github.com/LayoutXML/AppListManager#6-invoking-listeners)
+        1. ["allListener"](https://github.com/LayoutXML/AppListManager#alllistener-1)
+        2. ["newListener"](https://github.com/LayoutXML/AppListManager#newlistener-1)
+        3. ["uninstalledListener"](https://github.com/LayoutXML/AppListManager#uninstalledlistener-1)
+        4. ["sortListener"](https://github.com/LayoutXML/AppListManager#sortlistener-1)
+    7. [Accessing "AppData" Contents](https://github.com/LayoutXML/AppListManager#7-accessing-appdata-contents)
+    8. [Other Functionality](https://github.com/LayoutXML/AppListManager#8-other-functionality)
+        1. [Comparing](https://github.com/LayoutXML/AppListManager#comparing)
+        2. [Flags](https://github.com/LayoutXML/AppListManager#flags)
+            1. [Setting Flags](https://github.com/LayoutXML/AppListManager#setting-flags)
+            1. [Checking Flags](https://github.com/LayoutXML/AppListManager#checking-flags)
 
 ---
 
@@ -287,10 +287,10 @@ It is possible to filter app lists received by `allListener` and `newListener` b
 
 Description on how to filter app lists is in the "Invoking Listeners" section.
 
-To set multiple flags you have to use these operators:
+To set multiple flags you can use any combination of these operators:
 * & - AND operator. Adds apps that have all filters.
 * | - OR operator. Adds apps that have any of the given filters.
-* ^ - XOR (exlusive or) operator. Adds apps that have one but not the other filter.
+* ^ - XOR (exlcusive or) operator. Adds apps that have one but not the other filter.
 
 ##### Checking Flags
 
