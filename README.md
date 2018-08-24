@@ -40,12 +40,12 @@ Library has 4 listeners:
 
 Function Name | How invoked | Sent Parameters | Received Parameters
 --- | --- | --- | ---
-`allListener` | \1. `AppList.getAll(Context)`<br>\2. `AppList.getAll(Context, Integer, Boolean)` | \1. `Context context`<br>(\2. `Integer flags`<br>\3. `Boolean match`) | \1. `List<AppData>`<br>\2. `Integer filterFlags`<br>\3. `Boolean match`
-`newListener` | \1. `AppList.getNew(Context, List<AppData>)`<br>\2. `AppList.getNew(Context, List<AppData>, Integer, Boolean)`<br>\3. Automatically when new app installed* | \1. `Context context`<br>\2. `List<AppData> appDataList`<br>(\3. `Integer flags`<br>\4. `Boolean match`) | \1. `List<AppData>`<br>\2. `Integer filterFlags`<br>\3. `Boolean match`<br>\4. `Boolean fromReceiver`
-`uninstalledListener` | \1. `AppList.getUninstalled(Context, List<AppData>)`<br>\2. Automatically when any app uninstalled* | \1. `Context context`<br>\2. `List<AppData> appDataList` | \1. `List<AppData>`<br>\2. `Boolean fromReceiver`
-`sortListener` | \1. `AppList.sort(List<AppData>, Integer, Integer, Integer)` | \1. `List<AppData> appDataList`<br>\2. `Integer sortBy`<br>\3. `Integer inOrder`<br>\4. `Integer uniqueIdentifier` | \1. `List<AppData>`<br>\2. `Integer sortBy`<br>\3. `Integer inOrder`<br>\4. `Integer uniqueIdentifier`
+`allListener` | \* `AppList.getAll(Context)`<br>\* `AppList.getAll(Context, Integer, Boolean)` | \* `Context context`<br>(\* `Integer flags`<br>\* `Boolean match`) | \* `List<AppData>`<br>\* `Integer filterFlags`<br>\* `Boolean match`
+`newListener` | \* `AppList.getNew(Context, List<AppData>)`<br>\* `AppList.getNew(Context, List<AppData>, Integer, Boolean)`<br>\* Automatically when new app installed<sup>1</sup> | \* `Context context`<br>\* `List<AppData> appDataList`<br>(\* `Integer flags`<br>\* `Boolean match`) | \* `List<AppData>`<br>\* `Integer filterFlags`<br>\* `Boolean match`<br>\* `Boolean fromReceiver`
+`uninstalledListener` | \* `AppList.getUninstalled(Context, List<AppData>)`<br>\* Automatically when any app uninstalled<sup>1</sup> | \* `Context context`<br>\* `List<AppData> appDataList` | \* `List<AppData>`<br>\* `Boolean fromReceiver`
+`sortListener` | \* `AppList.sort(List<AppData>, Integer, Integer, Integer)` | \* `List<AppData> appDataList`<br>\* `Integer sortBy`<br>\* `Integer inOrder`<br>\* `Integer uniqueIdentifier` | \* `List<AppData>`<br>\* `Integer sortBy`<br>\* `Integer inOrder`<br>\* `Integer uniqueIdentifier`
 
-\* - On Android versions >=8.0 only when application opened. This means that you should periodically check for new apps or in onResume. Works in background on lower Android versions.
+<sup>1</sup> - On Android versions >=8.0 only when application opened. This means that you should periodically check for new apps or in onResume. Works in background on lower Android versions.
 
 ### 2. "AppData"
 
