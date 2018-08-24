@@ -1,5 +1,6 @@
 package com.layoutxml.applistmanager;
 
+import android.content.pm.ApplicationInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,10 +21,13 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
     private Button getAllButton;
     private Button getNewButton;
     private Button getUninstalledButton;
+    private Button getAllSystemButton;
     private TextView getAllText;
     private TextView getNewText;
     private TextView getUninstalledTxt;
+    private TextView getAllSystemText;
     private List<AppData> AllAppsList;
+    private List<AppData> AllSystemAppsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +37,11 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
         getAllButton = findViewById(R.id.getAllBtn);
         getNewButton = findViewById(R.id.getNewBtn);
         getUninstalledButton = findViewById(R.id.getUninstalledBtn);
+        getAllSystemButton = findViewById(R.id.getAllSystemBtn);
         getAllText = findViewById(R.id.getAllTxt);
         getNewText = findViewById(R.id.getNewTxt);
         getUninstalledTxt = findViewById(R.id.getUninstalledTxt);
+        getAllSystemText = findViewById(R.id.getAllSystemTxt);
 
         AppList.start(MainActivity.this,MainActivity.this,MainActivity.this);
         registerReceiver(new AppList(),AppList.intentFilter);
@@ -61,6 +67,13 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
             }
         });
 
+        getAllSystemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppList.getAll(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,true);
+            }
+        });
+
     }
 
     @Override
@@ -70,22 +83,39 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
     }
 
     @Override
-    public void allListener(List<AppData> appDataList) {
-        getAllText.setText("There are now "+appDataList.size()+" apps installed.");
-        AllAppsList = appDataList;
-    }
-
-    @Override
-    public void newListener(List<AppData> appDataList) {
-        getNewText.setText(appDataList.size()+" new apps installed.");
-        if (AllAppsList!=null) {
-            AllAppsList.addAll(appDataList);
-            getAllText.setText(getAllText.getText()+"\n+ "+appDataList.size()+" ("+AllAppsList.size()+" total).");
+    public void allListener(List<AppData> appDataList, Integer filterFlags) {
+        if (filterFlags == null) {
+            getAllText.setText("There are now " + appDataList.size() + " apps installed.");
+            AllAppsList = appDataList;
+        }
+        else if (filterFlags == (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) {
+            getAllSystemText.setText("There are now " + appDataList.size() + " apps installed.");
+            AllSystemAppsList = appDataList;
         }
     }
 
     @Override
-    public void uninstalledListener(List<AppData> appDataList) {
+    public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean fromReceiver) {
+        getNewText.setText(appDataList.size()+" new apps installed.");
+        if (filterFlags==null) {
+            if (AllAppsList != null) {
+                AllAppsList.addAll(appDataList);
+                getAllText.setText(getAllText.getText() + "\n+ " + appDataList.size() + " (" + AllAppsList.size() + " total).");
+            }
+        } else if (filterFlags == (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) {
+            if (AllAppsList != null) {
+                AllAppsList.addAll(appDataList);
+                getAllText.setText(getAllText.getText() + "\n+ " + appDataList.size() + " (" + AllAppsList.size() + " total).");
+            }
+            if (AllSystemAppsList!=null) {
+                AllSystemAppsList.addAll(appDataList);
+                getAllSystemText.setText(getAllSystemText.getText() + "\n+ " + appDataList.size() + " (" + AllSystemAppsList.size() + " total).");
+            }
+        }
+    }
+
+    @Override
+    public void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver) {
         getUninstalledTxt.setText(appDataList.size()+" apps uninstaleld.");
         if (AllAppsList!=null) {
             AllAppsList.removeAll(appDataList);

@@ -12,6 +12,15 @@ public class AppData {
     private String appName;
     private String appPackageName;
     private Drawable appIcon;
+    private Integer flags;
+
+    public Integer getFlags() {
+        return flags;
+    }
+
+    public void setFlags(Integer flags) {
+        this.flags = flags;
+    }
 
     public String getAppName() {
         return appName;

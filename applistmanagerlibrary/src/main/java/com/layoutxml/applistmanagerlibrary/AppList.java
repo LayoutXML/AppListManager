@@ -51,24 +51,38 @@ public class AppList extends BroadcastReceiver{
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         intentFilter.addDataScheme("package");
-        }
+    }
 
     public static void getAll(Context context){
-        //Returns a list of all installed packages
-        allTask = new AllTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA),allListener);
+        allTask = new AllTask(context.getPackageManager(), context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA),null, true, allListener);
+        allTask.execute();
+    }
+
+    public static void getAll(Context context, Integer flags, Boolean match){
+        allTask = new AllTask(context.getPackageManager(), context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), flags, match, allListener);
         allTask.execute();
     }
 
     public static void getNew(Context context, List<AppData> appDataList) {
-        //Returns a list of installed packages that are not in the given list
-        newTask = new NewTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, newListener);
+        newTask = new NewTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, null, true, newListener);
+        newTask.execute();
+    }
+
+    public static void getNew(Context context, List<AppData> appDataList, Integer flags, Boolean match) {
+        newTask = new NewTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, flags, match, newListener);
         newTask.execute();
     }
 
     public static void getUninstalled(Context context, List<AppData> appDataList) {
-        //Returns a list of all uninstalled packages that are in a given list
         uninstalledTask = new UninstalledTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, uninstalledListener);
         uninstalledTask.execute();
+    }
+
+    public static Boolean checkFlags(AppData appData, Integer flags, Boolean match) {
+        if (match)
+            return ((flags==null) || ((appData.getFlags() & flags) != 0));
+        else
+            return ((flags==null) || ((appData.getFlags() & flags) == 0));
     }
 
     public static List<AppData> sort(List<AppData> appDataList, Integer sortBy, Integer inOrder) {
@@ -105,8 +119,6 @@ public class AppList extends BroadcastReceiver{
     }
 
     public static void stop() {
-        //Stops all AsyncTasks to not create a memory leak
-        //Calls all AsyncTasks that are in this library
         if (allTask !=null) {
             if (allTask.getStatus()!=AsyncTask.Status.FINISHED) {
                 allTask.cancel(true);
@@ -126,10 +138,6 @@ public class AppList extends BroadcastReceiver{
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //Returns a list with information about one app that has just been installed/uninstalled on Android Versions <=7.1.1
-        //Can only return data about new installed apps if getNew was called at least once
-        //Can only return data about uninstalled apps if getUninstalled was called at least once
-        //Returns empty (not null) app name and transparent icon if uninstalled
         final String action = intent.getAction();
         if (action!=null && context!=null) {
             if (action.equals(Intent.ACTION_PACKAGE_ADDED) && newListener!=null) {
@@ -145,7 +153,7 @@ public class AppList extends BroadcastReceiver{
                             app.setAppIcon(applicationInfo.loadIcon(packageManager));
                             app.setAppName(applicationInfo.loadLabel(packageManager).toString());
                             newApp.add(app);
-                            newListener.get().newListener(newApp);
+                            newListener.get().newListener(newApp, null, true);
                         } catch (PackageManager.NameNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -159,10 +167,8 @@ public class AppList extends BroadcastReceiver{
                     AppData app = new AppData();
                     if (data != null) {
                         app.setAppPackageName(data.getEncodedSchemeSpecificPart());
-                        app.setAppIcon(new ColorDrawable(Color.TRANSPARENT));
-                        app.setAppName("");
                         newApp.add(app);
-                        uninstalledListener.get().uninstalledListener(newApp);
+                        uninstalledListener.get().uninstalledListener(newApp, true);
                     }
                 }
             }

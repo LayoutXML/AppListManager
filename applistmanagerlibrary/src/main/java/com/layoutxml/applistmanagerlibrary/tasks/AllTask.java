@@ -20,11 +20,15 @@ public class AllTask extends AsyncTask<Void,Void,List<AppData>> {
     private final WeakReference<AllListener> allAppsListener;
     private PackageManager packageManager;
     private List<ApplicationInfo> applicationInfoList;
+    private Integer flags;
+    private Boolean match;
 
-    public AllTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, WeakReference<AllListener> allListener) {
+    public AllTask(PackageManager packageManager, List<ApplicationInfo> applicationInfoList, Integer flags, Boolean match, WeakReference<AllListener> allListener) {
         this.packageManager = packageManager;
         this.applicationInfoList = applicationInfoList;
         this.allAppsListener = allListener;
+        this.flags = flags;
+        this.match = match;
     }
 
     @Override
@@ -35,7 +39,14 @@ public class AllTask extends AsyncTask<Void,Void,List<AppData>> {
             app.setAppName(applicationInfo.loadLabel(packageManager).toString());
             app.setAppPackageName(applicationInfo.packageName);
             app.setAppIcon(applicationInfo.loadIcon(packageManager));
-            appDataList.add(app);
+            app.setFlags(applicationInfo.flags);
+            if (match) {
+                if ((flags == null) || ((applicationInfo.flags & flags) != 0))
+                    appDataList.add(app);
+            } else {
+                if ((flags == null) || ((applicationInfo.flags & flags) == 0))
+                    appDataList.add(app);
+            }
             if (isCancelled())
                 break;
         }
@@ -46,7 +57,7 @@ public class AllTask extends AsyncTask<Void,Void,List<AppData>> {
     protected void onPostExecute(List<AppData> appDataList) {
         final AllListener listener = allAppsListener.get();
         if (listener!=null) {
-            listener.allListener(appDataList);
+            listener.allListener(appDataList, flags);
         }
     }
 

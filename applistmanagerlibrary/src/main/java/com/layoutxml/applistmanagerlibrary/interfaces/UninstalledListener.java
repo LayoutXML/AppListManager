@@ -8,5 +8,5 @@ import java.util.List;
  * Created by LayoutXML on 23/08/2018
  */
 public interface UninstalledListener {
-    void uninstalledListener(List<AppData> appDataList);
+    void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver);
 }

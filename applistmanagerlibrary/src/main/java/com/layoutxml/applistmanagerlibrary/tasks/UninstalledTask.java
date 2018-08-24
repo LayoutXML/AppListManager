@@ -39,6 +39,7 @@ public class UninstalledTask extends AsyncTask<Void,Void,List<AppData>>{
             app.setAppName(applicationInfo.loadLabel(packageManager).toString());
             app.setAppPackageName(applicationInfo.packageName);
             app.setAppIcon(applicationInfo.loadIcon(packageManager));
+            app.setFlags(applicationInfo.flags);
             installedAppList.add(app);
             if (isCancelled())
                 break;
@@ -59,7 +60,7 @@ public class UninstalledTask extends AsyncTask<Void,Void,List<AppData>>{
     protected void onPostExecute(List<AppData> appDataList){
         final UninstalledListener listener = allUninstalledAppsListener.get();
         if (listener!=null) {
-            listener.uninstalledListener(appDataList);
+            listener.uninstalledListener(appDataList, false);
         }
     }
 
