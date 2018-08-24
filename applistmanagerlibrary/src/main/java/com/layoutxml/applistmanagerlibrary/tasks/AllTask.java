@@ -57,7 +57,7 @@ public class AllTask extends AsyncTask<Void,Void,List<AppData>> {
     protected void onPostExecute(List<AppData> appDataList) {
         final AllListener listener = allAppsListener.get();
         if (listener!=null) {
-            listener.allListener(appDataList, flags);
+            listener.allListener(appDataList, flags, match);
         }
     }
 

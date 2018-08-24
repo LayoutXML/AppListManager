@@ -14,7 +14,7 @@ public class AppData {
     private Drawable appIcon;
     private Integer flags;
     @NonNull
-    private String appPackageName;
+    private String appPackageName = "";
 
     public Integer getFlags() {
         return flags;
@@ -32,11 +32,12 @@ public class AppData {
         this.appName = appName;
     }
 
+    @NonNull
     public String getAppPackageName() {
         return appPackageName;
     }
 
-    public void setAppPackageName(String appPackageName) {
+    public void setAppPackageName(@NonNull String appPackageName) {
         this.appPackageName = appPackageName;
     }
 

@@ -39,8 +39,8 @@ Library has 3 listeners:
 
 Function Name | How invoked | Parameters
 --- | --- | --- | ---
-`allListener` | 1. `AppList.getAll(Context)`<br>2. `AppList.getAll(Context, Integer, Boolean)` | 1. `List<AppData>`<br>2. `Integer filterFlags`
-`newListener` | 1. `AppList.getNew(Context, List<AppData>)`<br>2. `AppList.getNew(Context, List<AppData>, Integer, Boolean)`<br>3. Automatically when new app installed* | 1. `List<AppData>`<br>2. `Integer filterFlags`<br>3. `Boolean fromReceiver`
+`allListener` | 1. `AppList.getAll(Context)`<br>2. `AppList.getAll(Context, Integer, Boolean)` | 1. `List<AppData>`<br>2. `Integer filterFlags`<br>3. `Boolean match`
+`newListener` | 1. `AppList.getNew(Context, List<AppData>)`<br>2. `AppList.getNew(Context, List<AppData>, Integer, Boolean)`<br>3. Automatically when new app installed* | 1. `List<AppData>`<br>2. `Integer filterFlags`<br>3. `Boolean match`<br>4. `Boolean fromReceiver`
 `uninstalledListener` | 1. `AppList.getUninstalled(Context, List<AppData>)`<br>2. Automatically when any app uninstalled* | 1. `List<AppData>`<br>2. `Boolean fromReceiver`
 
 \* - On Android versions >=8.0 only when application opened. This means that you should periodically check for new apps or in onResume. Works in background on lower Android versions.
@@ -126,12 +126,12 @@ You can choose to use only some of the listeners. You must use `allListener` or 
 
 #### "allListener"
 
-`allListener` receives 2 parameters - `List<AppData> appDataList`, which is a new list of all installed apps, and `Integer filterFlags`, which informs what filters had been used when generating a list. This is useful when you store multiple lists of different apps. When no filter was used, `filterFlags` is `null`. More about filters and flags in "Flags" section.
+`allListener` receives 3 parameters - `List<AppData> appDataList`, which is a new list of all installed apps, `Integer filterFlags`, which informs what filters had been used when generating a list, and `Boolean match`, which informs whether apps in the list have flags or do not (read more in "Invoking Listeners" section). This is useful when you store multiple lists of different apps. When no filter was used, `filterFlags` is `null`. More about filters and flags in "Flags" section.
 
 1. If you have decided to implement listeners to your class, override `allListener` method like this:
 ```
 Override
-public void allListener(List<AppData> appDataList, Integer filterFlags) {
+public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match) {
     //Your code replacing main List<AppData> with a new one. Notify adapters about dataset changing etc...
 }
 ```
@@ -139,7 +139,7 @@ public void allListener(List<AppData> appDataList, Integer filterFlags) {
 ```
 AllListener allListener = new AllListener() {
     @Override
-    public void allListener(List<AppData> appDataList, Integer filterFlags) {
+    public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match) {
           //Your code replacing main List<AppData> with a new one. Notify adapters about dataset changing etc...      
     }
 };
@@ -147,12 +147,12 @@ AllListener allListener = new AllListener() {
 
 #### "newListener"
 
-`newListener` receives 3 parameters - `List<AppData> appDataList`, which is a list of new apps, `Integer filterFlags`, which informs what filters had been used when generating a list, and `Boolean fromReceiver`, which is `true` when a `BroadcastReceiver` invoked this listener - this means a list contains only one application and it did not check for filters (you may want to check application filters as described in "Checking Flags" section or manually).
+`newListener` receives 4 parameters - `List<AppData> appDataList`, which is a list of new apps, `Integer filterFlags`, which informs what filters had been used when generating a list, `Boolean match`, which informs whether apps in the list have flags or do not (read more in "Invoking Listeners" section), and `Boolean fromReceiver`, which is `true` when a `BroadcastReceiver` invoked this listener - this means a list contains only one application and it did not check for filters (you may want to check application filters as described in "Checking Flags" section or manually).
 
 1. If you have decided to implement listeners to your class, override `newListener` method like this:
 ```
 @Override
-public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean fromReceiver) {
+public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Boolean fromReceiver) {
     //Your code adding new list to the main List<AppData>. Notify adapters about dataset changing etc...
 }
 ```
@@ -160,7 +160,7 @@ public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean 
 ```
 AllListener allListener = new AllListener() {
     @Override
-    public void allListener(List<AppData> appDataList, Integer filterFlags) {
+    public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match) {
         //Your code adding new list to the main List<AppData>. Notify adapters about dataset changing etc...  
     }
 };

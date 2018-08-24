@@ -66,7 +66,7 @@ public class NewTask extends AsyncTask<Void,Void,List<AppData>>{
     protected void onPostExecute(List<AppData> appDataList) {
         final NewListener listener = allNewAppsListener.get();
         if (listener!=null) {
-            listener.newListener(appDataList, flags, false);
+            listener.newListener(appDataList, flags, match, false);
         }
     }
 
