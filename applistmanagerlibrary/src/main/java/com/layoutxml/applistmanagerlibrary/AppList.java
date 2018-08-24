@@ -13,10 +13,12 @@ import android.os.AsyncTask;
 
 import com.layoutxml.applistmanagerlibrary.interfaces.AllListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.NewListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 import com.layoutxml.applistmanagerlibrary.tasks.AllTask;
 import com.layoutxml.applistmanagerlibrary.tasks.NewTask;
+import com.layoutxml.applistmanagerlibrary.tasks.SortTask;
 import com.layoutxml.applistmanagerlibrary.tasks.UninstalledTask;
 
 import java.lang.ref.WeakReference;
@@ -34,19 +36,22 @@ public class AppList extends BroadcastReceiver{
     private static AllTask allTask;
     private static NewTask newTask;
     private static UninstalledTask uninstalledTask;
+    private static SortTask sortTask;
     private static WeakReference<AllListener> allListener;
     private static WeakReference<NewListener> newListener;
     private static WeakReference<UninstalledListener> uninstalledListener;
+    private static WeakReference<SortListener> sortListener;
     public static IntentFilter intentFilter = new IntentFilter();
     public static final Integer BY_APPNAME = 0;
     public static final Integer BY_PACKAGENAME = 1;
     public static final Integer IN_ASCENDING = 0;
     public static final Integer IN_DESCENDING = 1;
 
-    public static void start(AllListener allListener, NewListener newListener, UninstalledListener uninstalledListener) {
+    public static void start(AllListener allListener, NewListener newListener, UninstalledListener uninstalledListener, SortListener sortListener) {
         AppList.allListener = new WeakReference<>(allListener);
         AppList.newListener = new WeakReference<>(newListener);
         AppList.uninstalledListener = new WeakReference<>(uninstalledListener);
+        AppList.sortListener = new WeakReference<>(sortListener);
 
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
@@ -85,39 +90,9 @@ public class AppList extends BroadcastReceiver{
             return ((flags==null) || ((appData.getFlags() & flags) == 0));
     }
 
-    public static List<AppData> sort(List<AppData> appDataList, Integer sortBy, Integer inOrder) {
-        //TODO: AsynctAsk
-        //TODO: Check if null
-        if (sortBy.equals(BY_APPNAME) && inOrder.equals(IN_ASCENDING)) {
-            Collections.sort(appDataList, new Comparator<AppData>() {
-                @Override
-                public int compare(AppData t0, AppData t1) {
-                    return t0.getAppName().compareTo(t1.getAppName());
-                }
-            });
-        } else if (sortBy.equals(BY_APPNAME) && inOrder.equals(IN_DESCENDING)) {
-            Collections.sort(appDataList, new Comparator<AppData>() {
-                @Override
-                public int compare(AppData t0, AppData t1) {
-                    return t1.getAppName().compareTo(t0.getAppName());
-                }
-            });
-        } else if (sortBy.equals(BY_PACKAGENAME) && inOrder.equals(IN_ASCENDING)) {
-            Collections.sort(appDataList, new Comparator<AppData>() {
-                @Override
-                public int compare(AppData t0, AppData t1) {
-                    return t0.getAppPackageName().compareTo(t1.getAppPackageName());
-                }
-            });
-        } else if (sortBy.equals(BY_PACKAGENAME) && inOrder.equals(IN_DESCENDING)) {
-            Collections.sort(appDataList, new Comparator<AppData>() {
-                @Override
-                public int compare(AppData t0, AppData t1) {
-                    return t1.getAppPackageName().compareTo(t0.getAppPackageName());
-                }
-            });
-        }
-        return appDataList;
+    public static void sort(List<AppData> appDataList, Integer sortBy, Integer inOrder, Integer uniqueIdentifier) {
+        sortTask = new SortTask(appDataList,sortBy,inOrder,uniqueIdentifier,sortListener);
+        sortTask.execute();
     }
 
     public static void stop() {
@@ -134,6 +109,11 @@ public class AppList extends BroadcastReceiver{
         if (uninstalledTask !=null) {
             if (uninstalledTask.getStatus()!=AsyncTask.Status.FINISHED) {
                 uninstalledTask.cancel(true);
+            }
+        }
+        if (sortTask != null) {
+            if (sortTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                sortTask.cancel(true);
             }
         }
     }
@@ -155,7 +135,7 @@ public class AppList extends BroadcastReceiver{
                             app.setAppIcon(applicationInfo.loadIcon(packageManager));
                             app.setAppName(applicationInfo.loadLabel(packageManager).toString());
                             newApp.add(app);
-                            newListener.get().newListener(newApp, null, true);
+                            newListener.get().newListener(newApp, null, false, true);
                         } catch (PackageManager.NameNotFoundException e) {
                             e.printStackTrace();
                         }

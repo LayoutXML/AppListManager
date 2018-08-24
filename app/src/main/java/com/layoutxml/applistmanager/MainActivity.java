@@ -10,12 +10,13 @@ import android.widget.TextView;
 import com.layoutxml.applistmanagerlibrary.AppList;
 import com.layoutxml.applistmanagerlibrary.interfaces.AllListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.NewListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AllListener, NewListener, UninstalledListener{
+public class MainActivity extends AppCompatActivity implements AllListener, NewListener, UninstalledListener, SortListener{
 
     @Override
     protected void onPause() {
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
         getUninstalledTxt = findViewById(R.id.getUninstalledTxt);
         getAllSystemText = findViewById(R.id.getAllSystemTxt);
 
-        AppList.start(MainActivity.this,MainActivity.this,MainActivity.this);
+        AppList.start(MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this);
         registerReceiver(new AppList(),AppList.intentFilter);
 
         getAllButton.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
         if (filterFlags == null) {
             getAllText.setText("There are now " + appDataList.size() + " apps installed.");
             AllAppsList = appDataList;
+            AppList.sort(AllAppsList,AppList.BY_APPNAME,AppList.IN_ASCENDING,0);
         }
         else if (filterFlags == (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) {
             getAllSystemText.setText("There are now " + appDataList.size() + " apps installed.");
@@ -126,5 +128,10 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
             AllAppsList.removeAll(appDataList);
             getAllText.setText(getAllText.getText()+"\n- "+appDataList.size()+" ("+AllAppsList.size()+" total).");
         }
+    }
+
+    @Override
+    public void sortListener(List<AppData> appDataList, Integer sortBy, Integer inOrder, Integer uniqueIdentifier) {
+
     }
 }
