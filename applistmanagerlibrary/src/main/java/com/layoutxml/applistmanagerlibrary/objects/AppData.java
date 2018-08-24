@@ -1,6 +1,7 @@
 package com.layoutxml.applistmanagerlibrary.objects;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 /**
  * Created by LayoutXML on 22/08/2018
@@ -10,9 +11,10 @@ public class AppData {
     private static final String TAG = "AppData";
 
     private String appName;
-    private String appPackageName;
     private Drawable appIcon;
     private Integer flags;
+    @NonNull
+    private String appPackageName;
 
     public Integer getFlags() {
         return flags;

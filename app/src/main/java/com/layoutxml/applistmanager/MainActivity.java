@@ -17,6 +17,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AllListener, NewListener, UninstalledListener{
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppList.stop();
+    }
+
     private static final String TAG = "MainActivity";
     private Button getAllButton;
     private Button getNewButton;
@@ -79,11 +85,11 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AppList.stop();
     }
 
     @Override
     public void allListener(List<AppData> appDataList, Integer filterFlags) {
+        //TODO: receive Boolean
         if (filterFlags == null) {
             getAllText.setText("There are now " + appDataList.size() + " apps installed.");
             AllAppsList = appDataList;
@@ -96,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
 
     @Override
     public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean fromReceiver) {
+        //TODO: receive Boolean
         getNewText.setText(appDataList.size()+" new apps installed.");
         if (filterFlags==null) {
             if (AllAppsList != null) {
@@ -116,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
 
     @Override
     public void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver) {
+        //TODO: receive Boolean
         getUninstalledTxt.setText(appDataList.size()+" apps uninstaleld.");
         if (AllAppsList!=null) {
             AllAppsList.removeAll(appDataList);

@@ -86,6 +86,8 @@ public class AppList extends BroadcastReceiver{
     }
 
     public static List<AppData> sort(List<AppData> appDataList, Integer sortBy, Integer inOrder) {
+        //TODO: AsynctAsk
+        //TODO: Check if null
         if (sortBy.equals(BY_APPNAME) && inOrder.equals(IN_ASCENDING)) {
             Collections.sort(appDataList, new Comparator<AppData>() {
                 @Override
