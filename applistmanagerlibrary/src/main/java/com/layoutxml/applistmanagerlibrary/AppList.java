@@ -59,27 +59,32 @@ public class AppList extends BroadcastReceiver{
     }
 
     public static void getAll(Context context){
-        allTask = new AllTask(context.getPackageManager(), context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA),null, true, allListener);
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        allTask = new AllTask(context1,null, true, allListener);
         allTask.execute();
     }
 
     public static void getAll(Context context, Integer flags, Boolean match){
-        allTask = new AllTask(context.getPackageManager(), context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), flags, match, allListener);
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        allTask = new AllTask(context1, flags, match, allListener);
         allTask.execute();
     }
 
     public static void getNew(Context context, List<AppData> appDataList) {
-        newTask = new NewTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, null, true, newListener);
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        newTask = new NewTask(context1, appDataList, null, true, newListener);
         newTask.execute();
     }
 
     public static void getNew(Context context, List<AppData> appDataList, Integer flags, Boolean match) {
-        newTask = new NewTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, flags, match, newListener);
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        newTask = new NewTask(context1, appDataList, flags, match, newListener);
         newTask.execute();
     }
 
     public static void getUninstalled(Context context, List<AppData> appDataList) {
-        uninstalledTask = new UninstalledTask(context.getPackageManager(),context.getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA), appDataList, uninstalledListener);
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        uninstalledTask = new UninstalledTask(context1, appDataList, uninstalledListener);
         uninstalledTask.execute();
     }
 
