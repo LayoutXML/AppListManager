@@ -58,33 +58,33 @@ public class AppList extends BroadcastReceiver{
         intentFilter.addDataScheme("package");
     }
 
-    public static void getAll(Context context){
+    public static void getAll(Context context, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        allTask = new AllTask(context1,null, true, allListener);
+        allTask = new AllTask(context1,null, true, uniqueIdentifier, allListener);
         allTask.execute();
     }
 
-    public static void getAll(Context context, Integer flags, Boolean match){
+    public static void getAll(Context context,  Integer flags, Boolean match, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        allTask = new AllTask(context1, flags, match, allListener);
+        allTask = new AllTask(context1, flags, match, uniqueIdentifier, allListener);
         allTask.execute();
     }
 
-    public static void getNew(Context context, List<AppData> appDataList) {
+    public static void getNew(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newTask = new NewTask(context1, appDataList, null, true, newListener);
+        newTask = new NewTask(context1, appDataList, null, true, uniqueIdentifier, newListener);
         newTask.execute();
     }
 
-    public static void getNew(Context context, List<AppData> appDataList, Integer flags, Boolean match) {
+    public static void getNew(Context context, List<AppData> appDataList, Integer flags, Boolean match, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newTask = new NewTask(context1, appDataList, flags, match, newListener);
+        newTask = new NewTask(context1, appDataList, flags, match, uniqueIdentifier, newListener);
         newTask.execute();
     }
 
-    public static void getUninstalled(Context context, List<AppData> appDataList) {
+    public static void getUninstalled(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        uninstalledTask = new UninstalledTask(context1, appDataList, uninstalledListener);
+        uninstalledTask = new UninstalledTask(context1, appDataList, uniqueIdentifier, uninstalledListener);
         uninstalledTask.execute();
     }
 
@@ -140,7 +140,7 @@ public class AppList extends BroadcastReceiver{
                             app.setAppIcon(applicationInfo.loadIcon(packageManager));
                             app.setAppName(applicationInfo.loadLabel(packageManager).toString());
                             newApp.add(app);
-                            newListener.get().newListener(newApp, null, false, true);
+                            newListener.get().newListener(newApp, null, false, true, -1);
                         } catch (PackageManager.NameNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -155,7 +155,7 @@ public class AppList extends BroadcastReceiver{
                     if (data != null) {
                         app.setAppPackageName(data.getEncodedSchemeSpecificPart());
                         newApp.add(app);
-                        uninstalledListener.get().uninstalledListener(newApp, true);
+                        uninstalledListener.get().uninstalledListener(newApp, true, -1);
                     }
                 }
             }

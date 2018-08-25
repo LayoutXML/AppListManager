@@ -56,28 +56,28 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
         getAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getAll(getApplicationContext());
+                AppList.getAll(getApplicationContext(),0);
             }
         });
 
         getNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getNew(getApplicationContext(), AllAppsList);
+                AppList.getNew(getApplicationContext(), AllAppsList, 0);
             }
         });
 
         getUninstalledButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getUninstalled(getApplicationContext(), AllAppsList);
+                AppList.getUninstalled(getApplicationContext(), AllAppsList, 0);
             }
         });
 
         getAllSystemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getAll(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,true);
+                AppList.getAll(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP, true, 0);
             }
         });
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
     }
 
     @Override
-    public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match) {
+    public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
         if (filterFlags == null) {
             getAllText.setText("There are now " + appDataList.size() + " apps installed.");
             AllAppsList = appDataList;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
     }
 
     @Override
-    public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Boolean fromReceiver) {
+    public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Boolean fromReceiver, Integer uniqueIdentifier) {
         getNewText.setText(appDataList.size()+" new apps installed.");
         if (filterFlags==null) {
             if (AllAppsList != null) {
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements AllListener, NewL
     }
 
     @Override
-    public void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver) {
+    public void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver, Integer uniqueIdentifier) {
         getUninstalledTxt.setText(appDataList.size()+" apps uninstaleld.");
         if (AllAppsList!=null) {
             AllAppsList.removeAll(appDataList);

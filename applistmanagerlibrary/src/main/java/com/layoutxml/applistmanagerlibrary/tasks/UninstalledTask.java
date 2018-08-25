@@ -22,11 +22,14 @@ public class UninstalledTask extends AsyncTask<Void,Void,List<AppData>>{
     private final WeakReference<UninstalledListener> allUninstalledAppsListener;
     private final WeakReference<Context> contextWeakReference;
     private List<AppData> receivedAppList;
+    private Integer uniqueIdentifier;
 
-    public UninstalledTask(WeakReference<Context> context, List<AppData> receivedAppList, WeakReference<UninstalledListener> uninstalledListener) {
+
+    public UninstalledTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer uniqueIdentifier, WeakReference<UninstalledListener> uninstalledListener) {
         contextWeakReference = context;
         this.allUninstalledAppsListener = uninstalledListener;
         this.receivedAppList = receivedAppList;
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class UninstalledTask extends AsyncTask<Void,Void,List<AppData>>{
     protected void onPostExecute(List<AppData> appDataList){
         final UninstalledListener listener = allUninstalledAppsListener.get();
         if (listener!=null) {
-            listener.uninstalledListener(appDataList, false);
+            listener.uninstalledListener(appDataList, false, uniqueIdentifier);
         }
     }
 

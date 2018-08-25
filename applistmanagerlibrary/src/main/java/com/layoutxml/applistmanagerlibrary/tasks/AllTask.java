@@ -22,12 +22,14 @@ public class AllTask extends AsyncTask<Void,Void,List<AppData>> {
     private final WeakReference<Context> contextWeakReference;
     private Integer flags;
     private Boolean match;
+    private Integer uniqueIdentifier;
 
-    public AllTask(WeakReference<Context> context, Integer flags, Boolean match, WeakReference<AllListener> allListener) {
+    public AllTask(WeakReference<Context> context, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<AllListener> allListener) {
         contextWeakReference = context;
         this.allAppsListener = allListener;
         this.flags = flags;
         this.match = match;
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 
     @Override
@@ -62,7 +64,7 @@ public class AllTask extends AsyncTask<Void,Void,List<AppData>> {
     protected void onPostExecute(List<AppData> appDataList) {
         final AllListener listener = allAppsListener.get();
         if (listener!=null) {
-            listener.allListener(appDataList, flags, match);
+            listener.allListener(appDataList, flags, match, uniqueIdentifier);
         }
     }
 

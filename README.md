@@ -44,9 +44,9 @@ Library has 4 listeners:
 
 Function Name | How invoked | Sent Parameters | Received Parameters
 --- | --- | --- | ---
-`allListener` | \* `AppList.getAll(Context)`<br>\* `AppList.getAll(Context, Integer, Boolean)` | \* `Context context`<br>(\* `Integer flags`<br>\* `Boolean match`) | \* `List<AppData>`<br>\* `Integer filterFlags`<br>\* `Boolean match`
-`newListener` | \* `AppList.getNew(Context, List<AppData>)`<br>\* `AppList.getNew(Context, List<AppData>, Integer, Boolean)`<br>\* Automatically when new app installed<sup>1</sup> | \* `Context context`<br>\* `List<AppData> appDataList`<br>(\* `Integer flags`<br>\* `Boolean match`) | \* `List<AppData>`<br>\* `Integer filterFlags`<br>\* `Boolean match`<br>\* `Boolean fromReceiver`
-`uninstalledListener` | \* `AppList.getUninstalled(Context, List<AppData>)`<br>\* Automatically when any app uninstalled<sup>1</sup> | \* `Context context`<br>\* `List<AppData> appDataList` | \* `List<AppData>`<br>\* `Boolean fromReceiver`
+`allListener` | \* `AppList.getAll(Context, Integer)`<br>\* `AppList.getAll(Context, Integer, Boolean, Integer)` | \* `Context context`<br>(\* `Integer flags`<br>\* `Boolean match`)<br>\* ` Integer uniqueIdentifier` | \* `List<AppData>`<br>\* `Integer filterFlags`<br>\* `Boolean match`<br>\* ` Integer uniqueIdentifier`
+`newListener` | \* `AppList.getNew(Context, List<AppData>)`<br>\* `AppList.getNew(Context, List<AppData>, Integer, Boolean)`<br>\* Automatically when new app installed<sup>1</sup> | \* `Context context`<br>\* `List<AppData> appDataList`<br>(\* `Integer flags`<br>\* `Boolean match`)<br>\* ` Integer uniqueIdentifier` | \* `List<AppData>`<br>\* `Integer filterFlags`<br>\* `Boolean match`<br>\* `Boolean fromReceiver`<br>\* ` Integer uniqueIdentifier`
+`uninstalledListener` | \* `AppList.getUninstalled(Context, List<AppData>)`<br>\* Automatically when any app uninstalled<sup>1</sup> | \* `Context context`<br>\* `List<AppData> appDataList`<br>\* ` Integer uniqueIdentifier` | \* `List<AppData>`<br>\* `Boolean fromReceiver`<br>\* ` Integer uniqueIdentifier`
 `sortListener` | \* `AppList.sort(List<AppData>, Integer, Integer, Integer)` | \* `List<AppData> appDataList`<br>\* `Integer sortBy`<br>\* `Integer inOrder`<br>\* `Integer uniqueIdentifier` | \* `List<AppData>`<br>\* `Integer sortBy`<br>\* `Integer inOrder`<br>\* `Integer uniqueIdentifier`
 
 <sup>1</sup> - On Android versions >=8.0 only when application opened. This means that you should periodically check for new apps or in onResume. Works in background on lower Android versions.
@@ -149,7 +149,7 @@ You can choose to use only some of the listeners. You must use `allListener` or 
 1. If you have decided to implement listeners to your class, override `allListener` method like this:
 ```
 Override
-public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match) {
+public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
     //Your code replacing main List<AppData> with a new one, invoking sort, notifying adapters about dataset
 }
 ```
@@ -157,7 +157,7 @@ public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean 
 ```
 AllListener allListener = new AllListener() {
     @Override
-    public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match) {
+    public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
           //Your code replacing main List<AppData> with a new one, invoking sort, notifying adapters about dataset changing etc...      
     }
 };
@@ -172,7 +172,7 @@ AllListener allListener = new AllListener() {
 1. If you have decided to implement listeners to your class, override `newListener` method like this:
 ```
 @Override
-public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Boolean fromReceiver) {
+public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Boolean fromReceiver, Integer uniqueIdentifier) {
     //Your code adding new list to the main List<AppData>, invoking sorting, notifying adapters about dataset changing etc...
 }
 ```
@@ -180,7 +180,7 @@ public void newListener(List<AppData> appDataList, Integer filterFlags, Boolean 
 ```
 AllListener allListener = new AllListener() {
     @Override
-    public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match) {
+    public void allListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
         //Your code adding new list to the main List<AppData>, invoking sorting, notifying adapters about dataset changing etc...
     }
 };
@@ -195,7 +195,7 @@ AllListener allListener = new AllListener() {
 1. If you have decided to implement listeners to your class, override `uninstalledListener` method like this:
 ```
 @Override
-public void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver) {
+public void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver, Integer uniqueIdentifier) {
     //Your code removing apps from the main List<AppData>, invoking sorting, notifying adapters about dataset changing etc...
 }
 ```
@@ -203,7 +203,7 @@ public void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver)
 ```
 UninstalledListener uninstalledListener = new UninstalledListener() {
     @Override
-    public void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver) {
+    public void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver, Integer uniqueIdentifier) {
         //Your code removing apps from the main List<AppData>, invoking sorting, notifying adapters about dataset changing etc...
     }
 };
@@ -252,8 +252,8 @@ Order:
 ![Progress6.1](/Progress/6.1.jpg?raw=true)
 
 There are 2 ways to invoke `allListener`:
-1. `AppList.getAll(Context);`<br>`Context` is your context.<br>For example: `AppList.getAll(getApplicationContext());`.
-2. `AppList.getAll(Context, Integer, Boolean);`<br>`Context` is your context, `Integer` is your flag (flags), and `Boolean` is whether to return applications that match the given flags or those that do not match.<br>For example, `AppList.getAll(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,true);` will return (to your `allListener`) all system apps. Changing `true` to `false` will return only user apps. To learn more about flags, go to "Flags" section.
+1. `AppList.getAll(Context, Integer);`<br>`Context` is your context, and `Integer` is your unique identifier.<br>For example: `AppList.getAll(getApplicationContext());`.
+2. `AppList.getAll(Context, Integer, Boolean, Integer);`<br>`Context` is your context, `Integer` is your flag (flags), `Boolean` is whether to return applications that match the given flags or those that do not match, and `Integer` is your unique identifier.<br>For example, `AppList.getAll(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,true);` will return (to your `allListener`) all system apps. Changing `true` to `false` will return only user apps. To learn more about flags, go to "Flags" section.
 
 It is recommended to invoke `allListener` when application is opened (`onCreate`) and when user refreshes app list (if possible).
 
@@ -262,8 +262,8 @@ It is recommended to invoke `allListener` when application is opened (`onCreate`
 ![Progress6.2](/Progress/6.2.jpg?raw=true)
 
 There are 3 ways to invoke `newListener`:
-1. `AppList.getNew(Context, List<AppData>);`<br>`Context` is your context, and `List<AppData>` is a list with your current applications (application list will be compared to this list).<br>For example: `AppList.getNew(getApplicationContext(), AllAppsList);`.
-2. `AppList.getNew(Context, List<AppData>, Integer, Boolean);`<br>`Context` is your context, `Integer` is your flag (flags), and `Boolean` is whether to return applications that match the given flags or those that do not match.<br>For example, `AppList.getNew(getApplicationContext(), AllAppsList, ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,true);` will return (to your `newListener`) all new system apps. Changing `true` to `false` will return only user apps. To learn more about flags, go to "Flags" section.
+1. `AppList.getNew(Context, List<AppData>, Integer);`<br>`Context` is your context, `List<AppData>` is a list with your current applications (application list will be compared to this list), and `Integer` is your unique identifier.<br>For example: `AppList.getNew(getApplicationContext(), AllAppsList);`.
+2. `AppList.getNew(Context, List<AppData>, Integer, Boolean, Integer);`<br>`Context` is your context, `Integer` is your flag (flags), `Boolean` is whether to return applications that match the given flags or those that do not match, and `Integer` is your unique identifier.<br>For example, `AppList.getNew(getApplicationContext(), AllAppsList, ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,true);` will return (to your `newListener`) all new system apps. Changing `true` to `false` will return only user apps. To learn more about flags, go to "Flags" section.
 3. It is invoked automatically when a new app is installed.<br>Limitations: on Android versions >=8.0 works only when application is opened, on lower Android versions it works in background .
 
 It is recommended to invoke `newListener` periodically and when the app is reopened (`onResume`).
@@ -273,7 +273,7 @@ It is recommended to invoke `newListener` periodically and when the app is reope
 ![Progress6.3](/Progress/6.3.jpg?raw=true)
 
 There are 2 ways to invoke 'uninstalledListener':
-1. `AppList.getUninstalled(Context, List<AppData>);`<br>`Context` is your context, and `List<AppData>` is a list with your current applications (application list will be compared to this list).<br>For example: `AppList.getUninstalled(getApplicationContext(), AllAppsList);`.
+1. `AppList.getUninstalled(Context, List<AppData>, Integer);`<br>`Context` is your context, `List<AppData>` is a list with your current applications (application list will be compared to this list), and `Integer` is your unique identifier.<br>For example: `AppList.getUninstalled(getApplicationContext(), AllAppsList);`.
 2. It is invoked automatically when any app is uninstalled.<br>Limitations: on Android versions >=8.0 works only when application is opened, on lower Android versions it works in background .
 
 It is recommended to invoke `uninstalledListener` periodically and when the app is reopened (`onResume`).

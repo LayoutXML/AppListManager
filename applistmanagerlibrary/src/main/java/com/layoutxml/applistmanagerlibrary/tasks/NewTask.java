@@ -24,13 +24,16 @@ public class NewTask extends AsyncTask<Void,Void,List<AppData>>{
     private List<AppData> receivedAppList;
     private Integer flags;
     private Boolean match;
+    private Integer uniqueIdentifier;
 
-    public NewTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer flags, Boolean match, WeakReference<NewListener> newListener) {
+
+    public NewTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewListener> newListener) {
         contextWeakReference = context;
         this.allNewAppsListener = newListener;
         this.receivedAppList = receivedAppList;
         this.flags = flags;
         this.match = match;
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 
     @Override
@@ -71,7 +74,7 @@ public class NewTask extends AsyncTask<Void,Void,List<AppData>>{
     protected void onPostExecute(List<AppData> appDataList) {
         final NewListener listener = allNewAppsListener.get();
         if (listener!=null) {
-            listener.newListener(appDataList, flags, match, false);
+            listener.newListener(appDataList, flags, match, false, uniqueIdentifier);
         }
     }
 
