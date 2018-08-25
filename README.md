@@ -29,6 +29,10 @@ App List Manager is easy to use Android library, which minimizes developing time
         2. [Flags](https://github.com/LayoutXML/AppListManager#flags)
             1. [Setting Flags](https://github.com/LayoutXML/AppListManager#setting-flags)
             1. [Checking Flags](https://github.com/LayoutXML/AppListManager#checking-flags)
+3. [Other](https://github.com/LayoutXML/AppListManager#other)
+    1. [Donate](https://github.com/LayoutXML/AppListManager#donate)
+    2. [Author](https://github.com/LayoutXML/AppListManager#author)
+    3. [License](https://github.com/LayoutXML/AppListManager#license)
 
 ---
 
@@ -61,9 +65,9 @@ Flags | `Integer` | `.getFlags()` | `.setFlags(Integer)`
 ### 3. Other Functionality
 
 Library also provides functions to quickly compare applications (by their package names) and check application flags. More detailed information and examples can be found below.
-
+<br><br>
 ---
-
+<br><br>
 ## Usage
 
 It is important that you review the overview section above before using this library to get acquainted with the basic functionality. Do not skim through the usage below because a tiny mistake might reduce functionality, make your application crash or create a memory leak.
@@ -327,3 +331,20 @@ To set multiple flags you can use any combination of these operators:
 ##### Checking Flags
 
 You can check if individual app has (or does not have) flags by using `ApList.checkFlags(AppData, Integer Boolean)`, where `AppData` is a single app, `Integer` is flags, `Boolean` is to check whether or not the app has flags (`true`) or quite the opposite (`false`). Alternatively, you can check flags  yourself by accessing app's flags using `.getFlags`.
+<br><br>
+---
+<br><br>
+## Other Information
+
+### Donate
+You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/store/apps/details?id=com.layoutxml.support)** or **[PayPal](https://www.paypal.me/RJankunas)**.
+
+### Author
+More information about me: https://rokasjankunas.com
+
+More information about my projects: https://layoutxml.com
+
+### License
+Twelveish is licensed under "MIT" license. Copyright laws apply.
+
+Copyright © 2018 Rokas Jankūnas (LayoutXML)
