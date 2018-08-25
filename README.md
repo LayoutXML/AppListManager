@@ -70,6 +70,8 @@ It is important that you review the overview section above before using this lib
 
 ### 1. Adding Dependency
 
+![Progress1](/Progress/1.jpg?raw=true)
+
 Add the dependency to your app's `build.gradle`:
 
 ```
@@ -77,6 +79,8 @@ Add the dependency to your app's `build.gradle`:
 ```
 
 ### 2. Registering Receiver
+
+![Progress2](/Progress/2.jpg?raw=true)
 
 1. If your app supports Android versions 7.1.1 or lower, you will be using `newListener` or `uninstalledListener`, and you want know what apps have been uninstalled immediately, you will have to register receiver in your app's manifest file `AndroidManifest.xml` by adding this in your application tag:
 ```
@@ -101,6 +105,8 @@ registerReceiver(new AppList(),AppList.intentFilter);
 
 ### 3. Starting Functionality
 
+![Progress3](/Progress/3.jpg?raw=true)
+
 Decide whether your class will implement listeners or will create them in `onCreate` method.
 
 1. If you have decided to implement listeners to your class, add this line of code to your `onCreate` method:
@@ -117,6 +123,8 @@ You have to replace listener names with your actual listener names that you will
 
 ### 4. Stopping Functionality
 
+![Progress4](/Progress/4.jpg?raw=true)
+
 In your `onPause` method add this line of code to not create any memory leaks:
 ```
 AppList.stop();
@@ -124,9 +132,13 @@ AppList.stop();
 
 ### 5. Adding Listeners
 
+![Progress5](/Progress/5.jpg?raw=true)
+
 You can choose to use only some of the listeners. You must use `allListener` or create `List<AppData>` with your application list manually so that other listeners could work as well. If you want to receive a list of new installed applications (invoked either manually or automatically), you have to use `newListener`. If you want to receive a list of uninstalled applications (invoked either manually or automatically), you have to use `uninstalledListener`.
 
 #### "allListener"
+
+![Progress5.1](/Progress/5.1.jpg?raw=true)
 
 `allListener` receives 3 parameters - `List<AppData> appDataList`, which is a new list of all installed apps, `Integer filterFlags`, which informs what filters had been used when generating a list, and `Boolean match`, which informs whether apps in the list have flags or do not (read more in "Invoking Listeners" section). This is useful when you store multiple lists of different apps. When no filter was used, `filterFlags` is `null`. More about filters and flags in "Flags" section.
 
@@ -149,6 +161,8 @@ AllListener allListener = new AllListener() {
 
 #### "newListener"
 
+![Progress5.2](/Progress/5.2.jpg?raw=true)
+
 `newListener` receives 4 parameters - `List<AppData> appDataList`, which is a list of new apps, `Integer filterFlags`, which informs what filters had been used when generating a list, `Boolean match`, which informs whether apps in the list have flags or do not (read more in "Invoking Listeners" section), and `Boolean fromReceiver`, which is `true` when a `BroadcastReceiver` invoked this listener - this means a list contains only one application and it did not check for filters (you may want to check application filters as described in "Checking Flags" section or manually).
 
 1. If you have decided to implement listeners to your class, override `newListener` method like this:
@@ -170,6 +184,8 @@ AllListener allListener = new AllListener() {
 
 #### "uninstalledListener"
 
+![Progress5.3](/Progress/5.3.jpg?raw=true)
+
 `uninstalledListener` receives 2 parameters - `List<AppData> appDataList`, which is a list of new apps, and `Boolean fromReceiver`, which is `true` when a `BroadcastReceiver` invoked this listener - this means a list contains only one application and only package name is correct (other data is `null`).
 
 1. If you have decided to implement listeners to your class, override `uninstalledListener` method like this:
@@ -190,6 +206,8 @@ UninstalledListener uninstalledListener = new UninstalledListener() {
 ```
 
 #### "sortListener"
+
+![Progress5.4](/Progress/5.4.jpg?raw=true)
 
 Any given `AppData` list is unsorted, as given by the `PackageManager`. Because sorting takes additional time and resources, and is not needed for every app or every task, it is a separate listener. It is not integrated in other listeners because you might want to receive additional apps, add them to your app list and only sort after that.
 
@@ -223,7 +241,11 @@ Order:
 
 ### 6. Invoking Listeners
 
+![Progress6](/Progress/6.jpg?raw=true)
+
 #### "allListener"
+
+![Progress6.1](/Progress/6.1.jpg?raw=true)
 
 There are 2 ways to invoke `allListener`:
 1. `AppList.getAll(Context);`<br>`Context` is your context.<br>For example: `AppList.getAll(getApplicationContext());`.
@@ -232,6 +254,8 @@ There are 2 ways to invoke `allListener`:
 It is recommended to invoke `allListener` when application is opened (`onCreate`) and when user refreshes app list (if possible).
 
 #### "newListener"
+
+![Progress6.2](/Progress/6.2.jpg?raw=true)
 
 There are 3 ways to invoke `newListener`:
 1. `AppList.getNew(Context, List<AppData>);`<br>`Context` is your context, and `List<AppData>` is a list with your current applications (application list will be compared to this list).<br>For example: `AppList.getNew(getApplicationContext(), AllAppsList);`.
@@ -242,6 +266,8 @@ It is recommended to invoke `newListener` periodically and when the app is reope
 
 #### "uninstalledListener"
 
+![Progress6.3](/Progress/6.3.jpg?raw=true)
+
 There are 2 ways to invoke 'uninstalledListener':
 1. `AppList.getUninstalled(Context, List<AppData>);`<br>`Context` is your context, and `List<AppData>` is a list with your current applications (application list will be compared to this list).<br>For example: `AppList.getUninstalled(getApplicationContext(), AllAppsList);`.
 2. It is invoked automatically when any app is uninstalled.<br>Limitations: on Android versions >=8.0 works only when application is opened, on lower Android versions it works in background .
@@ -249,6 +275,8 @@ There are 2 ways to invoke 'uninstalledListener':
 It is recommended to invoke `uninstalledListener` periodically and when the app is reopened (`onResume`).
 
 #### "sortListener"
+
+![Progress6.4](/Progress/6.4.jpg?raw=true)
 
 There is only 1 way to invoke `sortListener`:<br>`AppList.sort(List<AppData>, Integer, Integer, Integer);`<br>`List<AppData>` is your app list, first `Integer` is your sort type, second `Integer` is your order, and a third `Integer` is your unique identifier. You might use it to identify different tasks (where the sort method was invoked, what apps were in the list etc).
 
@@ -262,6 +290,8 @@ Order:
 
 ### 7. Accessing "AppData" Contents
 
+![Progress7](/Progress/7.jpg?raw=true)
+
 `AppData` is an object with 4 values that can be read using getters and locally changed (in a list) using setters.
 
 Information | Data Type | How to get | How to set
@@ -274,6 +304,8 @@ Flags | `Integer` | `.getFlags()` | `.setFlags(Integer)`
 **Note: App name, icon and flags can be `null`**. This is the case when `AppData` is received from a BroadcastReceiver in `uninstalledListener`.
 
 ### 8. Other Functionality
+
+![Progress8](/Progress/8.jpg?raw=true)
 
 #### Comparing
 
