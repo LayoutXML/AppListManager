@@ -1,9 +1,11 @@
 package com.layoutxml.applistmanagerlibrary.tasks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+
 import com.layoutxml.applistmanagerlibrary.interfaces.AllListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
@@ -11,25 +13,20 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by LayoutXML on 22/08/2018
- */
-public class AllTask extends AsyncTask<Void,Void,List<AppData>> {
+public class AllActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
 
-    private static final String TAG = "AllTask";
+    private static final String TAG="AllActivitiesTask";
 
     private final WeakReference<AllListener> allAppsListener;
     private final WeakReference<Context> contextWeakReference;
-    private Integer flags;
-    private Boolean match;
+    private Intent intent;
     private Integer uniqueIdentifier;
 
-    public AllTask(WeakReference<Context> context, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<AllListener> allListener) {
+    public AllActivitiesTask(WeakReference<Context> context, Intent intent, Integer uniqueIdentifier, WeakReference<AllListener> allListener) {
         this.contextWeakReference = context;
-        this.allAppsListener = allListener;
-        this.flags = flags;
-        this.match = match;
+        this.intent = intent;
         this.uniqueIdentifier = uniqueIdentifier;
+        this.allAppsListener = allListener;
     }
 
     @Override
@@ -67,5 +64,4 @@ public class AllTask extends AsyncTask<Void,Void,List<AppData>> {
             listener.allListener(appDataList, flags, match, uniqueIdentifier);
         }
     }
-
 }

@@ -70,6 +70,18 @@ public class AppList extends BroadcastReceiver{
         allTask.execute();
     }
 
+    public static void getAllActivities(Context context, Integer uniqueIdentifier){
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        allTask = new AllTask(context1,null, true, uniqueIdentifier, allListener);
+        allTask.execute();
+    }
+
+    public static void getAllActivities(Context context,  Integer flags, Boolean match, Integer uniqueIdentifier){
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        allTask = new AllTask(context1, flags, match, uniqueIdentifier, allListener);
+        allTask.execute();
+    }
+
     public static void getNew(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
         newTask = new NewTask(context1, appDataList, null, true, uniqueIdentifier, newListener);
