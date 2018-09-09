@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
             public void onClick(View view) {
                 Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
                 mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                AppList.getSomeActivities(getApplicationContext(),mainIntent,4);
+                AppList.getSomeActivities(getApplicationContext(),mainIntent,0,4);
             }
         });
 
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void activitiesListener(List<AppData> appDataList, Intent intent, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
+    public void activitiesListener(List<AppData> appDataList, Intent intent, Integer filterFlags, Integer uniqueIdentifier) {
         if (uniqueIdentifier==4) {
             getActivitiesText.setText("There are now " + appDataList.size() + " activities");
             AllActivitiesList = appDataList;

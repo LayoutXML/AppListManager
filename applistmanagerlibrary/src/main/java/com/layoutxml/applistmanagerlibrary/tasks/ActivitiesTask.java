@@ -23,15 +23,13 @@ public class ActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
     private Intent intent;
     private Integer uniqueIdentifier;
     private Integer flags;
-    private Boolean match;
 
-    public ActivitiesTask(WeakReference<Context> context, Intent intent, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<ActivitiesListener> activitiesListenerWeakReference) {
+    public ActivitiesTask(WeakReference<Context> context, Intent intent, Integer flags, Integer uniqueIdentifier, WeakReference<ActivitiesListener> activitiesListenerWeakReference) {
         this.contextWeakReference = context;
         this.intent = intent;
         this.uniqueIdentifier = uniqueIdentifier;
         this.activitiesListenerWeakReference = activitiesListenerWeakReference;
         this.flags = flags;
-        this.match = match;
     }
 
     @Override
@@ -39,7 +37,7 @@ public class ActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
         Context context1 = contextWeakReference.get();
         if (context1!=null) {
             PackageManager packageManager = context1.getPackageManager();
-            List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent,0);
+            List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent,flags);
             List<AppData> appDataList = new ArrayList<>();
             for (ResolveInfo resolveInfo : resolveInfoList) {
                 AppData app = new AppData();
@@ -47,13 +45,6 @@ public class ActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
                 app.setPackageName(resolveInfo.activityInfo.packageName);
                 app.setIcon(resolveInfo.activityInfo.loadIcon(packageManager));
                 app.setFlags(resolveInfo.activityInfo.flags);
-                if (match) {
-                    if ((flags == null) || ((resolveInfo.activityInfo.flags & flags) != 0))
-                        appDataList.add(app);
-                } else {
-                    if ((flags == null) || ((resolveInfo.activityInfo.flags & flags) == 0))
-                        appDataList.add(app);
-                }
                 if (isCancelled())
                     break;
             }
@@ -66,7 +57,7 @@ public class ActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
     protected void onPostExecute(List<AppData> appDataList) {
         final ActivitiesListener listener = activitiesListenerWeakReference.get();
         if (listener!=null) {
-            listener.activitiesListener(appDataList, intent, flags, match, uniqueIdentifier);
+            listener.activitiesListener(appDataList, intent, flags, uniqueIdentifier);
         }
     }
 }
