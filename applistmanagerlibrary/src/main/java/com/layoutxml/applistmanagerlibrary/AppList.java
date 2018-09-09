@@ -89,16 +89,9 @@ public class AppList extends BroadcastReceiver{
         appTask.execute();
     }
 
-    public static void getAllActivities(Context context, Intent intent, Integer uniqueIdentifier){
+    public static void getSomeActivities(Context context, Intent intent, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
         activitiesTask = new ActivitiesTask(context1, intent, null, true, uniqueIdentifier, activitiesListener);
-        activitiesTask.execute();
-    }
-
-    public static void getSomeActivities(Context context, Intent intent, Integer flags, Boolean match, Integer uniqueIdentifier){
-        //TODO: make without intent or intent null
-        WeakReference<Context> context1 = new WeakReference<>(context);
-        activitiesTask = new ActivitiesTask(context1, intent, flags, match, uniqueIdentifier, activitiesListener);
         activitiesTask.execute();
     }
 

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.layoutxml.applistmanagerlibrary.AppList;
 import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
@@ -35,11 +34,15 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     private Button getUninstalledButton;
     private Button getAllSystemButton;
     private Button getActivitiesButton;
+    private Button getNewActivitiesButton;
+    private Button getUninstalledActivitiesButton;
     private TextView getAllText;
     private TextView getNewText;
     private TextView getUninstalledText;
     private TextView getAllSystemText;
     private TextView getActivitiesText;
+    private TextView getNewActivitiesText;
+    private TextView getUninstalledActivitiesText;
     private List<AppData> AllAppsList;
     private List<AppData> AllSystemAppsList;
     private List<AppData> AllActivitiesList;
@@ -54,11 +57,15 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         getUninstalledButton = findViewById(R.id.getUninstalledBtn);
         getAllSystemButton = findViewById(R.id.getAllSystemBtn);
         getActivitiesButton = findViewById(R.id.getActivitiesBtn);
+        getNewActivitiesButton = findViewById(R.id.getNewActivitiesBtn);
+        getUninstalledActivitiesButton = findViewById(R.id.getUninstalledActivitiesBtn);
         getAllText = findViewById(R.id.getAllTxt);
         getNewText = findViewById(R.id.getNewTxt);
         getUninstalledText = findViewById(R.id.getUninstalledTxt);
         getAllSystemText = findViewById(R.id.getAllSystemTxt);
         getActivitiesText = findViewById(R.id.getActivitiesTxt);
+        getNewActivitiesText = findViewById(R.id.getNewActivitiesTxt);
+        getUninstalledActivitiesText = findViewById(R.id.getUninstalledActivitiesTxt);
 
         AppList.start(MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this);
         registerReceiver(new AppList(),AppList.intentFilter);
@@ -96,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
             public void onClick(View view) {
                 Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
                 mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                AppList.getAllActivities(getApplicationContext(),mainIntent,4);
+                AppList.getSomeActivities(getApplicationContext(),mainIntent,4);
             }
         });
 
