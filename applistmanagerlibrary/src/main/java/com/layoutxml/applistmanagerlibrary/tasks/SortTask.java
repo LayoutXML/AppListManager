@@ -38,28 +38,28 @@ public class SortTask extends AsyncTask<Void,Void,List<AppData>> {
             Collections.sort(appDataList, new Comparator<AppData>() {
                 @Override
                 public int compare(AppData t0, AppData t1) {
-                    return t0.getAppName().compareTo(t1.getAppName());
+                    return t0.getName().compareTo(t1.getName());
                 }
             });
         } else if (sortBy.equals(0) && inOrder.equals(1)) {
             Collections.sort(appDataList, new Comparator<AppData>() {
                 @Override
                 public int compare(AppData t0, AppData t1) {
-                    return t1.getAppName().compareTo(t0.getAppName());
+                    return t1.getName().compareTo(t0.getName());
                 }
             });
         } else if (sortBy.equals(1) && inOrder.equals(0)) {
             Collections.sort(appDataList, new Comparator<AppData>() {
                 @Override
                 public int compare(AppData t0, AppData t1) {
-                    return t0.getAppPackageName().compareTo(t1.getAppPackageName());
+                    return t0.getPackageName().compareTo(t1.getPackageName());
                 }
             });
         } else if (sortBy.equals(1) && inOrder.equals(1)) {
             Collections.sort(appDataList, new Comparator<AppData>() {
                 @Override
                 public int compare(AppData t0, AppData t1) {
-                    return t1.getAppPackageName().compareTo(t0.getAppPackageName());
+                    return t1.getPackageName().compareTo(t0.getPackageName());
                 }
             });
         }

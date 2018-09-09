@@ -1,35 +1,36 @@
 package com.layoutxml.applistmanagerlibrary.tasks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 
-import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivitiesListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by LayoutXML on 23/08/2018
- */
-public class UninstalledTask extends AsyncTask<Void,Void,List<AppData>>{
+public class UninstalledActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
 
-    private static final String TAG = "UninstalledTask";
+    private static final String TAG = "UninstalledAppTask";
 
-    private final WeakReference<UninstalledListener> allUninstalledAppsListener;
+    private final WeakReference<UninstalledActivitiesListener> uninstalledActivitiesTaskWeakReference;
     private final WeakReference<Context> contextWeakReference;
     private List<AppData> receivedAppList;
     private Integer uniqueIdentifier;
+    private Intent intent;
 
 
-    public UninstalledTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer uniqueIdentifier, WeakReference<UninstalledListener> uninstalledListener) {
+    public UninstalledActivitiesTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer uniqueIdentifier, WeakReference<UninstalledActivitiesListener> uninstalledListener) {
         contextWeakReference = context;
-        this.allUninstalledAppsListener = uninstalledListener;
+        this.uninstalledActivitiesTaskWeakReference = uninstalledListener;
         this.receivedAppList = receivedAppList;
         this.uniqueIdentifier = uniqueIdentifier;
+        this.intent = intent;
     }
 
     @Override
@@ -37,15 +38,15 @@ public class UninstalledTask extends AsyncTask<Void,Void,List<AppData>>{
         Context context1 = contextWeakReference.get();
         if (context1!=null) {
             PackageManager packageManager = context1.getPackageManager();
-            List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+            List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent,0);
             List<AppData> appDataList = new ArrayList<>();
             List<AppData> installedAppList = new ArrayList<>();
-            for (ApplicationInfo applicationInfo : applicationInfoList) {
+            for (ResolveInfo resolveInfo : resolveInfoList) {
                 AppData app = new AppData();
-                app.setAppName(applicationInfo.loadLabel(packageManager).toString());
-                app.setAppPackageName(applicationInfo.packageName);
-                app.setAppIcon(applicationInfo.loadIcon(packageManager));
-                app.setFlags(applicationInfo.flags);
+                app.setName(resolveInfo.loadLabel(packageManager).toString());
+                app.setPackageName(resolveInfo.activityInfo.packageName);
+                app.setIcon(resolveInfo.activityInfo.loadIcon(packageManager));
+                app.setFlags(resolveInfo.activityInfo.flags);
                 installedAppList.add(app);
                 if (isCancelled())
                     break;
@@ -66,9 +67,9 @@ public class UninstalledTask extends AsyncTask<Void,Void,List<AppData>>{
 
     @Override
     protected void onPostExecute(List<AppData> appDataList){
-        final UninstalledListener listener = allUninstalledAppsListener.get();
+        final UninstalledActivitiesListener listener = uninstalledActivitiesTaskWeakReference.get();
         if (listener!=null) {
-            listener.uninstalledListener(appDataList, false, uniqueIdentifier);
+            listener.uninstalledActivitiesListener(appDataList, intent, false, uniqueIdentifier);
         }
     }
 

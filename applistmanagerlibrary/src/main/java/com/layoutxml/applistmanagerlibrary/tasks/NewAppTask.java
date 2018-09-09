@@ -5,7 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
-import com.layoutxml.applistmanagerlibrary.interfaces.NewListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewAppListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.lang.ref.WeakReference;
@@ -15,11 +15,11 @@ import java.util.List;
 /**
  * Created by LayoutXML on 23/08/2018
  */
-public class NewTask extends AsyncTask<Void,Void,List<AppData>>{
+public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
 
-    private static final String TAG = "NewTask";
+    private static final String TAG = "NewAppTask";
 
-    private final WeakReference<NewListener> allNewAppsListener;
+    private final WeakReference<NewAppListener> allNewAppsListener;
     private final WeakReference<Context> contextWeakReference;
     private List<AppData> receivedAppList;
     private Integer flags;
@@ -27,7 +27,7 @@ public class NewTask extends AsyncTask<Void,Void,List<AppData>>{
     private Integer uniqueIdentifier;
 
 
-    public NewTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewListener> newListener) {
+    public NewAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewAppListener> newListener) {
         contextWeakReference = context;
         this.allNewAppsListener = newListener;
         this.receivedAppList = receivedAppList;
@@ -45,9 +45,9 @@ public class NewTask extends AsyncTask<Void,Void,List<AppData>>{
             List<AppData> appDataList = new ArrayList<>();
             for (ApplicationInfo applicationInfo : applicationInfoList) {
                 AppData app = new AppData();
-                app.setAppName(applicationInfo.loadLabel(packageManager).toString());
-                app.setAppPackageName(applicationInfo.packageName);
-                app.setAppIcon(applicationInfo.loadIcon(packageManager));
+                app.setName(applicationInfo.loadLabel(packageManager).toString());
+                app.setPackageName(applicationInfo.packageName);
+                app.setIcon(applicationInfo.loadIcon(packageManager));
                 app.setFlags(applicationInfo.flags);
                 if (receivedAppList != null) {
                     if (match) {
@@ -72,9 +72,9 @@ public class NewTask extends AsyncTask<Void,Void,List<AppData>>{
 
     @Override
     protected void onPostExecute(List<AppData> appDataList) {
-        final NewListener listener = allNewAppsListener.get();
+        final NewAppListener listener = allNewAppsListener.get();
         if (listener!=null) {
-            listener.newListener(appDataList, flags, match, false, uniqueIdentifier);
+            listener.newAppListener(appDataList, flags, match, false, uniqueIdentifier);
         }
     }
 

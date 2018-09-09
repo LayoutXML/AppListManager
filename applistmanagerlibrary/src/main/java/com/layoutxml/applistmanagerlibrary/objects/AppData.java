@@ -10,11 +10,11 @@ public class AppData {
 
     private static final String TAG = "AppData";
 
-    private String appName;
-    private Drawable appIcon;
+    private String name;
+    private Drawable icon;
     private Integer flags;
     @NonNull
-    private String appPackageName = "";
+    private String packageName = "";
 
     public Integer getFlags() {
         return flags;
@@ -24,36 +24,36 @@ public class AppData {
         this.flags = flags;
     }
 
-    public String getAppName() {
-        return appName;
+    public String getName() {
+        return name;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @NonNull
-    public String getAppPackageName() {
-        return appPackageName;
+    public String getPackageName() {
+        return packageName;
     }
 
-    public void setAppPackageName(@NonNull String appPackageName) {
-        this.appPackageName = appPackageName;
+    public void setPackageName(@NonNull String packageName) {
+        this.packageName = packageName;
     }
 
-    public Drawable getAppIcon() {
-        return appIcon;
+    public Drawable getIcon() {
+        return icon;
     }
 
-    public void setAppIcon(Drawable appIcon) {
-        this.appIcon = appIcon;
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
     }
 
     @Override
     public boolean equals(Object o){
         if(o instanceof AppData){
             AppData p = (AppData) o;
-            return this.getAppPackageName().equals(p.getAppPackageName());
+            return this.getPackageName().equals(p.getPackageName());
         } else
             return false;
     }

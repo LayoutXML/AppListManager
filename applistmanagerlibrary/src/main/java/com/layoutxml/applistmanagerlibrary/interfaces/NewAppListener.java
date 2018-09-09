@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * Created by LayoutXML on 23/08/2018
  */
-public interface UninstalledListener {
-    void uninstalledListener(List<AppData> appDataList, Boolean fromReceiver, Integer uniqueIdentifier);
+public interface NewAppListener {
+    void newAppListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Boolean fromReceiver, Integer uniqueIdentifier);
 }

@@ -6,25 +6,28 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import com.layoutxml.applistmanagerlibrary.interfaces.AllListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.NewListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewAppListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledAppListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
-import com.layoutxml.applistmanagerlibrary.tasks.AllTask;
-import com.layoutxml.applistmanagerlibrary.tasks.NewTask;
+import com.layoutxml.applistmanagerlibrary.tasks.ActivitiesTask;
+import com.layoutxml.applistmanagerlibrary.tasks.AppTask;
+import com.layoutxml.applistmanagerlibrary.tasks.NewActivitiesTask;
+import com.layoutxml.applistmanagerlibrary.tasks.NewAppTask;
 import com.layoutxml.applistmanagerlibrary.tasks.SortTask;
-import com.layoutxml.applistmanagerlibrary.tasks.UninstalledTask;
+import com.layoutxml.applistmanagerlibrary.tasks.UninstalledActivitiesTask;
+import com.layoutxml.applistmanagerlibrary.tasks.UninstalledAppTask;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -33,24 +36,40 @@ import java.util.List;
 public class AppList extends BroadcastReceiver{
 
     private static final String TAG = "AppList";
-    private static AllTask allTask;
-    private static NewTask newTask;
-    private static UninstalledTask uninstalledTask;
-    private static SortTask sortTask;
-    private static WeakReference<AllListener> allListener;
-    private static WeakReference<NewListener> newListener;
-    private static WeakReference<UninstalledListener> uninstalledListener;
-    private static WeakReference<SortListener> sortListener;
+
     public static IntentFilter intentFilter = new IntentFilter();
+
+    //Tasks
+    private static AppTask appTask;
+    private static ActivitiesTask activitiesTask;
+    private static NewAppTask newAppTask;
+    private static NewActivitiesTask newActivitiesTask;
+    private static UninstalledAppTask uninstalledAppTask;
+    private static UninstalledActivitiesTask uninstalledActivitiesTask;
+    private static SortTask sortTask;
+
+    //Listeners - weakreferences
+    private static WeakReference<AppListener> appListener;
+    private static WeakReference<ActivitiesListener> activitiesListener;
+    private static WeakReference<NewAppListener> newAppListener;
+    private static WeakReference<NewActivitiesListener> newActivitiesListener;
+    private static WeakReference<UninstalledAppListener> uninstalledAppListener;
+    private static WeakReference<UninstalledActivitiesListener> uninstalledActivitiesListener;
+    private static WeakReference<SortListener> sortListener;
+
+    //Values
     public static final Integer BY_APPNAME = 0;
     public static final Integer BY_PACKAGENAME = 1;
     public static final Integer IN_ASCENDING = 0;
     public static final Integer IN_DESCENDING = 1;
 
-    public static void start(AllListener allListener, NewListener newListener, UninstalledListener uninstalledListener, SortListener sortListener) {
-        AppList.allListener = new WeakReference<>(allListener);
-        AppList.newListener = new WeakReference<>(newListener);
-        AppList.uninstalledListener = new WeakReference<>(uninstalledListener);
+    public static void start(AppListener appListener, ActivitiesListener activitiesListener, NewAppListener newAppListener, NewActivitiesListener newActivitiesListener, UninstalledAppListener uninstalledAppListener, UninstalledActivitiesListener uninstalledActivitiesListener, SortListener sortListener) {
+        AppList.appListener = new WeakReference<>(appListener);
+        AppList.activitiesListener = new WeakReference<>(activitiesListener);
+        AppList.newAppListener = new WeakReference<>(newAppListener);
+        AppList.newActivitiesListener = new WeakReference<>(newActivitiesListener);
+        AppList.uninstalledAppListener = new WeakReference<>(uninstalledAppListener);
+        AppList.uninstalledActivitiesListener = new WeakReference<>(uninstalledActivitiesListener);
         AppList.sortListener = new WeakReference<>(sortListener);
 
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -58,46 +77,53 @@ public class AppList extends BroadcastReceiver{
         intentFilter.addDataScheme("package");
     }
 
-    public static void getAll(Context context, Integer uniqueIdentifier){
+    public static void getAllApps(Context context, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        allTask = new AllTask(context1,null, true, uniqueIdentifier, allListener);
-        allTask.execute();
+        appTask = new AppTask(context1,null, true, uniqueIdentifier, appListener);
+        appTask.execute();
     }
 
-    public static void getAll(Context context,  Integer flags, Boolean match, Integer uniqueIdentifier){
+    public static void getSomeApps(Context context, Integer flags, Boolean match, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        allTask = new AllTask(context1, flags, match, uniqueIdentifier, allListener);
-        allTask.execute();
+        appTask = new AppTask(context1, flags, match, uniqueIdentifier, appListener);
+        appTask.execute();
     }
 
-    public static void getAllActivities(Context context, Integer uniqueIdentifier){
+    public static void getAllActivities(Context context, Intent intent, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        allTask = new AllTask(context1,null, true, uniqueIdentifier, allListener);
-        allTask.execute();
+        activitiesTask = new ActivitiesTask(context1, intent, null, true, uniqueIdentifier, activitiesListener);
+        activitiesTask.execute();
     }
 
-    public static void getAllActivities(Context context,  Integer flags, Boolean match, Integer uniqueIdentifier){
+    public static void getSomeActivities(Context context, Intent intent, Integer flags, Boolean match, Integer uniqueIdentifier){
+        //TODO: make without intent or intent null
         WeakReference<Context> context1 = new WeakReference<>(context);
-        allTask = new AllTask(context1, flags, match, uniqueIdentifier, allListener);
-        allTask.execute();
+        activitiesTask = new ActivitiesTask(context1, intent, flags, match, uniqueIdentifier, activitiesListener);
+        activitiesTask.execute();
     }
 
-    public static void getNew(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
+    public static void getAllNewApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newTask = new NewTask(context1, appDataList, null, true, uniqueIdentifier, newListener);
-        newTask.execute();
+        newAppTask = new NewAppTask(context1, appDataList, null, true, uniqueIdentifier, newAppListener);
+        newAppTask.execute();
     }
 
-    public static void getNew(Context context, List<AppData> appDataList, Integer flags, Boolean match, Integer uniqueIdentifier) {
+    public static void getSomeNewApps(Context context, List<AppData> appDataList, Integer flags, Boolean match, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newTask = new NewTask(context1, appDataList, flags, match, uniqueIdentifier, newListener);
-        newTask.execute();
+        newAppTask = new NewAppTask(context1, appDataList, flags, match, uniqueIdentifier, newAppListener);
+        newAppTask.execute();
     }
 
-    public static void getUninstalled(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
+    public static void getAllUninstalledApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        uninstalledTask = new UninstalledTask(context1, appDataList, uniqueIdentifier, uninstalledListener);
-        uninstalledTask.execute();
+        uninstalledAppTask = new UninstalledAppTask(context1, appDataList, uniqueIdentifier, uninstalledAppListener);
+        uninstalledAppTask.execute();
+    }
+
+    public static void getAllUninstalledActivities(Context context, List<AppData> appDataList, Intent intent, Integer uniqueIdentifier) {
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        uninstalledActivitiesTask = new UninstalledActivitiesTask(context1, appDataList, intent, uniqueIdentifier, uninstalledActivitiesListener);
+        uninstalledActivitiesTask.execute();
     }
 
     public static Boolean checkFlags(AppData appData, Integer flags, Boolean match) {
@@ -113,19 +139,34 @@ public class AppList extends BroadcastReceiver{
     }
 
     public static void stop() {
-        if (allTask !=null) {
-            if (allTask.getStatus()!=AsyncTask.Status.FINISHED) {
-                allTask.cancel(true);
+        if (appTask !=null) {
+            if (appTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                appTask.cancel(true);
             }
         }
-        if (newTask !=null) {
-            if (newTask.getStatus()!=AsyncTask.Status.FINISHED) {
-                newTask.cancel(true);
+        if (activitiesTask !=null) {
+            if (activitiesTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                activitiesTask.cancel(true);
             }
         }
-        if (uninstalledTask !=null) {
-            if (uninstalledTask.getStatus()!=AsyncTask.Status.FINISHED) {
-                uninstalledTask.cancel(true);
+        if (newAppTask !=null) {
+            if (newAppTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                newAppTask.cancel(true);
+            }
+        }
+        if (newActivitiesTask !=null) {
+            if (newActivitiesTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                newActivitiesTask.cancel(true);
+            }
+        }
+        if (uninstalledAppTask !=null) {
+            if (uninstalledAppTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                uninstalledAppTask.cancel(true);
+            }
+        }
+        if (uninstalledActivitiesTask !=null) {
+            if (uninstalledActivitiesTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                uninstalledActivitiesTask.cancel(true);
             }
         }
         if (sortTask != null) {
@@ -139,35 +180,63 @@ public class AppList extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if (action!=null && context!=null) {
-            if (action.equals(Intent.ACTION_PACKAGE_ADDED) && newListener!=null) {
-                if (newListener.get()!=null) {
-                    Uri data = intent.getData();
-                    List<AppData> newApp = new ArrayList<>();
-                    AppData app = new AppData();
-                    if (data != null) {
-                        app.setAppPackageName(data.getEncodedSchemeSpecificPart());
-                        try {
+            if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
+                if (newAppListener!=null) {
+                    if (newAppListener.get() != null) {
+                        Uri data = intent.getData();
+                        List<AppData> newApp = new ArrayList<>();
+                        AppData app = new AppData();
+                        if (data != null) {
+                            app.setPackageName(data.getEncodedSchemeSpecificPart());
+                            try {
+                                final PackageManager packageManager = context.getPackageManager();
+                                final ApplicationInfo applicationInfo = packageManager.getApplicationInfo(app.getPackageName(), 0);
+                                app.setIcon(applicationInfo.loadIcon(packageManager));
+                                app.setName(applicationInfo.loadLabel(packageManager).toString());
+                                newApp.add(app);
+                                newAppListener.get().newAppListener(newApp, null, false, true, -1);
+                            } catch (PackageManager.NameNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                if (newActivitiesListener!=null) {
+                    if (newActivitiesListener.get() != null) {
+                        Uri data = intent.getData();
+                        List<AppData> newApps = new ArrayList<>();
+                        if (data!=null) { //TODO: put in asynctask
+                            Intent intent1 = new Intent();
+                            intent1.setPackage(data.getEncodedSchemeSpecificPart());
                             final PackageManager packageManager = context.getPackageManager();
-                            final ApplicationInfo applicationInfo = packageManager.getApplicationInfo(app.getAppPackageName(), 0);
-                            app.setAppIcon(applicationInfo.loadIcon(packageManager));
-                            app.setAppName(applicationInfo.loadLabel(packageManager).toString());
-                            newApp.add(app);
-                            newListener.get().newListener(newApp, null, false, true, -1);
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
+                            List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent,0);
+                            for (ResolveInfo resolveInfo : resolveInfoList) {
+                                AppData app = new AppData();
+                                app.setName(resolveInfo.activityInfo.name);
+                                app.setPackageName(resolveInfo.activityInfo.packageName);
+                                try {
+                                    app.setIcon(packageManager.getApplicationIcon(app.getPackageName()));
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                app.setFlags(resolveInfo.activityInfo.flags);
+                                newApps.add(app);
+                            }
+                            newActivitiesListener.get().newActivitiesListener(newApps,null,null,false,true,-1);
                         }
                     }
                 }
             }
-            else if (action.equals(Intent.ACTION_PACKAGE_REMOVED) && uninstalledListener!=null) {
-                if (uninstalledListener.get()!=null) {
+            else if (action.equals(Intent.ACTION_PACKAGE_REMOVED) && uninstalledAppListener !=null) {
+                if (uninstalledAppListener.get()!=null) {
                     Uri data = intent.getData();
                     List<AppData> newApp = new ArrayList<>();
                     AppData app = new AppData();
                     if (data != null) {
-                        app.setAppPackageName(data.getEncodedSchemeSpecificPart());
+                        app.setPackageName(data.getEncodedSchemeSpecificPart());
                         newApp.add(app);
-                        uninstalledListener.get().uninstalledListener(newApp, true, -1);
+                        uninstalledAppListener.get().uninstalledAppListener(newApp, true, -1);
+                        uninstalledActivitiesListener.get().uninstalledActivitiesListener(newApp,null,true,-1);
                     }
                 }
             }

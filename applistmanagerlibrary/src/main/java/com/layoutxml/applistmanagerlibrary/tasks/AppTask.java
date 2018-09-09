@@ -1,32 +1,35 @@
 package com.layoutxml.applistmanagerlibrary.tasks;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-
-import com.layoutxml.applistmanagerlibrary.interfaces.AllListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
+/**
+ * Created by LayoutXML on 22/08/2018
+ */
+public class AppTask extends AsyncTask<Void,Void,List<AppData>> {
 
-    private static final String TAG="AllActivitiesTask";
+    private static final String TAG = "AppTask";
 
-    private final WeakReference<AllListener> allAppsListener;
+    private final WeakReference<AppListener> allAppsListener;
     private final WeakReference<Context> contextWeakReference;
-    private Intent intent;
+    private Integer flags;
+    private Boolean match;
     private Integer uniqueIdentifier;
 
-    public AllActivitiesTask(WeakReference<Context> context, Intent intent, Integer uniqueIdentifier, WeakReference<AllListener> allListener) {
+    public AppTask(WeakReference<Context> context, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<AppListener> allListener) {
         this.contextWeakReference = context;
-        this.intent = intent;
-        this.uniqueIdentifier = uniqueIdentifier;
         this.allAppsListener = allListener;
+        this.flags = flags;
+        this.match = match;
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 
     @Override
@@ -38,9 +41,9 @@ public class AllActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
             List<AppData> appDataList = new ArrayList<>();
             for (ApplicationInfo applicationInfo : applicationInfoList) {
                 AppData app = new AppData();
-                app.setAppName(applicationInfo.loadLabel(packageManager).toString());
-                app.setAppPackageName(applicationInfo.packageName);
-                app.setAppIcon(applicationInfo.loadIcon(packageManager));
+                app.setName(applicationInfo.loadLabel(packageManager).toString());
+                app.setPackageName(applicationInfo.packageName);
+                app.setIcon(applicationInfo.loadIcon(packageManager));
                 app.setFlags(applicationInfo.flags);
                 if (match) {
                     if ((flags == null) || ((applicationInfo.flags & flags) != 0))
@@ -59,9 +62,10 @@ public class AllActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
 
     @Override
     protected void onPostExecute(List<AppData> appDataList) {
-        final AllListener listener = allAppsListener.get();
+        final AppListener listener = allAppsListener.get();
         if (listener!=null) {
-            listener.allListener(appDataList, flags, match, uniqueIdentifier);
+            listener.appListener(appDataList,  flags, match, uniqueIdentifier);
         }
     }
+
 }
