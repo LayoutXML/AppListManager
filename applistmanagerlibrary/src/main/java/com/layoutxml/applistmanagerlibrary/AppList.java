@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
@@ -89,9 +90,15 @@ public class AppList extends BroadcastReceiver{
         appTask.execute();
     }
 
-    public static void getSomeActivities(Context context, Intent intent, Integer flags, Integer uniqueIdentifier){
+    public static void getAllActivities(Context context, Intent intent, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        activitiesTask = new ActivitiesTask(context1, intent, flags, uniqueIdentifier, activitiesListener);
+        activitiesTask = new ActivitiesTask(context1, intent, 0, null, false, uniqueIdentifier, activitiesListener);
+        activitiesTask.execute();
+    }
+
+    public static void getSomeActivities(Context context, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, Integer uniqueIdentifier){
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        activitiesTask = new ActivitiesTask(context1, intent, activitiesFlags, appFlags, appMatch, uniqueIdentifier, activitiesListener);
         activitiesTask.execute();
     }
 
@@ -208,11 +215,16 @@ public class AppList extends BroadcastReceiver{
                                 app.setName(resolveInfo.activityInfo.name);
                                 app.setPackageName(resolveInfo.activityInfo.packageName);
                                 try {
+                                    ApplicationInfo appInfo = packageManager.getApplicationInfo(app.getPackageName(),0);
+                                    app.setFlags(appInfo.flags);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
                                     app.setIcon(packageManager.getApplicationIcon(app.getPackageName()));
                                 } catch (PackageManager.NameNotFoundException e) {
                                     e.printStackTrace();
                                 }
-                                app.setFlags(resolveInfo.activityInfo.flags);
                                 newApps.add(app);
                             }
                             newActivitiesListener.get().newActivitiesListener(newApps,null,null,false,true,-1);
