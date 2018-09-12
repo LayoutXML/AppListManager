@@ -61,6 +61,16 @@ public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
                                 appDataList.add(app);
                         }
                     }
+                } else {
+                    if (match) {
+                        if ((flags == null) || ((applicationInfo.flags & flags) != 0)) {
+                            appDataList.add(app);
+                        }
+                    } else {
+                        if ((flags == null) || ((applicationInfo.flags & flags) == 0)) {
+                            appDataList.add(app);
+                        }
+                    }
                 }
                 if (isCancelled())
                     break;
