@@ -64,7 +64,7 @@ public class AppList extends BroadcastReceiver{
     public static final Integer IN_ASCENDING = 0;
     public static final Integer IN_DESCENDING = 1;
 
-    public static void start(AppListener appListener, ActivitiesListener activitiesListener, NewAppListener newAppListener, NewActivitiesListener newActivitiesListener, UninstalledAppListener uninstalledAppListener, UninstalledActivitiesListener uninstalledActivitiesListener, SortListener sortListener) {
+    public static void registerListeners(AppListener appListener, ActivitiesListener activitiesListener, NewAppListener newAppListener, NewActivitiesListener newActivitiesListener, UninstalledAppListener uninstalledAppListener, UninstalledActivitiesListener uninstalledActivitiesListener, SortListener sortListener) {
         AppList.appListener = new WeakReference<>(appListener);
         AppList.activitiesListener = new WeakReference<>(activitiesListener);
         AppList.newAppListener = new WeakReference<>(newAppListener);
@@ -126,7 +126,7 @@ public class AppList extends BroadcastReceiver{
         uninstalledActivitiesTask.execute();
     }
 
-    public static Boolean checkFlags(AppData appData, Integer flags, Boolean match) {
+    public static Boolean checkApplicationFlags(AppData appData, Integer flags, Boolean match) {
         if (match)
             return ((flags==null) || ((appData.getFlags() & flags) != 0));
         else
@@ -138,7 +138,7 @@ public class AppList extends BroadcastReceiver{
         sortTask.execute();
     }
 
-    public static void stop() {
+    public static void destroy() {
         if (appTask !=null) {
             if (appTask.getStatus()!=AsyncTask.Status.FINISHED) {
                 appTask.cancel(true);

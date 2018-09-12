@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     @Override
     protected void onPause() {
         super.onPause();
-        AppList.stop();
+        AppList.destroy();
     }
 
     private static final String TAG = "MainActivity";
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         getNewActivitiesText = findViewById(R.id.getNewActivitiesTxt);
         getUninstalledActivitiesText = findViewById(R.id.getUninstalledActivitiesTxt);
 
-        AppList.start(MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this);
+        AppList.registerListeners(MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this);
         registerReceiver(new AppList(),AppList.intentFilter);
 
         getAllButton.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +104,13 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
                 Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
                 mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                 AppList.getAllActivities(getApplicationContext(),mainIntent,4);
+            }
+        });
+
+        getNewActivitiesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
