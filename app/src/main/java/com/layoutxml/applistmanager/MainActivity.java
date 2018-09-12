@@ -30,6 +30,12 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         AppList.destroy();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppList.registerListeners(MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this);
+    }
+
     private static final String TAG = "MainActivity";
     private Button getAllButton;
     private Button getNewButton;
@@ -38,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     private Button getActivitiesButton;
     private Button getNewActivitiesButton;
     private Button getUninstalledActivitiesButton;
+    private Button showAppButton;
+    private Button showActivitiesButton;
     private TextView getAllText;
     private TextView getNewText;
     private TextView getUninstalledText;
@@ -61,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         getActivitiesButton = findViewById(R.id.getActivitiesBtn);
         getNewActivitiesButton = findViewById(R.id.getNewActivitiesBtn);
         getUninstalledActivitiesButton = findViewById(R.id.getUninstalledActivitiesBtn);
+        showAppButton = findViewById(R.id.showAppsBtn);
+        showActivitiesButton = findViewById(R.id.showActivitiesBtn);
         getAllText = findViewById(R.id.getAllTxt);
         getNewText = findViewById(R.id.getNewTxt);
         getUninstalledText = findViewById(R.id.getUninstalledTxt);
@@ -125,6 +135,24 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
                 Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
                 mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                 AppList.getAllUninstalledActivities(getApplicationContext(),AllActivitiesList,mainIntent,6);
+            }
+        });
+
+        showAppButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                intent.putExtra("appDataList","apps");
+                startActivity(intent);
+            }
+        });
+
+        showActivitiesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                intent.putExtra("appDataList","activities");
+                startActivity(intent);
             }
         });
 

@@ -16,17 +16,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver
             android:name="com.layoutxml.applistmanagerlibrary.AppList"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
-                <action android:name="android.intent.action.PACKAGE_ADDED"  />
+
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".ListActivity" />
     </application>
 
 </manifest>
