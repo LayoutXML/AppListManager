@@ -180,12 +180,16 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         getNewActivitiesText.setText(appDataList.size()+" activities added");
         if (AllActivitiesList!=null) {
             AllActivitiesList.addAll(appDataList);
-            getActivitiesText.setText(getActivitiesText.getText()+"\n- "+appDataList.size()+" ("+AllActivitiesList.size()+" total).");
+            getActivitiesText.setText(getActivitiesText.getText()+"\n+ "+appDataList.size()+" ("+AllActivitiesList.size()+" total).");
         }
     }
 
     @Override
     public void uninstalledActivitiesListener(List<AppData> appDataList, Intent intent, Boolean fromReceiver, Integer uniqueIdentifier) {
-
+        getUninstalledActivitiesText.setText(appDataList.size()+" activities removed");
+        if (AllActivitiesList!=null){
+            AllActivitiesList.removeAll(appDataList);
+            getActivitiesText.setText(getActivitiesText.getText()+"\n- "+appDataList.size()+" ("+AllActivitiesList.size()+" total).");
+        }
     }
 }
