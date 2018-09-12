@@ -114,6 +114,16 @@ public class AppList extends BroadcastReceiver{
         newAppTask.execute();
     }
 
+    public static void getAllNewActivities(Context context, List<AppData> appDataList, Intent intent, Integer uniqueIdentifier) {
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        //TODO: New activities task
+    }
+
+    public static void getSomeNewActivities(Context context, List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, Integer uniqueIdentifier) {
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        //TODO: New activities task
+    }
+
     public static void getAllUninstalledApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
         uninstalledAppTask = new UninstalledAppTask(context1, appDataList, uniqueIdentifier, uninstalledAppListener);

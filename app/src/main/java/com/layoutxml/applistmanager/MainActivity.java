@@ -110,7 +110,18 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         getNewActivitiesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                AppList.getAllNewActivities(getApplicationContext(),AllActivitiesList,mainIntent,5);
+            }
+        });
 
+        getUninstalledActivitiesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                AppList.getAllUninstalledActivities(getApplicationContext(),AllActivitiesList,mainIntent,6);
             }
         });
 
@@ -157,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void activitiesListener(List<AppData> appDataList, Intent intent, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
+    public void activitiesListener(List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
         if (uniqueIdentifier==4) {
             getActivitiesText.setText("There are now " + appDataList.size() + " activities");
             AllActivitiesList = appDataList;
