@@ -176,8 +176,12 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void newActivitiesListener(List<AppData> appDataList, Intent intent, Integer filterFlags, Boolean match, Boolean fromReceiver, Integer uniqueIdentifier) {
-
+    public void newActivitiesListener(List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer filterFlags, Boolean match, Boolean fromReceiver, Integer uniqueIdentifier) {
+        getNewActivitiesText.setText(appDataList.size()+" activities added");
+        if (AllActivitiesList!=null) {
+            AllActivitiesList.addAll(appDataList);
+            getActivitiesText.setText(getActivitiesText.getText()+"\n- "+appDataList.size()+" ("+AllActivitiesList.size()+" total).");
+        }
     }
 
     @Override

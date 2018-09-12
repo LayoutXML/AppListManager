@@ -104,7 +104,7 @@ public class AppList extends BroadcastReceiver{
 
     public static void getAllNewApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newAppTask = new NewAppTask(context1, appDataList, null, true, uniqueIdentifier, newAppListener);
+        newAppTask = new NewAppTask(context1, appDataList, null, false, uniqueIdentifier, newAppListener);
         newAppTask.execute();
     }
 
@@ -116,12 +116,14 @@ public class AppList extends BroadcastReceiver{
 
     public static void getAllNewActivities(Context context, List<AppData> appDataList, Intent intent, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        //TODO: New activities task
+        newActivitiesTask = new NewActivitiesTask(context1,appDataList,intent,0,null,false,uniqueIdentifier,newActivitiesListener);
+        newActivitiesTask.execute();
     }
 
     public static void getSomeNewActivities(Context context, List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        //TODO: New activities task
+        newActivitiesTask = new NewActivitiesTask(context1,appDataList,intent,activitiesFlags,appFlags,appMatch,uniqueIdentifier,newActivitiesListener);
+        newActivitiesTask.execute();
     }
 
     public static void getAllUninstalledApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
@@ -237,7 +239,7 @@ public class AppList extends BroadcastReceiver{
                                 }
                                 newApps.add(app);
                             }
-                            newActivitiesListener.get().newActivitiesListener(newApps,null,null,false,true,-1);
+                            newActivitiesListener.get().newActivitiesListener(newApps,null,0,null,false,true,-1);
                         }
                     }
                 }

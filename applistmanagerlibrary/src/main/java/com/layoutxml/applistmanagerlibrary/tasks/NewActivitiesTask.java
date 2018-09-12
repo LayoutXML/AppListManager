@@ -2,6 +2,7 @@ package com.layoutxml.applistmanagerlibrary.tasks;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
@@ -24,9 +25,10 @@ public class NewActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
     private Boolean match;
     private Integer uniqueIdentifier;
     private Intent intent;
+    private Integer activitiesFlags;
 
 
-    public NewActivitiesTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewActivitiesListener> newActivitiesListener) {
+    public NewActivitiesTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activitiesFlags, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewActivitiesListener> newActivitiesListener) {
         contextWeakReference = context;
         this.newActivitiesListener = newActivitiesListener;
         this.receivedAppList = receivedAppList;
@@ -34,6 +36,7 @@ public class NewActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
         this.match = match;
         this.uniqueIdentifier = uniqueIdentifier;
         this.intent = intent;
+        this.activitiesFlags = activitiesFlags;
     }
 
     @Override
@@ -41,22 +44,29 @@ public class NewActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
         Context context1 = contextWeakReference.get();
         if (context1!=null) {
             PackageManager packageManager = context1.getPackageManager();
-            List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent,0);
+            List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent,activitiesFlags);
             List<AppData> appDataList = new ArrayList<>();
             for (ResolveInfo resolveInfo : resolveInfoList) {
                 AppData app = new AppData();
                 app.setName(resolveInfo.loadLabel(packageManager).toString());
                 app.setPackageName(resolveInfo.activityInfo.packageName);
                 app.setIcon(resolveInfo.activityInfo.loadIcon(packageManager));
-                app.setFlags(resolveInfo.activityInfo.flags);
-                if (match) {
-                    if ((flags == null) || ((resolveInfo.activityInfo.flags & flags) != 0))
-                        if (!receivedAppList.contains(app))
-                            appDataList.add(app);
-                } else {
-                    if ((flags == null) || ((resolveInfo.activityInfo.flags & flags) == 0))
-                        if (!receivedAppList.contains(app))
-                            appDataList.add(app);
+                try {
+                    ApplicationInfo appInfo = packageManager.getApplicationInfo(app.getPackageName(),0);
+                    app.setFlags(appInfo.flags);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                if (receivedAppList!=null) {
+                    if (match) {
+                        if ((flags == null) || ((app.getFlags() & flags) != 0))
+                            if (!receivedAppList.contains(app))
+                                appDataList.add(app);
+                    } else {
+                        if ((flags == null) || ((app.getFlags() & flags) == 0))
+                            if (!receivedAppList.contains(app))
+                                appDataList.add(app);
+                    }
                 }
                 if (isCancelled())
                     break;
@@ -70,7 +80,7 @@ public class NewActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
     protected void onPostExecute(List<AppData> appDataList) {
         final NewActivitiesListener listener = newActivitiesListener.get();
         if (listener!=null) {
-            listener.newActivitiesListener(appDataList, intent, flags, match, false, uniqueIdentifier);
+            listener.newActivitiesListener(appDataList, intent, activitiesFlags, flags, match, false, uniqueIdentifier);
         }
     }
 
