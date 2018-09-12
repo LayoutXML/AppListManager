@@ -2,8 +2,10 @@ package com.layoutxml.applistmanager;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -68,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         getUninstalledActivitiesText = findViewById(R.id.getUninstalledActivitiesTxt);
 
         AppList.registerListeners(MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this);
-        registerReceiver(new AppList(),AppList.intentFilter);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            registerReceiver(new AppList(),AppList.intentFilter);
 
         getAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
 
     @Override
     public void uninstalledAppListener(List<AppData> appDataList, Boolean fromReceiver, Integer uniqueIdentifier) {
-        getUninstalledText.setText(appDataList.size()+" apps uninstaleld.");
+        getUninstalledText.setText(appDataList.size()+" apps uninstalled.");
         if (AllAppsList!=null) {
             AllAppsList.removeAll(appDataList);
             getAllText.setText(getAllText.getText()+"\n- "+appDataList.size()+" ("+AllAppsList.size()+" total).");
