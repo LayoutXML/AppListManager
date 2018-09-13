@@ -22,12 +22,14 @@ import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.NewActivitiesListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.NewAppListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledAppListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity implements ActivitiesListener, NewActivitiesListener, AppListener, NewAppListener, SortListener {
+public class ListActivity extends AppCompatActivity implements ActivitiesListener, NewActivitiesListener, UninstalledActivitiesListener, AppListener, NewAppListener, UninstalledAppListener, SortListener {
 
     private static final String TAG = "ListActivity";
 
@@ -92,12 +94,16 @@ public class ListActivity extends AppCompatActivity implements ActivitiesListene
     @Override
     protected void onResume() {
         super.onResume();
-        AppList.registerListeners(ListActivity.this,ListActivity.this,ListActivity.this,ListActivity.this,null,null,ListActivity.this);
+        AppList.registerListeners(ListActivity.this,ListActivity.this,ListActivity.this,ListActivity.this,ListActivity.this,ListActivity.this,ListActivity.this);
         if (appDataList!=null && apps!=null) {
-            if (apps)
-                AppList.getAllNewApps(getApplicationContext(),appDataList,2);
-            else
-                AppList.getAllNewActivities(getApplicationContext(),appDataList,mainIntent,3);
+            if (apps) {
+                AppList.getAllNewApps(getApplicationContext(), appDataList, 2);
+                AppList.getAllUninstalledApps(getApplicationContext(),appDataList,4);
+            }
+            else {
+                AppList.getAllNewActivities(getApplicationContext(), appDataList, mainIntent, 3);
+                AppList.getAllUninstalledActivities(getApplicationContext(),appDataList, mainIntent,5);
+            }
         }
     }
 
@@ -137,6 +143,20 @@ public class ListActivity extends AppCompatActivity implements ActivitiesListene
         if (apps) {
             appDataList.addAll(this.appDataList);
             AppList.sort(appDataList,AppList.BY_APPNAME,AppList.IN_ASCENDING,2);
+        }
+    }
+
+    @Override
+    public void uninstalledActivitiesListener(List<AppData> appDataList, Intent intent, Boolean fromReceiver, Integer uniqueIdentifier) {
+        if (this.appDataList!=null){
+            this.appDataList.removeAll(appDataList);
+        }
+    }
+
+    @Override
+    public void uninstalledAppListener(List<AppData> appDataList, Boolean fromReceiver, Integer uniqueIdentifier) {
+        if (this.appDataList!=null){
+            this.appDataList.removeAll(appDataList);
         }
     }
 
