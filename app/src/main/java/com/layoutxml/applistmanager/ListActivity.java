@@ -1,6 +1,7 @@
 package com.layoutxml.applistmanager;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,13 +19,15 @@ import android.widget.TextView;
 import com.layoutxml.applistmanagerlibrary.AppList;
 import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewAppListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity implements ActivitiesListener, AppListener, SortListener {
+public class ListActivity extends AppCompatActivity implements ActivitiesListener, NewActivitiesListener, AppListener, NewAppListener, SortListener {
 
     private static final String TAG = "ListActivity";
 
@@ -33,6 +36,8 @@ public class ListActivity extends AppCompatActivity implements ActivitiesListene
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
+    private Boolean apps;
+    private Intent mainIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,29 +51,36 @@ public class ListActivity extends AppCompatActivity implements ActivitiesListene
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(layoutManager);
+        adapter = new MyAdapter(appDataList);
+        recyclerView.setAdapter(adapter);
 
         Intent intent = getIntent();
         String data = intent.getStringExtra("appDataList");
 
-        AppList.registerListeners(ListActivity.this,ListActivity.this,null,null,null,null,ListActivity.this);
+        AppList.registerListeners(ListActivity.this,ListActivity.this,ListActivity.this,ListActivity.this,null,null,ListActivity.this);
 
         switch (data){
             default:
+                apps = true;
                 progressBar.setVisibility(View.VISIBLE);
                 AppList.getAllApps(getApplicationContext(),0);
                 break;
             case "apps":
+                apps = true;
                 progressBar.setVisibility(View.VISIBLE);
                 AppList.getAllApps(getApplicationContext(),0);
                 break;
             case "activities":
+                apps = false;
                 progressBar.setVisibility(View.VISIBLE);
-                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent = new Intent(Intent.ACTION_MAIN, null);
                 mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                 AppList.getAllActivities(getApplicationContext(),mainIntent,1);
                 break;
         }
 
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            registerReceiver(new AppList(),AppList.intentFilter);
     }
 
     @Override
@@ -80,7 +92,13 @@ public class ListActivity extends AppCompatActivity implements ActivitiesListene
     @Override
     protected void onResume() {
         super.onResume();
-        AppList.registerListeners(ListActivity.this,ListActivity.this,null,null,null,null,ListActivity.this);
+        AppList.registerListeners(ListActivity.this,ListActivity.this,ListActivity.this,ListActivity.this,null,null,ListActivity.this);
+        if (appDataList!=null && apps!=null) {
+            if (apps)
+                AppList.getAllNewApps(getApplicationContext(),appDataList,2);
+            else
+                AppList.getAllNewActivities(getApplicationContext(),appDataList,mainIntent,3);
+        }
     }
 
     @Override
@@ -95,11 +113,31 @@ public class ListActivity extends AppCompatActivity implements ActivitiesListene
 
     @Override
     public void sortListener(List<AppData> appDataList, Integer sortBy, Integer inOrder, Integer uniqueIdentifier) {
-        this.appDataList = appDataList;
-        progressBar.setVisibility(View.GONE);
+        this.appDataList.clear();
+        this.appDataList.addAll(appDataList);
+        if (uniqueIdentifier==0 || uniqueIdentifier==1) {
+            progressBar.setVisibility(View.GONE);
+            adapter.notifyDataSetChanged();
+        }
+        else if (uniqueIdentifier==2 || uniqueIdentifier==3) {
+            adapter.notifyDataSetChanged();
+        }
+    }
 
-        adapter = new MyAdapter(appDataList);
-        recyclerView.setAdapter(adapter);
+    @Override
+    public void newActivitiesListener(List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
+        if (!apps) {
+            appDataList.addAll(this.appDataList);
+            AppList.sort(appDataList,AppList.BY_APPNAME,AppList.IN_ASCENDING,3);
+        }
+    }
+
+    @Override
+    public void newAppListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
+        if (apps) {
+            appDataList.addAll(this.appDataList);
+            AppList.sort(appDataList,AppList.BY_APPNAME,AppList.IN_ASCENDING,2);
+        }
     }
 
     public static class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {

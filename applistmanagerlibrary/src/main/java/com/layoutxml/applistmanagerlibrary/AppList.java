@@ -224,7 +224,7 @@ public class AppList extends BroadcastReceiver{
                             List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent1,0);
                             for (ResolveInfo resolveInfo : resolveInfoList) {
                                 AppData app = new AppData();
-                                app.setName(resolveInfo.activityInfo.name);
+                                app.setName(resolveInfo.loadLabel(packageManager).toString());
                                 app.setPackageName(resolveInfo.activityInfo.packageName);
                                 try {
                                     ApplicationInfo appInfo = packageManager.getApplicationInfo(app.getPackageName(),0);
