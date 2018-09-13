@@ -1,92 +1,72 @@
 # App List Manager (Android Library)
 
-App List Manager is easy to use Android library, which minimizes developing time when working on application lists. You no longer have to worry about asynchronous tasks, memory leaks and intent receivers. This library provides a simple way to receive application lists as they change.
+App List Manager is easy to use Android library, which minimizes developing time when working on applications and activities lists. You no longer have to worry about asynchronous tasks, memory leaks and intent receivers. This library provides a simple way to receive applications and activities lists as they change.
+
+To receive application and activities lists you must implement listeners and invoke methods. In addition, to receive these lists automatically you must also register a receiver (in the manifest and code). All listeners must be registered, and all unfinished tasks must be destroyed. Guide below explains exactly how to do all that and you can also inspect the included sample app that uses most of the features.
 
 ## Table of Contents
 
-1. [Quick Overview](https://github.com/LayoutXML/AppListManager#quick-overview)
-    1. [Listeners](https://github.com/LayoutXML/AppListManager#1-listeners)
-    2. ["AppData"](https://github.com/LayoutXML/AppListManager#2-appdata)
-    3. [Other Functionality](https://github.com/LayoutXML/AppListManager#3-other-functionality)
-2. [Usage](https://github.com/LayoutXML/AppListManager#usage)
-    1. [Adding Dependency](https://github.com/LayoutXML/AppListManager#1-adding-dependency)
-    2. [Registering Receiver](https://github.com/LayoutXML/AppListManager#2-registering-receiver)
-    3. [Starting Functionality](https://github.com/LayoutXML/AppListManager#3-starting-functionality)
-    4. [Stopping Functionality](https://github.com/LayoutXML/AppListManager#4-stopping-functionality)
-    5. [Adding Listeners](https://github.com/LayoutXML/AppListManager#5-adding-listeners)
-        1. ["appListener"](https://github.com/LayoutXML/AppListManager#alllistener)
-        2. ["newAppListener"](https://github.com/LayoutXML/AppListManager#newlistener)
-        3. ["uninstalledAppListener"](https://github.com/LayoutXML/AppListManager#uninstalledlistener)
-        4. ["sortListener"](https://github.com/LayoutXML/AppListManager#sortlistener)
-    6. [Invoking Listeners](https://github.com/LayoutXML/AppListManager#6-invoking-listeners)
-        1. ["appListener"](https://github.com/LayoutXML/AppListManager#alllistener-1)
-        2. ["newAppListener"](https://github.com/LayoutXML/AppListManager#newlistener-1)
-        3. ["uninstalledAppListener"](https://github.com/LayoutXML/AppListManager#uninstalledlistener-1)
-        4. ["sortListener"](https://github.com/LayoutXML/AppListManager#sortlistener-1)
-    7. [Accessing "AppData" Contents](https://github.com/LayoutXML/AppListManager#7-accessing-appdata-contents)
-    8. [Other Functionality](https://github.com/LayoutXML/AppListManager#8-other-functionality)
-        1. [Comparing](https://github.com/LayoutXML/AppListManager#comparing)
-        2. [Flags](https://github.com/LayoutXML/AppListManager#flags)
-            1. [Setting Flags](https://github.com/LayoutXML/AppListManager#setting-flags)
-            1. [Checking Flags](https://github.com/LayoutXML/AppListManager#checking-flags)
-3. [Other Information](https://github.com/LayoutXML/AppListManager#other-information)
+1. How to use - basic features
+    1. Getting apps
+    2. Getting activities
+    3. Registering listeners
+    4. Destroying unfinished tasks
+    5. Registering a receiver
+2. How to use - advanced features
+    1. Sorting
+    2. Comparing
+    3. Checking application flags
+3. More on each method and listener
+4. [Other Information](https://github.com/LayoutXML/AppListManager#other-information)
     1. [Donate](https://github.com/LayoutXML/AppListManager#donate)
     2. [Author](https://github.com/LayoutXML/AppListManager#author)
     3. [License](https://github.com/LayoutXML/AppListManager#license)
 
 ---
 
-## Quick Overview
+## How to use - basic features
 
-### 1. Listeners
+### Getting apps
 
-Library has 4 listeners:
+ | Method | Listener
+--- | --- | ---
+Get all apps | AppList.getAllApps(...) | appListener(...)
+Get some apps (filtered list) | AppList.getSomeApps(...) | appListener(...)
+Get all new apps | AppList.getAllNewApps(...) | newAppListener(...)
+Get some new apps (filtered list) | AppList.getSomeNewApps(...) | newAppListener(...)
+Get all uninstalled apps | AppList.getAllUninstalledApps(...) | uninstalledAppListener(...)
 
-Function Name | How invoked | Sent Parameters | Received Parameters
---- | --- | --- | ---
-`appListener` | \* `AppList.getAll(Context, Integer)`<br>\* `AppList.getAll(Context, Integer, Boolean, Integer)` | \* `Context context`<br>(\* `Integer flags`<br>\* `Boolean match`)<br>\* ` Integer uniqueIdentifier` | \* `List<AppData>`<br>\* `Integer filterFlags`<br>\* `Boolean match`<br>\* ` Integer uniqueIdentifier`
-`newAppListener` | \* `AppList.getNew(Context, List<AppData>)`<br>\* `AppList.getNew(Context, List<AppData>, Integer, Boolean)`<br>\* Automatically when new app installed<sup>1</sup> | \* `Context context`<br>\* `List<AppData> appDataList`<br>(\* `Integer flags`<br>\* `Boolean match`)<br>\* ` Integer uniqueIdentifier` | \* `List<AppData>`<br>\* `Integer filterFlags`<br>\* `Boolean match`<br>\* `Boolean fromReceiver`<br>\* ` Integer uniqueIdentifier`
-`uninstalledAppListener` | \* `AppList.getUninstalled(Context, List<AppData>)`<br>\* Automatically when any app uninstalled<sup>1</sup> | \* `Context context`<br>\* `List<AppData> appDataList`<br>\* ` Integer uniqueIdentifier` | \* `List<AppData>`<br>\* `Boolean fromReceiver`<br>\* ` Integer uniqueIdentifier`
-`sortListener` | \* `AppList.sort(List<AppData>, Integer, Integer, Integer)` | \* `List<AppData> appDataList`<br>\* `Integer sortBy`<br>\* `Integer inOrder`<br>\* `Integer uniqueIdentifier` | \* `List<AppData>`<br>\* `Integer sortBy`<br>\* `Integer inOrder`<br>\* `Integer uniqueIdentifier`
+newAppListener and uninstalledAppListener are also invoked automatically in foreground (on all Android versions) and in background (on Android versions 7.1.1 and lower).
 
-<sup>1</sup> - On Android versions >=8.0 only when application opened. This means that you should periodically check for new apps or in onResume. Works in background on lower Android versions.
+### Getting activities
 
-### 2. "AppData"
+| Method | Listener
+--- | --- | ---
+Get all<sup>1</sup> activities | AppList.getAllActivities(...) | activitiesListener(...)
+Get some activities (filtered list) | AppList.getSomeActivities(...) | activitiesListener(...)
+Get all<sup>1</sup> new activities | AppList.getAllNewActivities(...) | newActivitiesListener(...)
+Get some new activities (filtered list) | AppList.getSomeNewActivities(...) | newActivitiesListener(...)
+Get all<sup>1</sup> uninstalled activities | AppList.getAllUninstalledActivities(...) | uninstalledActivitiesListener(...)
 
-All receivers receive a list of `AppData` objects. `AppData` contains this info about single application:
+<sup>1</sup> - all activities with the intent.
 
-Information | Data Type | How to get | How to set
---- | --- | --- | ---
-App Name | `String` | `.getAppName()` | `.setAppName(String)`
-Package Name | `String` | `.getAppPackageName()` | `.setAppPackageName(String)`
-Icon | `Drawable` | `.getAppIcon()` | `.setAppIcon(Drawable)`
-Flags | `Integer` | `.getFlags()` | `.setFlags(Integer)`
+newActivitiesListener and uninstalledActivitiesListener are also invoked automatically in foreground (on all Android versions) and in background (on Android versions 7.1.1 and lower).
 
-### 3. Other Functionality
+### Registering listeners
 
-Library also provides functions to quickly compare applications (by their package names) and check application flags. More detailed information and examples can be found below.
+You must register all listeners that are implemented in your application by using `AppList.registerListeners(...)` and adding listeners names (or classes names if classes implement listeners) in this order:<br>`appListener, activitiesListener, newAppListener, newActivitiesListener, uninstalledAppListener, uninstalledActivitiesListener, sortListener`.
 
----
+Registering listeners can be done only once if listeners (or classes) do not change.
 
-## Usage
+### Destroying unfinished tasks
 
-It is important that you review the overview section above before using this library to get acquainted with the basic functionality. Do not skim through the usage below because a tiny mistake might reduce functionality, make your application crash or create a memory leak.
+You must destroy all unfinished tasks when the activity is being closed, changes or is restarted by using `AppList.destroy()` to not create memory leaks.
 
-### 1. Adding Dependency
+For example, you can destroy unfinished tasks in activity's onPause method.
 
-![Progress1](/Progress/1.jpg?raw=true)
+### Registering a receiver
 
-Add the dependency to your app's `build.gradle`:
-
-```
-    TODO: Adding Dependency
-```
-
-### 2. Registering Receiver
-
-![Progress2](/Progress/2.jpg?raw=true)
-
-1. If your app supports Android versions 7.1.1 or lower, you will be using `newAppListener` or `uninstalledAppListener`, and you want know what apps have been uninstalled immediately, you will have to register receiver in your app's manifest file `AndroidManifest.xml` by adding this in your application tag:
+If your application supports Android versions 7.1.1 or lower (not necessarily limited to these versions), you must add this to your AndroidManifest.xml file between application tags:
 ```
 <receiver
     android:name="com.layoutxml.applistmanagerlibrary.AppList"
@@ -94,228 +74,34 @@ Add the dependency to your app's `build.gradle`:
     android:exported="true">
     <intent-filter>
         <category android:name="android.intent.category.DEFAULT" />
-        <action android:name="android.intent.action.PACKAGE_ADDED"  />
+        <action android:name="android.intent.action.PACKAGE_ADDED" />
         <action android:name="android.intent.action.PACKAGE_REMOVED" />
         <data android:scheme="package" />
     </intent-filter>
 </receiver>
 ```
 
-2. If your apps supports Android versions 8.0 and greater you will also have to register receiver in your code (if your app only supports Android versions 8.0 and greater you will only have to register it in your code). Add this line of code to your `onCreate` method:
+If your application supports Android versions 8.0 and higher (not necessarily limited to these versions), you must add this to your application, for example to onCreate method:
 ```
-registerReceiver(new AppList(),AppList.intentFilter);
-```
-**Note: this line of code has to be under `Applist.start` which you will add in the next section called "Starting Functionality".**
-
-### 3. Starting Functionality
-
-![Progress3](/Progress/3.jpg?raw=true)
-
-Decide whether your class will implement listeners or will create them in `onCreate` method.
-
-1. If you have decided to implement listeners to your class, add this line of code to your `onCreate` method:
-```
-AppList.start(<yourClassName>.this,<yourClassName>.this,<yourClassName>.this,<yourClassName>.this);
-```
-You have to replace <yourClassName> to your class name that will implement listeners. If your class will implement only some of the listeners, replace `<yourClassName>.this` with `null`.
-
-2. If you have decided to create listeners in your `onCreate` method, add this line of code to your `onCreate` method:
-```
-AppList.start(<allListenerName>,<newListenerName>,<uninstallListenerName>,<sortListenerName>);
-```
-You have to replace listener names with your actual listener names that you will use. If you will use only some of the listeners, replace listener name with `null`. **Note: this line of code has to be under your listeners in `onCreate` method.**
-
-### 4. Stopping Functionality
-
-![Progress4](/Progress/4.jpg?raw=true)
-
-In your `onPause` method add this line of code to not create any memory leaks:
-```
-AppList.stop();
+if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+    registerReceiver(new AppList(),AppList.intentFilter);
 ```
 
-### 5. Adding Listeners
+---
 
-![Progress5](/Progress/5.jpg?raw=true)
+## How to use - advanced features
 
-You can choose to use only some of the listeners. You must use `appListener` or create `List<AppData>` with your application list manually so that other listeners could work as well. If you want to receive a list of new installed applications (invoked either manually or automatically), you have to use `newAppListener`. If you want to receive a list of uninstalled applications (invoked either manually or automatically), you have to use `uninstalledAppListener`.
+### Sorting
 
-#### "appListener"
+App List Manager library provides a method and listener to sort your applications and activities lists.
 
-![Progress5.1](/Progress/5.1.jpg?raw=true)
+Method `AppList.sort` takes 4 arguments - app list (what to sort), 
 
-`appListener` receives 3 parameters - `List<AppData> appDataList`, which is a new list of all installed apps, `Integer filterFlags`, which informs what filters had been used when generating a list, and `Boolean match`, which informs whether apps in the list have flags or do not (read more in "Invoking Listeners" section). This is useful when you store multiple lists of different apps. When no filter was used, `filterFlags` is `null`. More about filters and flags in "Flags" section.
-
-1. If you have decided to implement listeners to your class, override `appListener` method like this:
-```
-Override
-public void appListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
-    //Your code replacing main List<AppData> with a new one, invoking sort, notifying adapters about dataset
-}
-```
-2. If you have decided to create listeners in your `onCreate` method, create a new `appListener` like this:
-```
-AllListener appListener = new AllListener() {
-    @Override
-    public void appListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
-          //Your code replacing main List<AppData> with a new one, invoking sort, notifying adapters about dataset changing etc...      
-    }
-};
-```
-
-#### "newAppListener"
-
-![Progress5.2](/Progress/5.2.jpg?raw=true)
-
-`newAppListener` receives 4 parameters - `List<AppData> appDataList`, which is a list of new apps, `Integer filterFlags`, which informs what filters had been used when generating a list, `Boolean match`, which informs whether apps in the list have flags or do not (read more in "Invoking Listeners" section), and `Boolean fromReceiver`, which is `true` when a `BroadcastReceiver` invoked this listener - this means a list contains only one application and it did not check for filters (you may want to check application filters as described in "Checking Flags" section or manually).
-
-1. If you have decided to implement listeners to your class, override `newAppListener` method like this:
-```
-@Override
-public void newAppListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Boolean fromReceiver, Integer uniqueIdentifier) {
-    //Your code adding new list to the main List<AppData>, invoking sorting, notifying adapters about dataset changing etc...
-}
-```
-2. If you have decided to create listeners in your `onCreate` method, create a new `newAppListener` like this:
-```
-AllListener appListener = new AllListener() {
-    @Override
-    public void appListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
-        //Your code adding new list to the main List<AppData>, invoking sorting, notifying adapters about dataset changing etc...
-    }
-};
-```
-
-#### "uninstalledAppListener"
-
-![Progress5.3](/Progress/5.3.jpg?raw=true)
-
-`uninstalledAppListener` receives 2 parameters - `List<AppData> appDataList`, which is a list of new apps, and `Boolean fromReceiver`, which is `true` when a `BroadcastReceiver` invoked this listener - this means a list contains only one application and only package name is correct (other data is `null`).
-
-1. If you have decided to implement listeners to your class, override `uninstalledAppListener` method like this:
-```
-@Override
-public void uninstalledAppListener(List<AppData> appDataList, Boolean fromReceiver, Integer uniqueIdentifier) {
-    //Your code removing apps from the main List<AppData>, invoking sorting, notifying adapters about dataset changing etc...
-}
-```
-2. If you have decided to create listeners in your `onCreate` method, create a new `uninstalledAppListener` like this:
-```
-UninstalledListener uninstalledAppListener = new UninstalledListener() {
-    @Override
-    public void uninstalledAppListener(List<AppData> appDataList, Boolean fromReceiver, Integer uniqueIdentifier) {
-        //Your code removing apps from the main List<AppData>, invoking sorting, notifying adapters about dataset changing etc...
-    }
-};
-```
-
-#### "sortListener"
-
-![Progress5.4](/Progress/5.4.jpg?raw=true)
-
-Any given `AppData` list is unsorted, as given by the `PackageManager`. Because sorting takes additional time and resources, and is not needed for every app or every task, it is a separate listener. It is not integrated in other listeners because you might want to receive additional apps, add them to your app list and only sort after that.
-
-`sortListener` receives 4 parameters - `List<AppData appDataList`, which is your sorter app list, `Integer sortBy`, which informs what was the sort type, `Integer inOrder`, which informs in what order the app list was sorted, and `Integer uniqueIdentifier`, which you might use to identify different tasks (where the sort method was invoked, what apps were in the list etc).
-
-1. If you have decided to implement listeners to your class, override `sortListener` method like this:
-```
-@Override
-public void sortListener(List<AppData> appDataList, Integer sortBy, Integer inOrder, Integer uniqueIdentifier) { {
-    //Your code adding or removing apps from the main List<AppData>, notify adapters about dataset changing etc...
-}
-```
-2. If you have decided to create listeners in your `onCreate` method, create a new `sortListener` like this:
-```
-SortListener sortListener = new SortListener() {
-    @Override
-    public void sortListener(List<AppData> appDataList, Integer sortBy, Integer inOrder, Integer uniqueIdentifier) {
-        //Your code adding or removing apps from the main List<AppData>, notify adapters about dataset changing etc...
-    }
-};
-```
-
-Sort types:
-1. `AppList.BY_APPNAME` (equals to 0). Sorts `AppData` list by app names.
-2. `AppList.BY_PACKAGENAME` (equals to 1). Sorts `AppData` list by package names.
-
-Order:
-1. `AppList.IN_ASCENDING` (equals to 0). Sorts `AppData` list in ascending order (A to Z).
-2. `AppList.IN_DESCENDING` (equals to 1). Sorts `AppData` list in descending order (Z to A).
-
-
-### 6. Invoking Listeners
-
-![Progress6](/Progress/6.jpg?raw=true)
-
-#### "appListener"
-
-![Progress6.1](/Progress/6.1.jpg?raw=true)
-
-There are 2 ways to invoke `appListener`:
-1. `AppList.getAll(Context, Integer);`<br>`Context` is your context, and `Integer` is your unique identifier.<br>For example: `AppList.getAll(getApplicationContext());`.
-2. `AppList.getAll(Context, Integer, Boolean, Integer);`<br>`Context` is your context, `Integer` is your flag (flags), `Boolean` is whether to return applications that match the given flags or those that do not match, and `Integer` is your unique identifier.<br>For example, `AppList.getAll(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,true);` will return (to your `appListener`) all system apps. Changing `true` to `false` will return only user apps. To learn more about flags, go to "Flags" section.
-
-It is recommended to invoke `appListener` when application is opened (`onCreate`) and when user refreshes app list (if possible).
-
-#### "newAppListener"
-
-![Progress6.2](/Progress/6.2.jpg?raw=true)
-
-There are 3 ways to invoke `newAppListener`:
-1. `AppList.getNew(Context, List<AppData>, Integer);`<br>`Context` is your context, `List<AppData>` is a list with your current applications (application list will be compared to this list), and `Integer` is your unique identifier.<br>For example: `AppList.getNew(getApplicationContext(), AllAppsList);`.
-2. `AppList.getNew(Context, List<AppData>, Integer, Boolean, Integer);`<br>`Context` is your context, `Integer` is your flag (flags), `Boolean` is whether to return applications that match the given flags or those that do not match, and `Integer` is your unique identifier.<br>For example, `AppList.getNew(getApplicationContext(), AllAppsList, ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP,true);` will return (to your `newAppListener`) all new system apps. Changing `true` to `false` will return only user apps. To learn more about flags, go to "Flags" section.
-3. It is invoked automatically when a new app is installed.<br>Limitations: on Android versions >=8.0 works only when application is opened, on lower Android versions it works in background .
-
-It is recommended to invoke `newAppListener` periodically and when the app is reopened (`onResume`).
-
-#### "uninstalledAppListener"
-
-![Progress6.3](/Progress/6.3.jpg?raw=true)
-
-There are 2 ways to invoke 'uninstalledAppListener':
-1. `AppList.getUninstalled(Context, List<AppData>, Integer);`<br>`Context` is your context, `List<AppData>` is a list with your current applications (application list will be compared to this list), and `Integer` is your unique identifier.<br>For example: `AppList.getUninstalled(getApplicationContext(), AllAppsList);`.
-2. It is invoked automatically when any app is uninstalled.<br>Limitations: on Android versions >=8.0 works only when application is opened, on lower Android versions it works in background .
-
-It is recommended to invoke `uninstalledAppListener` periodically and when the app is reopened (`onResume`).
-
-#### "sortListener"
-
-![Progress6.4](/Progress/6.4.jpg?raw=true)
-
-There is only 1 way to invoke `sortListener`:<br>`AppList.sort(List<AppData>, Integer, Integer, Integer);`<br>`List<AppData>` is your app list, first `Integer` is your sort type, second `Integer` is your order, and a third `Integer` is your unique identifier. You might use it to identify different tasks (where the sort method was invoked, what apps were in the list etc).
-
-Sort types:
-1. `AppList.BY_APPNAME` (equals to 0). Sorts `AppData` list by app names.
-2. `AppList.BY_PACKAGENAME` (equals to 1). Sorts `AppData` list by package names.
-
-Order:
-1. `AppList.IN_ASCENDING` (equals to 0). Sorts `AppData` list in ascending order (A to Z).
-2. `AppList.IN_DESCENDING` (equals to 1). Sorts `AppData` list in descending order (Z to A).
-
-### 7. Accessing "AppData" Contents
-
-![Progress7](/Progress/7.jpg?raw=true)
-
-`AppData` is an object with 4 values that can be read using getters and locally changed (in a list) using setters.
-
-Information | Data Type | How to get | How to set
---- | --- | --- | ---
-App Name | `String` | `.getAppName()` | `.setAppName(String)`
-Package Name | `String` | `.getAppPackageName()` | `.setAppPackageName(String)`
-Icon | `Drawable` | `.getAppIcon()` | `.setAppIcon(Drawable)`
-Flags | `Integer` | `.getFlags()` | `.setFlags(Integer)`
-
-**Note: App name, icon and flags can be `null`**. This is the case when `AppData` is received from a BroadcastReceiver in `uninstalledAppListener`.
-
-### 8. Other Functionality
-
-![Progress8](/Progress/8.jpg?raw=true)
-
-#### Comparing
+### Comparing
 
 Because we can not get app names, icons and other data of already uninstalled apps, `AppData` `.equals()` is overridden to compare by package names. This includes `.contains(AppData)`, `.remove(AppData)`, `.removeAll(List<AppData>)` and others.
 
-#### Flags
+### Checking application flags
 
 It is possible to filter app lists received by `appListener` and `newAppListener` by any combination of [flags](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags) and their opposites (if `FLAG_SYSTEM` filter returns a list of not updated systems apps, the opposite would be all user apps and updated system apps). You can also check individual `AppData`'s flags and check if it contains any combination of them.
 
