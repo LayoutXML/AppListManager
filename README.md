@@ -22,7 +22,7 @@ To receive application and activities lists you must implement listeners and inv
     1. [Methods](https://github.com/LayoutXML/AppListManager#methods)
     2. [Listeners](https://github.com/LayoutXML/AppListManager#listeners)
 4. [Other Information](https://github.com/LayoutXML/AppListManager#other-information)
-    1. [Sample app]
+    1. [Sample app](https://github.com/LayoutXML/AppListManager#sample-app)
     2. [Donate](https://github.com/LayoutXML/AppListManager#donate)
     3. [Author](https://github.com/LayoutXML/AppListManager#author)
     4. [License](https://github.com/LayoutXML/AppListManager#license)
@@ -108,11 +108,11 @@ Because we can not get app names, icons and other data of already uninstalled ap
 
 It is possible to filter applications lists received by `appListener`, `newAppListener`, `activitiesListener`, `newActivitiesListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags) and their opposites (if `FLAG_SYSTEM` filter returns a list of not updated systems apps, the opposite would be all user apps and updated system apps). You can also check individual application's flags and check if it contains any combination of them.
 
-Additionally, you can check whether an individual application has flags by using `AppList.checkFlags(...)` with 3 arguments - application (or activities) list, flags ([these ](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags)) and whether to match them or not. Alternatively, you can check flags  yourself by accessing app's flags using `.getFlags`. When checking an activity, method checks its application flags and not activity flags.
+Additionally, you can check whether an individual application has flags by using `AppList.checkFlags(...)` with 3 arguments - application (or activities) list, flags ([these](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags)) and whether to match them or not. Alternatively, you can check flags  yourself by accessing app's flags using `.getFlags`. When checking an activity, method checks its application flags and not activity flags.
 
 ### Filtering activities with flags
 
-It is also possible to filter activities lists received by `activitiesListener`, `newActivitiesListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/PackageManager#queryIntentActivities(android.content.Intent,%20int).
+It is also possible to filter activities lists received by `activitiesListener`, `newActivitiesListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/PackageManager#queryIntentActivities(android.content.Intent,%20int)).
 
 ### More on flags
 
