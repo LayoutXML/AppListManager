@@ -38,6 +38,7 @@ Get some apps (filtered list) | AppList.getSomeApps(...) | appListener(...)
 Get all new apps | AppList.getAllNewApps(...) | newAppListener(...)
 Get some new apps (filtered list) | AppList.getSomeNewApps(...) | newAppListener(...)
 Get all uninstalled apps | AppList.getAllUninstalledApps(...) | uninstalledAppListener(...)
+Get some uninstalled apps | AppList.getSomeUninstalledApps(...) | uninstalledAppListener(...)
 
 newAppListener and uninstalledAppListener are also invoked automatically in the foreground (on all Android versions) and in the background (on Android versions 7.1.1 and lower).
 
@@ -128,33 +129,38 @@ To set multiple flags you can use any combination of these operators:
 Methods for applications:
 1. **getAllApps**. Takes 2 arguments: *Context* and *Integer* (unique identifier for your personal use). Used to receive all installed application list (unfiltered and unsorted).
 2. **getSomeApps.** Takes 4 arguments: *Context*, *Integer* (application flags), *Boolean* (whether to find applications that match the flags or not), and *Integer* (unique identifier). Used to receive filtered installed application list (unsorted).
-3. **getAllNewApps**. Takes 3 arguments: *Context*, *List<AppData>* (current application list), and *Integer* (unique identifier). Used to receive all application list that are not in the given list (unfiltered and unsorted)
+3. **getAllNewApps**. Takes 3 arguments: *Context*, *List<AppData>* (current application list), and *Integer* (unique identifier). Used to receive all application list that are not in the given list (unfiltered and unsorted).
 4. **getSomeNewApps**. Takes 5 arguments: *Context*, *List<AppData>* (current application list), *Integer* (application flags), *Boolean* (whether to find applications that match the flags or not), and *Integer* (unique identifier). Used to receive filtered application list that are not in the given list (unsorted). Does not remove applications that do not have given flags from the given list.
-5. **getAllUninstalledApps**. Takes 3 arguments: *Context*, *List<AppData>* (current application list), and *Integer* (unique identifier). Used to receive all application list that are no longer installed (unfiltered and unsorted). If received from broadcast receiver, only package name is set but applications can still be removed with `.removeAll(...)`.
+5. **getAllUninstalledApps**. Takes 3 arguments: *Context*, *List<AppData>* (current application list), and *Integer* (unique identifier). Used to receive all application list that are no longer installed (unfiltered and unsorted).
+6. **getSomeUninstalledApps**. Takes 5 arguments: *Context*, *List<AppData>* (current application list), *Integer* (application flags), *Boolean* (whether to find applications that match the flags or not), and *Integer* (unique identifier). Used to receive a list of applications that are not in the filtered currently installed application list.
 
 Methods for activities:
 1. **getAllActivities**. Takes 3 arguments: *Context*, *Intent*, and *Integer* (unique identifier). Used to receive all activity list with the intent (unfiltered and unsorted).
 2. **getSomeActivities**. Takes 6 arguments: *Context*, *Intent*, *Integer* (activity flags), *Integer* (application flags), *Boolean* (whether to find **applications** that match the flags or not), and *Integer* (unique identifier). Used to receive filtered activity list (unsorted). If "activity flags" not applicable - write 0, if "application flags" not applicable - write null and false for "match".
 3. **getAllNewActivities**. Takes 4 arguments: *Context*, *List<AppData>* (current activity list), *Intent*, and *Integer* (unique identifier). Used to receive all activity lists that are not in the given list with the intent (unfiltered and unsorted).
 4. **getSomeNewActivities**. Takes 7 arguments: *Context*, *List<AppData>* (current activity list), *Intent*, *Integer* (activity flags), *Integer* (application flags), *Boolean* (whether to find **applications** that match the flags or not), and *Integer* (unique identifier). Used to receive filtered activity list that are not in the given list (unsorted). Does not remove activities that do not have given flags from the given list.
-5. **getAllUninstalledActivities**. Takes 4 arguments: *Context*, *List<AppData>* (current application list), *Intent*, and *Integer* (unique identifier). Used to receive all activity list that are no longer installed (unfiltered and unsorted). If received from broadcast receiver, received list contains only 1 activity for every uninstalled application (with only package name set) but if the application has 2 activities that are in the list, they can still be removed with `.removeAll(...)`.
+5. **getAllUninstalledActivities**. Takes 4 arguments: *Context*, *List<AppData>* (current application list), *Intent*, and *Integer* (unique identifier). Used to receive all activity list that are no longer installed (unfiltered and unsorted).
 
 Other methods:
 1. **registerListeners**. Takes 7 arguments: *AppListener, ActivityListener, NewAppListener, NewActivityListener, UninstalledAppListener, UninstalledActivityListener, SortListener*. Must be listener names or classes names that implement these listeners. If listener is not used then write null. Explained in more detail in "Registering listeners" section [here](https://github.com/LayoutXML/AppListManager#registering-a-receiver).
 2. **checkApplicationFlags**. Takes 3 arguments: *AppData* (single application or activity), *Integer* (**application** flags), and *Boolean* (whether the **application** must match the flags or not). Explained in more detail in "Checking and filtering applications with flags" section [here](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-with-flags).
 3. **sort**. Takes 4 arguments: *List<AppData>* (application or activity lists that you want to be sorted), *Integer* (explains how to sort), *Integer* (explains how to sort), and *Integer* (unique identifier). Explained in more detail in "Sorting" section [here](https://github.com/LayoutXML/AppListManager#sorting).
 
+Note: New application/activity list methods could be used to get application/activity list with different filters - method compares given (filtered) list with currently installed application/activity list and returns applications/activities that are in a currently installed application/activity list but not in the given (filtered) list.
+
+Note: Uninstalled application/activity list methods could be used to get application/activity list with different filters - method compares given list with currently installed (filtered) application/activity list and returns applications/activities that are in the given list but not in the currently installed (filtered) application/activity list.
+
 ### Listeners
 
 Listeners for applications:
 1. **appListener**. Receives 4 arguments: *List<AppData>* (your application list), *Integer* (application flags; if getAllApps was called, then it's null), *Boolean* (whether flags match applications; if getAllApps was called then it's false), and *Integer* (unique identifier).
 2. **newAppListener**. Receives 5 arguments: *List<AppData>* (your new application list), *Integer* (application flags; if getAllNewApps was called or from a broadcast receiver, then it's null), *Boolean* (whether flags match applications; if getAllNewApps was called or from a broadcast receiver, then it's false), *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier);
-3. **uninstalledAppListener**. Receives 3 arguments: *List<AppData>* (your uninstalled application lists), *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier; if from broadcast receiver, it's -1);
+3. **uninstalledAppListener**. Receives 5 arguments: *List<AppData>* (your uninstalled application lists), *Boolean* (true when from broadcast receiver, otherwise false), *Integer* (application flags; if getAllUninstalledApps was called or from a broadcast receiver, then it's null), *Boolean* (whether flags match applications; if getAllUninstalledApps was called or from a broadcast receiver, then it's false), and *Integer* (unique identifier; if from broadcast receiver, it's -1); If received from broadcast receiver, only package name is set to the AppData but applications can still be removed with `.removeAll(...)`.
 
 Listeners for activities:
 1. **activityListener**. Receives 4 arguments: *List<AppData>* (your activity list), *Intent*, *Integer* (activity flags), *Integer* (application flags), *Boolean* (whether **applications** match the flags or not), and *Integer* (unique identifier).
 2. **newActivityListener**. Receives 7 arguments: *List<AppData>* (your new activity list), *Intent*, *Integer* (activity flags; if getAllNewActivities was called or from a broadcast receiver, then it's 0), *Integer* (application flags; if getAllNewActivities was called or from a broadcast receiver, then it's null), *Boolean* (whether flags match applications; if getAllNewActivities was called or from broadcast receiver, then it's false), *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier).
-3. **uninstalledActivityListener**. Receives 4 arguments: *List<AppData>* (your uninstalled activity list), *Intent*, *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier; if from broadcast receiver, it's -1).
+3. **uninstalledActivityListener**. Receives 4 arguments: *List<AppData>* (your uninstalled activity list), *Intent*, *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier; if from broadcast receiver, it's -1). If received from broadcast receiver, received list contains only 1 activity for every uninstalled application (with only package name set) but if the application has 2 activities that are in the list, they can still be removed with `.removeAll(...)`.
 
 Other listeners:
 1. **sortListener**. Receives 4 arguments: *List<AppData>* (your sorted activities list), *Integer* (explains how to sort), *Integer* (explains how to sort), *Integer* (unique identifier). Explained in more detail in "Sorting" section [here](https://github.com/LayoutXML/AppListManager#sorting).

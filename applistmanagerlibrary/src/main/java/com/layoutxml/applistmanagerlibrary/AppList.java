@@ -125,7 +125,13 @@ public class AppList extends BroadcastReceiver{
 
     public static void getAllUninstalledApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        uninstalledAppTask = new UninstalledAppTask(context1, appDataList, uniqueIdentifier, uninstalledAppListener);
+        uninstalledAppTask = new UninstalledAppTask(context1, appDataList, null, false, uniqueIdentifier, uninstalledAppListener);
+        uninstalledAppTask.execute();
+    }
+
+    public static void getSomeUninstalledApps(Context context, List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        uninstalledAppTask = new UninstalledAppTask(context1, appDataList, applicationFlags, applicationFlagsMatch, uniqueIdentifier, uninstalledAppListener);
         uninstalledAppTask.execute();
     }
 
@@ -250,7 +256,7 @@ public class AppList extends BroadcastReceiver{
                         if (data != null) {
                             app.setPackageName(data.getEncodedSchemeSpecificPart());
                             newApp.add(app);
-                            uninstalledAppListener.get().uninstalledAppListener(newApp, true, -1);
+                            uninstalledAppListener.get().uninstalledAppListener(newApp, true,null,false, -1);
                         }
                     }
                 }

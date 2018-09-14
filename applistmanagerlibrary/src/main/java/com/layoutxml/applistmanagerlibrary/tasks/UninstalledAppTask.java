@@ -21,13 +21,17 @@ public class UninstalledAppTask extends AsyncTask<Void,Void,List<AppData>>{
     private final WeakReference<Context> contextWeakReference;
     private List<AppData> receivedAppList;
     private Integer uniqueIdentifier;
+    private Integer applicationFlags;
+    private Boolean applicationFlagsMatch;
 
 
-    public UninstalledAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer uniqueIdentifier, WeakReference<UninstalledAppListener> uninstalledListener) {
+    public UninstalledAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier,  WeakReference<UninstalledAppListener> uninstalledListener) {
         contextWeakReference = context;
         this.allUninstalledAppsListener = uninstalledListener;
         this.receivedAppList = receivedAppList;
         this.uniqueIdentifier = uniqueIdentifier;
+        this.applicationFlags = applicationFlags;
+        this.applicationFlagsMatch = applicationFlagsMatch;
     }
 
     @Override
@@ -44,7 +48,15 @@ public class UninstalledAppTask extends AsyncTask<Void,Void,List<AppData>>{
                 app.setPackageName(applicationInfo.packageName);
                 app.setIcon(applicationInfo.loadIcon(packageManager));
                 app.setFlags(applicationInfo.flags);
-                installedAppList.add(app);
+                if (applicationFlagsMatch) {
+                    if ((applicationFlags == null) || ((app.getFlags() & applicationFlags) != 0)) {
+                        installedAppList.add(app);
+                    }
+                } else {
+                    if ((applicationFlags == null) || ((app.getFlags() & applicationFlags) == 0)) {
+                        installedAppList.add(app);
+                    }
+                }
                 if (isCancelled())
                     break;
             }
@@ -66,7 +78,7 @@ public class UninstalledAppTask extends AsyncTask<Void,Void,List<AppData>>{
     protected void onPostExecute(List<AppData> appDataList){
         final UninstalledAppListener listener = allUninstalledAppsListener.get();
         if (listener!=null) {
-            listener.uninstalledAppListener(appDataList, false, uniqueIdentifier);
+            listener.uninstalledAppListener(appDataList, false, applicationFlags, applicationFlagsMatch, uniqueIdentifier);
         }
     }
 
