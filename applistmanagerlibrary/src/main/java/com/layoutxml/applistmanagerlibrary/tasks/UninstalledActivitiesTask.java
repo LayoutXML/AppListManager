@@ -2,7 +2,6 @@ package com.layoutxml.applistmanagerlibrary.tasks;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
@@ -15,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UninstalledActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
-
-    private static final String TAG = "UninstalledAppTask";
 
     private final WeakReference<UninstalledActivitiesListener> uninstalledActivitiesTaskWeakReference;
     private final WeakReference<Context> contextWeakReference;

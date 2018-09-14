@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.util.Log;
-
 import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
@@ -17,8 +15,6 @@ import java.util.List;
  * Created by LayoutXML on 22/08/2018
  */
 public class AppTask extends AsyncTask<Void,Void,List<AppData>> {
-
-    private static final String TAG = "AppTask";
 
     private final WeakReference<AppListener> allAppsListener;
     private final WeakReference<Context> contextWeakReference;

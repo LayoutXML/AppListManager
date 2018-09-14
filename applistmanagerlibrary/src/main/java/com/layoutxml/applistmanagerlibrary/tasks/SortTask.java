@@ -15,8 +15,6 @@ import java.util.List;
  */
 public class SortTask extends AsyncTask<Void,Void,List<AppData>> {
 
-    private static final String TAG = "SortTask";
-
     private final WeakReference<SortListener> sortListener;
     private List<AppData> appDataList;
     private Integer sortBy;

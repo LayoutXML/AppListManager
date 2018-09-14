@@ -8,8 +8,6 @@ import android.support.annotation.NonNull;
  */
 public class AppData {
 
-    private static final String TAG = "AppData";
-
     private String name;
     private Drawable icon;
     private Integer flags;

@@ -38,7 +38,7 @@ Get all new apps | AppList.getAllNewApps(...) | newAppListener(...)
 Get some new apps (filtered list) | AppList.getSomeNewApps(...) | newAppListener(...)
 Get all uninstalled apps | AppList.getAllUninstalledApps(...) | uninstalledAppListener(...)
 
-newAppListener and uninstalledAppListener are also invoked automatically in foreground (on all Android versions) and in background (on Android versions 7.1.1 and lower).
+newAppListener and uninstalledAppListener are also invoked automatically in the foreground (on all Android versions) and in the background (on Android versions 7.1.1 and lower).
 
 ### Getting activities
 
@@ -52,7 +52,7 @@ Get all<sup>1</sup> uninstalled activities | AppList.getAllUninstalledActivities
 
 <sup>1</sup> - all activities with the intent.
 
-newActivitiesListener and uninstalledActivitiesListener are also invoked automatically in foreground (on all Android versions) and in background (on Android versions 7.1.1 and lower).
+newActivitiesListener and uninstalledActivitiesListener are also invoked automatically in the foreground (on all Android versions) and in the background (on Android versions 7.1.1 and lower).
 
 ### Registering listeners
 

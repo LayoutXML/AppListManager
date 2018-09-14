@@ -6,7 +6,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
@@ -16,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
-
-    private static final String TAG="ActivitiesTask";
 
     private final WeakReference<ActivitiesListener> activitiesListenerWeakReference;
     private final WeakReference<Context> contextWeakReference;

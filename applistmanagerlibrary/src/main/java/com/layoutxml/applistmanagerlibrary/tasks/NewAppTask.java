@@ -17,8 +17,6 @@ import java.util.List;
  */
 public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
 
-    private static final String TAG = "NewAppTask";
-
     private final WeakReference<NewAppListener> allNewAppsListener;
     private final WeakReference<Context> contextWeakReference;
     private List<AppData> receivedAppList;

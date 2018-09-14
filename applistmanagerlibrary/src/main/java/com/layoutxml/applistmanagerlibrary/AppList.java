@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
@@ -35,8 +34,6 @@ import java.util.List;
  * Created by LayoutXML on 22/08/2018
  */
 public class AppList extends BroadcastReceiver{
-
-    private static final String TAG = "AppList";
 
     public static IntentFilter intentFilter = new IntentFilter();
 
