@@ -214,6 +214,7 @@ public class AppList extends BroadcastReceiver{
                                 final ApplicationInfo applicationInfo = packageManager.getApplicationInfo(app.getPackageName(), 0);
                                 app.setIcon(applicationInfo.loadIcon(packageManager));
                                 app.setName(applicationInfo.loadLabel(packageManager).toString());
+                                app.setFlags(applicationInfo.flags);
                             } catch (PackageManager.NameNotFoundException e) {
                                 e.printStackTrace();
                             }
