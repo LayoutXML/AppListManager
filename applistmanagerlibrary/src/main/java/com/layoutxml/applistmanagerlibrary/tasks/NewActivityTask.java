@@ -7,16 +7,16 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 
-import com.layoutxml.applistmanagerlibrary.interfaces.NewActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewActivityListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
+public class NewActivityTask extends AsyncTask<Void,Void,List<AppData>> {
 
-    private final WeakReference<NewActivitiesListener> newActivitiesListener;
+    private final WeakReference<NewActivityListener> newActivitiesListener;
     private final WeakReference<Context> contextWeakReference;
     private List<AppData> receivedAppList;
     private Integer flags;
@@ -26,7 +26,7 @@ public class NewActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
     private Integer activitiesFlags;
 
 
-    public NewActivitiesTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activitiesFlags, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewActivitiesListener> newActivitiesListener) {
+    public NewActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activitiesFlags, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewActivityListener> newActivitiesListener) {
         contextWeakReference = context;
         this.newActivitiesListener = newActivitiesListener;
         this.receivedAppList = receivedAppList;
@@ -85,9 +85,9 @@ public class NewActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
 
     @Override
     protected void onPostExecute(List<AppData> appDataList) {
-        final NewActivitiesListener listener = newActivitiesListener.get();
+        final NewActivityListener listener = newActivitiesListener.get();
         if (listener!=null) {
-            listener.newActivitiesListener(appDataList, intent, activitiesFlags, flags, match, false, uniqueIdentifier);
+            listener.newActivityListener(appDataList, intent, activitiesFlags, flags, match, false, uniqueIdentifier);
         }
     }
 

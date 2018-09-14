@@ -16,12 +16,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.layoutxml.applistmanagerlibrary.AppList;
-import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.ActivityListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.NewActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewActivityListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.NewAppListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivityListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledAppListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
@@ -30,7 +30,7 @@ import java.util.List;
 
 //Activity that displays activities list or apps list depending on what button was pressed in the activity before
 
-public class ListActivity extends AppCompatActivity implements ActivitiesListener, NewActivitiesListener, UninstalledActivitiesListener, AppListener, NewAppListener, UninstalledAppListener, SortListener {
+public class ListActivity extends AppCompatActivity implements ActivityListener, NewActivityListener, UninstalledActivityListener, AppListener, NewAppListener, UninstalledAppListener, SortListener {
 
     private List<AppData> appDataList = new ArrayList<>();
     private ProgressBar progressBar;
@@ -107,7 +107,7 @@ public class ListActivity extends AppCompatActivity implements ActivitiesListene
     }
 
     @Override
-    public void activitiesListener(List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+    public void activityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
         AppList.sort(appDataList,AppList.BY_APPNAME,AppList.IN_ASCENDING,uniqueIdentifier);
     }
 
@@ -130,7 +130,7 @@ public class ListActivity extends AppCompatActivity implements ActivitiesListene
     }
 
     @Override
-    public void newActivitiesListener(List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void newActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
         if (!apps) {
             appDataList.addAll(this.appDataList);
             AppList.sort(appDataList,AppList.BY_APPNAME,AppList.IN_ASCENDING,3);
@@ -146,7 +146,7 @@ public class ListActivity extends AppCompatActivity implements ActivitiesListene
     }
 
     @Override
-    public void uninstalledActivitiesListener(List<AppData> appDataList, Intent intent, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Boolean fromReceiver, Integer uniqueIdentifier) {
         if (this.appDataList!=null){
             this.appDataList.removeAll(appDataList);
         }

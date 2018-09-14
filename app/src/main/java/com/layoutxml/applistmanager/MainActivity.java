@@ -10,18 +10,18 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.layoutxml.applistmanagerlibrary.AppList;
-import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.ActivityListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.NewActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewActivityListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.NewAppListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivityListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledAppListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AppListener, NewAppListener, UninstalledAppListener, SortListener, ActivitiesListener, NewActivitiesListener, UninstalledActivitiesListener {
+public class MainActivity extends AppCompatActivity implements AppListener, NewAppListener, UninstalledAppListener, SortListener, ActivityListener, NewActivityListener, UninstalledActivityListener {
 
     @Override
     protected void onPause() {
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void appListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
+    public void appListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
         if (uniqueIdentifier==0) { //Could also be: if (filterFlags == null)
             getAllText.setText("There are now " + appDataList.size() + " apps installed.");
             AppList.sort(appDataList,AppList.BY_APPNAME,AppList.IN_ASCENDING,0);
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void newAppListener(List<AppData> appDataList, Integer filterFlags, Boolean match, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void newAppListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
         getNewText.setText(appDataList.size()+" new apps installed.");
         if (AllAppsList != null) {
             AllAppsList.addAll(appDataList);
@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void activitiesListener(List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer filterFlags, Boolean match, Integer uniqueIdentifier) {
+    public void activityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
         if (uniqueIdentifier==4) {
             getActivitiesText.setText("There are now " + appDataList.size() + " activities");
             AllActivitiesList = appDataList;
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void newActivitiesListener(List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer filterFlags, Boolean match, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void newActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
         getNewActivitiesText.setText(appDataList.size()+" activities added");
         if (AllActivitiesList!=null) {
             AllActivitiesList.addAll(appDataList);
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void uninstalledActivitiesListener(List<AppData> appDataList, Intent intent, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Boolean fromReceiver, Integer uniqueIdentifier) {
         getUninstalledActivitiesText.setText(appDataList.size()+" activities removed");
         if (AllActivitiesList!=null){
             AllActivitiesList.removeAll(appDataList);

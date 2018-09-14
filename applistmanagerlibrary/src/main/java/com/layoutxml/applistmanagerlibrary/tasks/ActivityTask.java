@@ -7,16 +7,16 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 
-import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.ActivityListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
+public class ActivityTask extends AsyncTask<Void,Void,List<AppData>> {
 
-    private final WeakReference<ActivitiesListener> activitiesListenerWeakReference;
+    private final WeakReference<ActivityListener> activitiesListenerWeakReference;
     private final WeakReference<Context> contextWeakReference;
     private Intent intent;
     private Integer uniqueIdentifier;
@@ -24,7 +24,7 @@ public class ActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
     private Integer activitiesFlags;
     private Boolean match;
 
-    public ActivitiesTask(WeakReference<Context> context, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, Integer uniqueIdentifier, WeakReference<ActivitiesListener> activitiesListenerWeakReference) {
+    public ActivityTask(WeakReference<Context> context, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, Integer uniqueIdentifier, WeakReference<ActivityListener> activitiesListenerWeakReference) {
         this.contextWeakReference = context;
         this.intent = intent;
         this.uniqueIdentifier = uniqueIdentifier;
@@ -69,9 +69,9 @@ public class ActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
 
     @Override
     protected void onPostExecute(List<AppData> appDataList) {
-        final ActivitiesListener listener = activitiesListenerWeakReference.get();
+        final ActivityListener listener = activitiesListenerWeakReference.get();
         if (listener!=null) {
-            listener.activitiesListener(appDataList, intent, activitiesFlags, flags, match, uniqueIdentifier);
+            listener.activityListener(appDataList, intent, activitiesFlags, flags, match, uniqueIdentifier);
         }
     }
 }

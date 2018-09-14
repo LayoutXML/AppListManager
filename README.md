@@ -45,19 +45,19 @@ newAppListener and uninstalledAppListener are also invoked automatically in the 
 
 -| Method | Listener
 --- | --- | ---
-Get all<sup>1</sup> activities | AppList.getAllActivities(...) | activitiesListener(...)
-Get some activities (filtered list) | AppList.getSomeActivities(...) | activitiesListener(...)
-Get all<sup>1</sup> new activities | AppList.getAllNewActivities(...) | newActivitiesListener(...)
-Get some new activities (filtered list) | AppList.getSomeNewActivities(...) | newActivitiesListener(...)
-Get all<sup>1</sup> uninstalled activities | AppList.getAllUninstalledActivities(...) | uninstalledActivitiesListener(...)
+Get all<sup>1</sup> activities | AppList.getAllActivities(...) | activityListener(...)
+Get some activities (filtered list) | AppList.getSomeActivities(...) | activityListener(...)
+Get all<sup>1</sup> new activities | AppList.getAllNewActivities(...) | newActivityListener(...)
+Get some new activities (filtered list) | AppList.getSomeNewActivities(...) | newActivityListener(...)
+Get all<sup>1</sup> uninstalled activities | AppList.getAllUninstalledActivities(...) | uninstalledActivityListener(...)
 
 <sup>1</sup> - all activities with the intent.
 
-newActivitiesListener and uninstalledActivitiesListener are also invoked automatically in the foreground (on all Android versions) and in the background (on Android versions 7.1.1 and lower).
+newActivityListener and uninstalledActivityListener are also invoked automatically in the foreground (on all Android versions) and in the background (on Android versions 7.1.1 and lower).
 
 ### Registering listeners
 
-You must register all listeners that are implemented in your application by using `AppList.registerListeners(...)` and adding listeners names (or classes names if classes implement listeners) in this order:<br>`appListener, activitiesListener, newAppListener, newActivitiesListener, uninstalledAppListener, uninstalledActivitiesListener, sortListener`.
+You must register all listeners that are implemented in your application by using `AppList.registerListeners(...)` and adding listeners names (or classes names if classes implement listeners) in this order:<br>`appListener, activityListener, newAppListener, newActivityListener, uninstalledAppListener, uninstalledActivityListener, sortListener`.
 
 Registering listeners can be done only once if listeners (or classes) do not change.
 
@@ -106,13 +106,13 @@ Because we can not get app names, icons and other data of already uninstalled ap
 
 ### Checking and filtering applications with flags
 
-It is possible to filter applications lists received by `appListener`, `newAppListener`, `activitiesListener`, `newActivitiesListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags) and their opposites (if `FLAG_SYSTEM` filter returns a list of not updated systems apps, the opposite would be all user apps and updated system apps). You can also check individual application's flags and check if it contains any combination of them.
+It is possible to filter applications lists received by `appListener`, `newAppListener`, `activityListener`, `newActivityListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags) and their opposites (if `FLAG_SYSTEM` filter returns a list of not updated systems apps, the opposite would be all user apps and updated system apps). You can also check individual application's flags and check if it contains any combination of them.
 
 Additionally, you can check whether an individual application has flags by using `AppList.checkFlags(...)` with 3 arguments - application (or activities) list, flags ([these](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags)) and whether to match them or not. Alternatively, you can check flags  yourself by accessing app's flags using `.getFlags`. When checking an activity, method checks its application flags and not activity flags.
 
 ### Filtering activities with flags
 
-It is also possible to filter activities lists received by `activitiesListener`, `newActivitiesListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/PackageManager#queryIntentActivities(android.content.Intent,%20int)).
+It is also possible to filter activities lists received by `activityListener`, `newActivityListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/PackageManager#queryIntentActivities(android.content.Intent,%20int)).
 
 ### More on flags
 
@@ -152,9 +152,9 @@ Listeners for applications:
 3. **uninstalledAppListener**. Receives 3 arguments: *List<AppData>* (your uninstalled applications lists), *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier; if from broadcast receiver, it's -1);
 
 Listeners for activities:
-1. **activitiesListener**. Receives 4 arguments: *List<AppData>* (your activities list), *Intent*, *Integer* (activities flags), *Integer* (applications flags), *Boolean* (whether **applications** match the flags or not), and *Integer* (unique identifier).
-2. **newActivitiesListener**. Receives 7 arguments: *List<AppData>* (your new activities list), *Intent*, *Integer* (activities flags; if getAllNewActivities was called or from a broadcast receiver, then it's 0), *Integer* (applications flags; if getAllNewActivities was called or from a broadcast receiver, then it's null), *Boolean* (whether flags match applications; if getAllNewActivities was called or from broadcast receiver, then it's false), *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier).
-3. **uninstalledActivitiesListener**. Receives 4 arguments: *List<AppData>* (your uninstalled activities list), *Intent*, *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier; if from broadcast receiver, it's -1).
+1. **activityListener**. Receives 4 arguments: *List<AppData>* (your activities list), *Intent*, *Integer* (activities flags), *Integer* (applications flags), *Boolean* (whether **applications** match the flags or not), and *Integer* (unique identifier).
+2. **newActivityListener**. Receives 7 arguments: *List<AppData>* (your new activities list), *Intent*, *Integer* (activities flags; if getAllNewActivities was called or from a broadcast receiver, then it's 0), *Integer* (applications flags; if getAllNewActivities was called or from a broadcast receiver, then it's null), *Boolean* (whether flags match applications; if getAllNewActivities was called or from broadcast receiver, then it's false), *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier).
+3. **uninstalledActivityListener**. Receives 4 arguments: *List<AppData>* (your uninstalled activities list), *Intent*, *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier; if from broadcast receiver, it's -1).
 
 ## Other Information
 

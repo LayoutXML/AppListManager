@@ -10,20 +10,20 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import com.layoutxml.applistmanagerlibrary.interfaces.ActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.ActivityListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.NewActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.NewActivityListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.NewAppListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
-import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivityListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledAppListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
-import com.layoutxml.applistmanagerlibrary.tasks.ActivitiesTask;
+import com.layoutxml.applistmanagerlibrary.tasks.ActivityTask;
 import com.layoutxml.applistmanagerlibrary.tasks.AppTask;
-import com.layoutxml.applistmanagerlibrary.tasks.NewActivitiesTask;
+import com.layoutxml.applistmanagerlibrary.tasks.NewActivityTask;
 import com.layoutxml.applistmanagerlibrary.tasks.NewAppTask;
 import com.layoutxml.applistmanagerlibrary.tasks.SortTask;
-import com.layoutxml.applistmanagerlibrary.tasks.UninstalledActivitiesTask;
+import com.layoutxml.applistmanagerlibrary.tasks.UninstalledActivityTask;
 import com.layoutxml.applistmanagerlibrary.tasks.UninstalledAppTask;
 
 import java.lang.ref.WeakReference;
@@ -39,20 +39,20 @@ public class AppList extends BroadcastReceiver{
 
     //Tasks
     private static AppTask appTask;
-    private static ActivitiesTask activitiesTask;
+    private static ActivityTask activityTask;
     private static NewAppTask newAppTask;
-    private static NewActivitiesTask newActivitiesTask;
+    private static NewActivityTask newActivityTask;
     private static UninstalledAppTask uninstalledAppTask;
-    private static UninstalledActivitiesTask uninstalledActivitiesTask;
+    private static UninstalledActivityTask uninstalledActivityTask;
     private static SortTask sortTask;
 
     //Listeners - weakreferences
     private static WeakReference<AppListener> appListener;
-    private static WeakReference<ActivitiesListener> activitiesListener;
+    private static WeakReference<ActivityListener> activitiesListener;
     private static WeakReference<NewAppListener> newAppListener;
-    private static WeakReference<NewActivitiesListener> newActivitiesListener;
+    private static WeakReference<NewActivityListener> newActivitiesListener;
     private static WeakReference<UninstalledAppListener> uninstalledAppListener;
-    private static WeakReference<UninstalledActivitiesListener> uninstalledActivitiesListener;
+    private static WeakReference<UninstalledActivityListener> uninstalledActivitiesListener;
     private static WeakReference<SortListener> sortListener;
 
     //Values
@@ -61,13 +61,13 @@ public class AppList extends BroadcastReceiver{
     public static final Integer IN_ASCENDING = 0;
     public static final Integer IN_DESCENDING = 1;
 
-    public static void registerListeners(AppListener appListener, ActivitiesListener activitiesListener, NewAppListener newAppListener, NewActivitiesListener newActivitiesListener, UninstalledAppListener uninstalledAppListener, UninstalledActivitiesListener uninstalledActivitiesListener, SortListener sortListener) {
+    public static void registerListeners(AppListener appListener, ActivityListener activityListener, NewAppListener newAppListener, NewActivityListener newActivityListener, UninstalledAppListener uninstalledAppListener, UninstalledActivityListener uninstalledActivityListener, SortListener sortListener) {
         AppList.appListener = new WeakReference<>(appListener);
-        AppList.activitiesListener = new WeakReference<>(activitiesListener);
+        AppList.activitiesListener = new WeakReference<>(activityListener);
         AppList.newAppListener = new WeakReference<>(newAppListener);
-        AppList.newActivitiesListener = new WeakReference<>(newActivitiesListener);
+        AppList.newActivitiesListener = new WeakReference<>(newActivityListener);
         AppList.uninstalledAppListener = new WeakReference<>(uninstalledAppListener);
-        AppList.uninstalledActivitiesListener = new WeakReference<>(uninstalledActivitiesListener);
+        AppList.uninstalledActivitiesListener = new WeakReference<>(uninstalledActivityListener);
         AppList.sortListener = new WeakReference<>(sortListener);
 
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -81,22 +81,22 @@ public class AppList extends BroadcastReceiver{
         appTask.execute();
     }
 
-    public static void getSomeApps(Context context, Integer flags, Boolean match, Integer uniqueIdentifier){
+    public static void getSomeApps(Context context, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        appTask = new AppTask(context1, flags, match, uniqueIdentifier, appListener);
+        appTask = new AppTask(context1, applicationFlags, applicationFlagsMatch, uniqueIdentifier, appListener);
         appTask.execute();
     }
 
     public static void getAllActivities(Context context, Intent intent, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        activitiesTask = new ActivitiesTask(context1, intent, 0, null, false, uniqueIdentifier, activitiesListener);
-        activitiesTask.execute();
+        activityTask = new ActivityTask(context1, intent, 0, null, false, uniqueIdentifier, activitiesListener);
+        activityTask.execute();
     }
 
-    public static void getSomeActivities(Context context, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, Integer uniqueIdentifier){
+    public static void getSomeActivities(Context context, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        activitiesTask = new ActivitiesTask(context1, intent, activitiesFlags, appFlags, appMatch, uniqueIdentifier, activitiesListener);
-        activitiesTask.execute();
+        activityTask = new ActivityTask(context1, intent, activityFlags, applicationFlags, applicationFlagsMatch, uniqueIdentifier, activitiesListener);
+        activityTask.execute();
     }
 
     public static void getAllNewApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
@@ -105,22 +105,22 @@ public class AppList extends BroadcastReceiver{
         newAppTask.execute();
     }
 
-    public static void getSomeNewApps(Context context, List<AppData> appDataList, Integer flags, Boolean match, Integer uniqueIdentifier) {
+    public static void getSomeNewApps(Context context, List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newAppTask = new NewAppTask(context1, appDataList, flags, match, uniqueIdentifier, newAppListener);
+        newAppTask = new NewAppTask(context1, appDataList, applicationFlags, applicationFlagsMatch, uniqueIdentifier, newAppListener);
         newAppTask.execute();
     }
 
     public static void getAllNewActivities(Context context, List<AppData> appDataList, Intent intent, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newActivitiesTask = new NewActivitiesTask(context1,appDataList,intent,0,null,false,uniqueIdentifier,newActivitiesListener);
-        newActivitiesTask.execute();
+        newActivityTask = new NewActivityTask(context1,appDataList,intent,0,null,false,uniqueIdentifier,newActivitiesListener);
+        newActivityTask.execute();
     }
 
-    public static void getSomeNewActivities(Context context, List<AppData> appDataList, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, Integer uniqueIdentifier) {
+    public static void getSomeNewActivities(Context context, List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newActivitiesTask = new NewActivitiesTask(context1,appDataList,intent,activitiesFlags,appFlags,appMatch,uniqueIdentifier,newActivitiesListener);
-        newActivitiesTask.execute();
+        newActivityTask = new NewActivityTask(context1,appDataList,intent,activityFlags,applicationFlags,applicationFlagsMatch,uniqueIdentifier,newActivitiesListener);
+        newActivityTask.execute();
     }
 
     public static void getAllUninstalledApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
@@ -131,15 +131,15 @@ public class AppList extends BroadcastReceiver{
 
     public static void getAllUninstalledActivities(Context context, List<AppData> appDataList, Intent intent, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        uninstalledActivitiesTask = new UninstalledActivitiesTask(context1, appDataList, intent, uniqueIdentifier, uninstalledActivitiesListener);
-        uninstalledActivitiesTask.execute();
+        uninstalledActivityTask = new UninstalledActivityTask(context1, appDataList, intent, uniqueIdentifier, uninstalledActivitiesListener);
+        uninstalledActivityTask.execute();
     }
 
-    public static Boolean checkApplicationFlags(AppData appData, Integer flags, Boolean match) {
-        if (match)
-            return ((flags==null) || ((appData.getFlags() & flags) != 0));
+    public static Boolean checkApplicationFlags(AppData appData, Integer applicationFlags, Boolean applicationFlagsMatch) {
+        if (applicationFlagsMatch)
+            return ((applicationFlags==null) || ((appData.getFlags() & applicationFlags) != 0));
         else
-            return ((flags==null) || ((appData.getFlags() & flags) == 0));
+            return ((applicationFlags==null) || ((appData.getFlags() & applicationFlags) == 0));
     }
 
     public static void sort(List<AppData> appDataList, Integer sortBy, Integer inOrder, Integer uniqueIdentifier) {
@@ -153,9 +153,9 @@ public class AppList extends BroadcastReceiver{
                 appTask.cancel(true);
             }
         }
-        if (activitiesTask !=null) {
-            if (activitiesTask.getStatus()!=AsyncTask.Status.FINISHED) {
-                activitiesTask.cancel(true);
+        if (activityTask !=null) {
+            if (activityTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                activityTask.cancel(true);
             }
         }
         if (newAppTask !=null) {
@@ -163,9 +163,9 @@ public class AppList extends BroadcastReceiver{
                 newAppTask.cancel(true);
             }
         }
-        if (newActivitiesTask !=null) {
-            if (newActivitiesTask.getStatus()!=AsyncTask.Status.FINISHED) {
-                newActivitiesTask.cancel(true);
+        if (newActivityTask !=null) {
+            if (newActivityTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                newActivityTask.cancel(true);
             }
         }
         if (uninstalledAppTask !=null) {
@@ -173,9 +173,9 @@ public class AppList extends BroadcastReceiver{
                 uninstalledAppTask.cancel(true);
             }
         }
-        if (uninstalledActivitiesTask !=null) {
-            if (uninstalledActivitiesTask.getStatus()!=AsyncTask.Status.FINISHED) {
-                uninstalledActivitiesTask.cancel(true);
+        if (uninstalledActivityTask !=null) {
+            if (uninstalledActivityTask.getStatus()!=AsyncTask.Status.FINISHED) {
+                uninstalledActivityTask.cancel(true);
             }
         }
         if (sortTask != null) {
@@ -236,7 +236,7 @@ public class AppList extends BroadcastReceiver{
                                 }
                                 newApps.add(app);
                             }
-                            newActivitiesListener.get().newActivitiesListener(newApps,null,0,null,false,true,-1);
+                            newActivitiesListener.get().newActivityListener(newApps,null,0,null,false,true,-1);
                         }
                     }
                 }
@@ -262,7 +262,7 @@ public class AppList extends BroadcastReceiver{
                         if (data != null) {
                             app.setPackageName(data.getEncodedSchemeSpecificPart());
                             newApp.add(app);
-                            uninstalledActivitiesListener.get().uninstalledActivitiesListener(newApp, null, true, -1);
+                            uninstalledActivitiesListener.get().uninstalledActivityListener(newApp, null, true, -1);
                         }
                     }
                 }

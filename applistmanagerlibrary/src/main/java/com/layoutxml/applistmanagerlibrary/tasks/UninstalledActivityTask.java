@@ -6,23 +6,23 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 
-import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivitiesListener;
+import com.layoutxml.applistmanagerlibrary.interfaces.UninstalledActivityListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UninstalledActivitiesTask extends AsyncTask<Void,Void,List<AppData>> {
+public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> {
 
-    private final WeakReference<UninstalledActivitiesListener> uninstalledActivitiesTaskWeakReference;
+    private final WeakReference<UninstalledActivityListener> uninstalledActivitiesTaskWeakReference;
     private final WeakReference<Context> contextWeakReference;
     private List<AppData> receivedAppList;
     private Integer uniqueIdentifier;
     private Intent intent;
 
 
-    public UninstalledActivitiesTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer uniqueIdentifier, WeakReference<UninstalledActivitiesListener> uninstalledListener) {
+    public UninstalledActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer uniqueIdentifier, WeakReference<UninstalledActivityListener> uninstalledListener) {
         contextWeakReference = context;
         this.uninstalledActivitiesTaskWeakReference = uninstalledListener;
         this.receivedAppList = receivedAppList;
@@ -64,9 +64,9 @@ public class UninstalledActivitiesTask extends AsyncTask<Void,Void,List<AppData>
 
     @Override
     protected void onPostExecute(List<AppData> appDataList){
-        final UninstalledActivitiesListener listener = uninstalledActivitiesTaskWeakReference.get();
+        final UninstalledActivityListener listener = uninstalledActivitiesTaskWeakReference.get();
         if (listener!=null) {
-            listener.uninstalledActivitiesListener(appDataList, intent, false, uniqueIdentifier);
+            listener.uninstalledActivityListener(appDataList, intent, false, uniqueIdentifier);
         }
     }
 
