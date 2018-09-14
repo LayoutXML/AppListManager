@@ -61,7 +61,7 @@ newActivityListener and uninstalledActivityListener are also invoked automatical
 
 You must register all listeners that are implemented in your application by using `AppList.registerListeners(...)` and adding listeners names (or classes names if classes implement listeners) in this order:<br>`appListener, activityListener, newAppListener, newActivityListener, uninstalledAppListener, uninstalledActivityListener, sortListener`.
 
-Registering listeners can be done only once if listeners (or classes) do not change.
+You can register listeners only once if listeners do not change but if you have multiple receivers across different classes feel free to re-register every time you want to change it.
 
 ### Destroying unfinished tasks
 
