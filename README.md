@@ -156,6 +156,9 @@ Listeners for activities:
 2. **newActivityListener**. Receives 7 arguments: *List<AppData>* (your new activities list), *Intent*, *Integer* (activities flags; if getAllNewActivities was called or from a broadcast receiver, then it's 0), *Integer* (applications flags; if getAllNewActivities was called or from a broadcast receiver, then it's null), *Boolean* (whether flags match applications; if getAllNewActivities was called or from broadcast receiver, then it's false), *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier).
 3. **uninstalledActivityListener**. Receives 4 arguments: *List<AppData>* (your uninstalled activities list), *Intent*, *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier; if from broadcast receiver, it's -1).
 
+Other listeners:
+1. **sortListener**. Receives 4 arguments: *List<AppData>* (your sorted activities list), *Integer* (explains how to sort), *Integer* (explains how to sort), *Integer* (unique identifier). Explained in more detail in "Sorting" section [here](https://github.com/LayoutXML/AppListManager#sorting).
+
 ## Other Information
 
 ### Sample app
