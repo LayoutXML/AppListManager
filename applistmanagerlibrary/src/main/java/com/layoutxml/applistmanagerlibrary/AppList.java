@@ -137,7 +137,13 @@ public class AppList extends BroadcastReceiver{
 
     public static void getAllUninstalledActivities(Context context, List<AppData> appDataList, Intent intent, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        uninstalledActivityTask = new UninstalledActivityTask(context1, appDataList, intent, uniqueIdentifier, uninstalledActivitiesListener);
+        uninstalledActivityTask = new UninstalledActivityTask(context1, appDataList, intent, 0, null, false, uniqueIdentifier, uninstalledActivitiesListener);
+        uninstalledActivityTask.execute();
+    }
+
+    public static void getSomeUninstalledActivities(Context context, List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+        WeakReference<Context> context1 = new WeakReference<>(context);
+        uninstalledActivityTask = new UninstalledActivityTask(context1, appDataList, intent, activityFlags, applicationFlags, applicationFlagsMatch, uniqueIdentifier, uninstalledActivitiesListener);
         uninstalledActivityTask.execute();
     }
 
@@ -208,11 +214,11 @@ public class AppList extends BroadcastReceiver{
                                 final ApplicationInfo applicationInfo = packageManager.getApplicationInfo(app.getPackageName(), 0);
                                 app.setIcon(applicationInfo.loadIcon(packageManager));
                                 app.setName(applicationInfo.loadLabel(packageManager).toString());
-                                newApp.add(app);
-                                newAppListener.get().newAppListener(newApp, null, false, true, -1);
                             } catch (PackageManager.NameNotFoundException e) {
                                 e.printStackTrace();
                             }
+                            newApp.add(app);
+                            newAppListener.get().newAppListener(newApp, null, false, true, -1);
                         }
                     }
                 }
@@ -235,11 +241,7 @@ public class AppList extends BroadcastReceiver{
                                 } catch (PackageManager.NameNotFoundException e) {
                                     e.printStackTrace();
                                 }
-                                try {
-                                    app.setIcon(packageManager.getApplicationIcon(app.getPackageName()));
-                                } catch (PackageManager.NameNotFoundException e) {
-                                    e.printStackTrace();
-                                }
+                                app.setIcon(resolveInfo.activityInfo.loadIcon(packageManager));
                                 newApps.add(app);
                             }
                             newActivitiesListener.get().newActivityListener(newApps,null,0,null,false,true,-1);
@@ -268,7 +270,7 @@ public class AppList extends BroadcastReceiver{
                         if (data != null) {
                             app.setPackageName(data.getEncodedSchemeSpecificPart());
                             newApp.add(app);
-                            uninstalledActivitiesListener.get().uninstalledActivityListener(newApp, null, true, -1);
+                            uninstalledActivitiesListener.get().uninstalledActivityListener(newApp, null, 0, null, false, true, -1);
                         }
                     }
                 }

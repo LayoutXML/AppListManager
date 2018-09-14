@@ -146,7 +146,7 @@ public class ListActivity extends AppCompatActivity implements ActivityListener,
     }
 
     @Override
-    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
         if (this.appDataList!=null){
             this.appDataList.removeAll(appDataList);
         }

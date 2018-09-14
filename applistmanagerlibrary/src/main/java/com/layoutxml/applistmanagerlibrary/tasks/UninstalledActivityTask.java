@@ -2,6 +2,7 @@ package com.layoutxml.applistmanagerlibrary.tasks;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
@@ -20,14 +21,20 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
     private List<AppData> receivedAppList;
     private Integer uniqueIdentifier;
     private Intent intent;
+    private Integer activityFlags;
+    private Integer applicationFlags;
+    private Boolean applicationFlagsMatch;
 
 
-    public UninstalledActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer uniqueIdentifier, WeakReference<UninstalledActivityListener> uninstalledListener) {
+    public UninstalledActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier, WeakReference<UninstalledActivityListener> uninstalledListener) {
         contextWeakReference = context;
         this.uninstalledActivitiesTaskWeakReference = uninstalledListener;
         this.receivedAppList = receivedAppList;
         this.uniqueIdentifier = uniqueIdentifier;
         this.intent = intent;
+        this.activityFlags = activityFlags;
+        this.applicationFlags = applicationFlags;
+        this.applicationFlagsMatch = applicationFlagsMatch;
     }
 
     @Override
@@ -35,7 +42,7 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
         Context context1 = contextWeakReference.get();
         if (context1!=null) {
             PackageManager packageManager = context1.getPackageManager();
-            List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent,0);
+            List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent,activityFlags);
             List<AppData> appDataList = new ArrayList<>();
             List<AppData> installedAppList = new ArrayList<>();
             for (ResolveInfo resolveInfo : resolveInfoList) {
@@ -43,8 +50,21 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
                 app.setName(resolveInfo.loadLabel(packageManager).toString());
                 app.setPackageName(resolveInfo.activityInfo.packageName);
                 app.setIcon(resolveInfo.activityInfo.loadIcon(packageManager));
-                app.setFlags(resolveInfo.activityInfo.flags);
-                installedAppList.add(app);
+                try {
+                    ApplicationInfo appInfo = packageManager.getApplicationInfo(app.getPackageName(),0);
+                    app.setFlags(appInfo.flags);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                if (applicationFlagsMatch) {
+                    if ((applicationFlags == null) || ((app.getFlags() & applicationFlags) != 0)) {
+                        installedAppList.add(app);
+                    }
+                } else {
+                    if ((applicationFlags == null) || ((app.getFlags() & applicationFlags) == 0)) {
+                        installedAppList.add(app);
+                    }
+                }
                 if (isCancelled())
                     break;
             }
@@ -66,7 +86,7 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
     protected void onPostExecute(List<AppData> appDataList){
         final UninstalledActivityListener listener = uninstalledActivitiesTaskWeakReference.get();
         if (listener!=null) {
-            listener.uninstalledActivityListener(appDataList, intent, false, uniqueIdentifier);
+            listener.uninstalledActivityListener(appDataList, intent, activityFlags, applicationFlags, applicationFlagsMatch, false, uniqueIdentifier);
         }
     }
 

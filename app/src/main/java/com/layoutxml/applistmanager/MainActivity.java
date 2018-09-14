@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
         getUninstalledActivitiesText.setText(appDataList.size()+" activities removed");
         if (AllActivitiesList!=null){
             AllActivitiesList.removeAll(appDataList);
