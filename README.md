@@ -22,9 +22,10 @@ To receive application and activities lists you must implement listeners and inv
     1. [Methods](https://github.com/LayoutXML/AppListManager#methods)
     2. [Listeners](https://github.com/LayoutXML/AppListManager#listeners)
 4. [Other Information](https://github.com/LayoutXML/AppListManager#other-information)
-    1. [Donate](https://github.com/LayoutXML/AppListManager#donate)
-    2. [Author](https://github.com/LayoutXML/AppListManager#author)
-    3. [License](https://github.com/LayoutXML/AppListManager#license)
+    1. [Sample app]
+    2. [Donate](https://github.com/LayoutXML/AppListManager#donate)
+    3. [Author](https://github.com/LayoutXML/AppListManager#author)
+    4. [License](https://github.com/LayoutXML/AppListManager#license)
 
 ## How to use - basic features
 
@@ -156,6 +157,32 @@ Listeners for activities:
 3. **uninstalledActivitiesListener**. Receives 4 arguments: *List<AppData>* (your uninstalled activities list), *Intent*, *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier).
 
 ## Other Information
+
+### Sample app
+
+Sample app that showcases most of the features can be found in ["app" folder in this repository](https://github.com/LayoutXML/AppListManager/tree/master/app). Application contains two activities:
+1. [MainActivity](https://github.com/LayoutXML/AppListManager/blob/master/app/src/main/java/com/layoutxml/applistmanager/MainActivity.java) demonstrates these features:
+    1. Receiving all applications (getAllApps).
+    2. Receiving new applications (getAllNewApps and broadcast receiver).
+    3. Receiving uninstalled applications (getAllUninstalledApps and broadcast receiver).
+    4. Receiving some (system) applications (getSomeApps) with flags.
+    5. Receiving all activities (with launcher intent) (getAllActivities).
+    6. Receiving new activities (with launcher intent) (getAllNewActivities and broadcast receiver).
+    7. Receiving uninstalled activities (with launcher intent) (getAllUninstalledActivities and broadcast receiver).
+    8. Sorting (sort).
+2. [ListActivity](https://github.com/LayoutXML/AppListManager/blob/master/app/src/main/java/com/layoutxml/applistmanager/ListActivity.java) demonstrates these features:
+    1. Showing spinning progress bar (loading) when waiting for applications/activities list.
+    2. Receiving all applications (getAllApps).
+    3. Receiving all activities (with launcher intent) (getAllActivities).
+    4. Showing applications/activities list on screen.
+    5. Receiving new applications (getAllNewApps and broadcast receiver).
+    6. Receiving new activities (with launcher intent) (getAllNewActivities and broadcast receiver).
+    7. Updating the list on screen with new applications/activities.
+    8. Receiving uninstalled applications (getAllUninstalledApps and broadcast receiver).
+    9. Receiving uninstalled activities (with launcher intent) (getAllUninstalledActivities and broadcast receiver).
+    10. Updating the list on screen without uninstalled applications/activities.
+    11. Sorting (sort).
+
 
 ### Donate
 You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/store/apps/details?id=com.layoutxml.support)** or **[PayPal](https://www.paypal.me/RJankunas)**.
