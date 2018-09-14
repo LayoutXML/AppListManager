@@ -241,16 +241,29 @@ public class AppList extends BroadcastReceiver{
                     }
                 }
             }
-            else if (action.equals(Intent.ACTION_PACKAGE_REMOVED) && uninstalledAppListener !=null) {
-                if (uninstalledAppListener.get()!=null) {
-                    Uri data = intent.getData();
-                    List<AppData> newApp = new ArrayList<>();
-                    AppData app = new AppData();
-                    if (data != null) {
-                        app.setPackageName(data.getEncodedSchemeSpecificPart());
-                        newApp.add(app);
-                        uninstalledAppListener.get().uninstalledAppListener(newApp, true, -1);
-                        uninstalledActivitiesListener.get().uninstalledActivitiesListener(newApp,null,true,-1);
+            else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
+                if (uninstalledAppListener !=null) {
+                    if (uninstalledAppListener.get() != null) {
+                        Uri data = intent.getData();
+                        List<AppData> newApp = new ArrayList<>();
+                        AppData app = new AppData();
+                        if (data != null) {
+                            app.setPackageName(data.getEncodedSchemeSpecificPart());
+                            newApp.add(app);
+                            uninstalledAppListener.get().uninstalledAppListener(newApp, true, -1);
+                        }
+                    }
+                }
+                if (uninstalledActivitiesListener != null) {
+                    if (uninstalledActivitiesListener.get() != null) {
+                        Uri data = intent.getData();
+                        List<AppData> newApp = new ArrayList<>();
+                        AppData app = new AppData();
+                        if (data != null) {
+                            app.setPackageName(data.getEncodedSchemeSpecificPart());
+                            newApp.add(app);
+                            uninstalledActivitiesListener.get().uninstalledActivitiesListener(newApp, null, true, -1);
+                        }
                     }
                 }
             }
