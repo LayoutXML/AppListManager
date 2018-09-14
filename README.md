@@ -1,38 +1,36 @@
 # App List Manager (Android Library)
 
-App List Manager is easy to use Android library, which minimizes developing time when working on applications and activities lists. You no longer have to worry about asynchronous tasks, memory leaks and intent receivers. This library provides a simple way to receive applications and activities lists as they change.
+App List Manager is easy to use Android library, which minimizes developing time when working on applications or activities lists. You no longer have to worry about asynchronous tasks, memory leaks and intent receivers. This library provides a simple way to receive applications and activities lists as they change.
 
-To receive application and activities lists you must implement listeners and invoke methods. In addition, to receive these lists automatically you must also register a receiver (in the manifest and code). All listeners must be registered, and all unfinished tasks must be destroyed. Guide below explains exactly how to do all that and you can also inspect the included sample app that uses most of the features.
+To receive application and activities lists you must implement listeners and invoke methods. Additionally, to receive these lists automatically you must also register a receiver (in the manifest file and code). All listeners must be registered, and all unfinished tasks must be destroyed. Guide below explains exactly how to do all that. You can also inspect the included sample app that uses most of the features.
 
 ## Table of Contents
 
-1. How to use - basic features
-    1. Getting apps
-    2. Getting activities
-    3. Registering listeners
-    4. Destroying unfinished tasks
-    5. Registering a receiver
-2. How to use - advanced features
-    1. Sorting
-    2. Comparing
-    3. Checking and filtering applications with flags
-    4. Filtering activities with flags
-    5. More on flags
-3. More on each method and listener
-    1. Methods
-    2. Listeners
+1. [How to use - basic features](https://github.com/LayoutXML/AppListManager#how-to-use---basic-features)
+    1. [Getting apps](https://github.com/LayoutXML/AppListManager#getting-apps)
+    2. [Getting activities](https://github.com/LayoutXML/AppListManager#getting-activities)
+    3. [Registering listeners](https://github.com/LayoutXML/AppListManager#registering-listeners)
+    4. [Destroying unfinished tasks](https://github.com/LayoutXML/AppListManager#destroying-unfinished-tasks)
+    5. [Registering a receiver](https://github.com/LayoutXML/AppListManager#registering-a-receiver)
+2. [How to use - advanced features](https://github.com/LayoutXML/AppListManager#how-to-use---advanced-features)
+    1. [Sorting](https://github.com/LayoutXML/AppListManager#sorting)
+    2. [Comparing](https://github.com/LayoutXML/AppListManager#comparing)
+    3. [Checking and filtering applications with flags](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-with-flags)
+    4. [Filtering activities with flags](https://github.com/LayoutXML/AppListManager#filtering-activities-with-flags)
+    5. [More on flags](https://github.com/LayoutXML/AppListManager#more-on-flags)
+3. [More on each method and listener](https://github.com/LayoutXML/AppListManager#more-on-each-method-and-listener)
+    1. [Methods](https://github.com/LayoutXML/AppListManager#methods)
+    2. [Listeners](https://github.com/LayoutXML/AppListManager#listeners)
 4. [Other Information](https://github.com/LayoutXML/AppListManager#other-information)
     1. [Donate](https://github.com/LayoutXML/AppListManager#donate)
     2. [Author](https://github.com/LayoutXML/AppListManager#author)
     3. [License](https://github.com/LayoutXML/AppListManager#license)
 
----
-
 ## How to use - basic features
 
 ### Getting apps
 
-- | Method | Listener
+-| Method | Listener
 --- | --- | ---
 Get all apps | AppList.getAllApps(...) | appListener(...)
 Get some apps (filtered list) | AppList.getSomeApps(...) | appListener(...)
@@ -91,8 +89,6 @@ if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
     registerReceiver(new AppList(),AppList.intentFilter);
 ```
 
----
-
 ## How to use - advanced features
 
 ### Sorting
@@ -124,8 +120,6 @@ To set multiple flags you can use any combination of these operators:
 * | - OR operator. Adds apps that have any of the given filters.
 * ^ - XOR (exlcusive or) operator. Adds apps that have one but not the other filter.
 
----
-
 ## More on each method and listener
 
 ### Methods
@@ -145,9 +139,9 @@ Methods for activities:
 5. **getAllUninstalledActivities**. Takes 4 arguments: *Context*, *List<AppData>* (current applications list), *Intent*, and *Integer* (unique identifier). Used to receive all activities list that are no longer installed (unfiltered and unsorted). Received list contains only 1 activity for every uninstalled application but if the application has 2 activities that are in the list, they can still be removed with `.removeAll(...)`.
 
 Other methods:
-1. **registerListeners**. Takes 7 arguments. Explained in more detail in "Registering listeners" section.
-2. **checkApplicationFlags**. Takes 3 arguments. Explained in more detail in "Checking and filtering applications with flags" section.
-3. **sort**. Takes 4 arguments. Explained in more detail in "Sorting" section.
+1. **registerListeners**. Takes 7 arguments: *AppListener, ActivitiesListener, NewAppListener, NewActivitiesListener, UninstalledAppListener, UninstalledActivitiesListener, SortListener*. Must be listener names or classes names that implement these listeners. If listener is not used then write null. Explained in more detail in "Registering listeners" section [here](https://github.com/LayoutXML/AppListManager#registering-a-receiver).
+2. **checkApplicationFlags**. Takes 3 arguments: *AppData* (single application or activity), *Integer* (**application** flags), and *Boolean* (whether the **application** must match the flags or not). Explained in more detail in "Checking and filtering applications with flags" section [here](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-with-flags).
+3. **sort**. Takes 4 arguments: *List<AppData>* (applications or activities lists that you want to be sorted), *Integer* (explains how to sort), *Integer* (explains how to sort), and *Integer* (unique identifier). Explained in more detail in "Sorting" section [here](https://github.com/LayoutXML/AppListManager#sorting).
 
 ### Listeners
 
@@ -161,8 +155,6 @@ Listeners for activities:
 2. **newActivitiesListener**. Receives 7 arguments: *List<AppData>* (your new activities list), *Intent*, *Integer* (activities flags; if getAllNewActivities was called or from a broadcast receiver, then it's 0), *Integer* (applications flags; if getAllNewActivities was called or from a broadcast receiver, then it's null), *Boolean* (whether flags match applications; if getAllNewActivities was called or from broadcast receiver, then it's false), *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier).
 3. **uninstalledActivitiesListener**. Receives 4 arguments: *List<AppData>* (your uninstalled activities list), *Intent*, *Boolean* (true when from broadcast receiver, otherwise false), and *Integer* (unique identifier).
 
----
-
 ## Other Information
 
 ### Donate
@@ -174,6 +166,6 @@ More information about me: https://rokasjankunas.com
 More information about my projects: https://layoutxml.com
 
 ### License
-Twelveish is licensed under "MIT" license. Copyright laws apply.
+AppListManager and a sample app are licensed under "MIT" license. Copyright laws apply.
 
 Copyright © 2018 Rokas Jankūnas (LayoutXML)
