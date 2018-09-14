@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +28,9 @@ import com.layoutxml.applistmanagerlibrary.objects.AppData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity implements ActivitiesListener, NewActivitiesListener, UninstalledActivitiesListener, AppListener, NewAppListener, UninstalledAppListener, SortListener {
+//Activity that displays activities list or apps list depending on what button was pressed in the activity before
 
-    private static final String TAG = "ListActivity";
+public class ListActivity extends AppCompatActivity implements ActivitiesListener, NewActivitiesListener, UninstalledActivitiesListener, AppListener, NewAppListener, UninstalledAppListener, SortListener {
 
     private List<AppData> appDataList = new ArrayList<>();
     private ProgressBar progressBar;

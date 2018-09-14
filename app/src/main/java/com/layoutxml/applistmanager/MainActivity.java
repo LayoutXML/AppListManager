@@ -5,7 +5,6 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         AppList.registerListeners(MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this,MainActivity.this);
     }
 
-    private static final String TAG = "MainActivity";
     private Button getAllButton;
     private Button getNewButton;
     private Button getUninstalledButton;

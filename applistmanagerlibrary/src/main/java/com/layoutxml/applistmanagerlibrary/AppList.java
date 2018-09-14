@@ -214,7 +214,7 @@ public class AppList extends BroadcastReceiver{
                     if (newActivitiesListener.get() != null) {
                         Uri data = intent.getData();
                         List<AppData> newApps = new ArrayList<>();
-                        if (data!=null) { //TODO: put in asynctask
+                        if (data!=null) {
                             Intent intent1 = new Intent();
                             intent1.setPackage(data.getEncodedSchemeSpecificPart());
                             final PackageManager packageManager = context.getPackageManager();
