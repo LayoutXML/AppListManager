@@ -12,6 +12,7 @@ To receive application and activity lists you must implement listeners and invok
     3. [Registering listeners](https://github.com/LayoutXML/AppListManager#registering-listeners)
     4. [Destroying unfinished tasks](https://github.com/LayoutXML/AppListManager#destroying-unfinished-tasks)
     5. [Registering a receiver](https://github.com/LayoutXML/AppListManager#registering-a-receiver)
+    6. [Working with AppDatas](https://github.com/LayoutXML/AppListManager#working-with-appdatas)
 2. [How to use - advanced features](https://github.com/LayoutXML/AppListManager#how-to-use---advanced-features)
     1. [Sorting](https://github.com/LayoutXML/AppListManager#sorting)
     2. [Comparing](https://github.com/LayoutXML/AppListManager#comparing)
@@ -92,6 +93,19 @@ if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
     registerReceiver(new AppList(),AppList.intentFilter);
 ```
 
+### Working with AppDatas
+
+AppData object contains these properties of applications and activities:
+1. Name (*String*) - application or activity name you would want to display.
+2. Icon (*Drawable*) - application or activity icon you would want to display.
+3. Flags (*Integer*) - application flags. For activities it's still application flags.
+4. ActivityName (*String*) - activity name you would want to use for identifying or launching activities. For applications this variable is set to null.
+5. PackageName (*String*) - application package name. For activities it's still application package name.
+
+All these variables have getters and setters that can be used with `.set<Name>` and `.get<Name>`. For example, package name can be accesses with `.getPackageName()` and `.setPackageName(String)`.
+
+All these variables except for PackageName can be null (and they will be null when received from broadcast receivers).
+
 ## How to use - advanced features
 
 ### Sorting
@@ -171,8 +185,8 @@ Other listeners:
 
 ### Sample app
 
-Sample app that showcases most of the features can be found in ["app" folder in this repository](https://github.com/LayoutXML/AppListManager/tree/master/app). Application contains two activities:
-1. [MainActivity](https://github.com/LayoutXML/AppListManager/blob/master/app/src/main/java/com/layoutxml/applistmanager/MainActivity.java) demonstrates these features:
+Sample app that showcases most of the features can be found in ["app" folder in this repository](https://github.com/LayoutXML/AppListManager/tree/master/app). Application contains two independent (for the most part) activities:
+1. [MainActivity](https://github.com/LayoutXML/AppListManager/blob/master/app/src/main/java/com/layoutxml/applistmanager/MainActivity.java), which demonstrates these features:
     1. Receiving all applications (getAllApps).
     2. Receiving new applications (getAllNewApps and broadcast receiver).
     3. Receiving uninstalled applications (getAllUninstalledApps and broadcast receiver).
@@ -181,7 +195,7 @@ Sample app that showcases most of the features can be found in ["app" folder in 
     6. Receiving new activities (with launcher intent) (getAllNewActivities and broadcast receiver).
     7. Receiving uninstalled activities (with launcher intent) (getAllUninstalledActivities and broadcast receiver).
     8. Sorting (sort).
-2. [ListActivity](https://github.com/LayoutXML/AppListManager/blob/master/app/src/main/java/com/layoutxml/applistmanager/ListActivity.java) demonstrates these features:
+2. [ListActivity](https://github.com/LayoutXML/AppListManager/blob/master/app/src/main/java/com/layoutxml/applistmanager/ListActivity.java), which demonstrates these features:
     1. Showing spinning progress bar (loading) when waiting for application/activity list.
     2. Receiving all applications (getAllApps).
     3. Receiving all activities (with launcher intent) (getAllActivities).

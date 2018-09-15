@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
  */
 public class AppData {
 
+    @NonNull
+    private String packageName = "";
     private String name;
     private Drawable icon;
     private Integer flags;
@@ -20,9 +22,6 @@ public class AppData {
     public void setActivityName(String activityName) {
         this.activityName = activityName;
     }
-
-    @NonNull
-    private String packageName = "";
 
     public Integer getFlags() {
         return flags;
