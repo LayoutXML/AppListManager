@@ -1,9 +1,10 @@
-# App List Manager (Android Library)
+# AppListManager (Android Library)
 
-App List Manager is easy to use Android library, which minimizes developing time when working on application or activity lists. You no longer have to worry about asynchronous tasks, memory leaks and intent receivers. This library provides a simple way to receive application and activity lists as they change.
+AppListManager is easy to use Android library, which minimizes developing time when working on application or activity lists. You no longer have to worry about asynchronous tasks, memory leaks and intent receivers. This library provides a simple way to receive application and activity lists as they change.
 
 To receive application and activity lists using this library you must implement listeners and invoke methods. Additionally, to receive these lists automatically you must also register a receiver (in the manifest file and code). All listeners must be registered, and all unfinished tasks must be destroyed. Guide below explains exactly how to do all that. You can also inspect the included sample app that uses most of the features.
 
+[Download sample app from the Google Play store](https://play.google.com/store/apps/details?id=com.layoutxml.applistmanager).
 
 **Step 1: Add the JitPack repository in your root build.gradle at the end of repositories:**
 ```
@@ -128,7 +129,7 @@ All these variables except for PackageName can be null (and they will be null wh
 
 ### Sorting
 
-App List Manager library provides a method and a listener to sort your application and activity lists.
+AppListManager library provides a method and a listener to sort your application and activity lists.
 
 Method `AppList.sort` takes 4 arguments - app list (what to sort), two integer arguments that describe how to sort and a unique identifier:
 1. Second argument describes by what - it can be `AppList.BY_APPNAME` or `AppList.BY_PACKAGENAME`.
@@ -203,7 +204,7 @@ Other listeners:
 
 ### Sample app
 
-Sample app that showcases most of the features can be found in ["app" folder in this repository](https://github.com/LayoutXML/AppListManager/tree/master/app). Application contains two independent (for the most part) activities:
+Sample app that showcases most of the features can be found in ["app" folder in this repository](https://github.com/LayoutXML/AppListManager/tree/master/app). You can download pre-compiled version from the [Google Play store here](https://play.google.com/store/apps/details?id=com.layoutxml.applistmanager). Application contains two independent (for the most part) activities:
 1. [MainActivity](https://github.com/LayoutXML/AppListManager/blob/master/app/src/main/java/com/layoutxml/applistmanager/MainActivity.java), which demonstrates these features:
     1. Receiving all applications (getAllApps).
     2. Receiving new applications (getAllNewApps and broadcast receiver).
