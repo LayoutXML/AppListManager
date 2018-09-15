@@ -18,12 +18,12 @@ public class NewActivityTask extends AsyncTask<Void,Void,List<AppData>> {
 
     private final WeakReference<NewActivityListener> newActivitiesListener;
     private final WeakReference<Context> contextWeakReference;
-    private List<AppData> receivedAppList;
-    private Integer flags;
-    private Boolean match;
-    private Integer uniqueIdentifier;
-    private Intent intent;
-    private Integer activitiesFlags;
+    private final List<AppData> receivedAppList;
+    private final Integer flags;
+    private final Boolean match;
+    private final Integer uniqueIdentifier;
+    private final Intent intent;
+    private final Integer activitiesFlags;
 
 
     public NewActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activitiesFlags, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewActivityListener> newActivitiesListener) {

@@ -18,9 +18,9 @@ public class AppTask extends AsyncTask<Void,Void,List<AppData>> {
 
     private final WeakReference<AppListener> allAppsListener;
     private final WeakReference<Context> contextWeakReference;
-    private Integer flags;
-    private Boolean match;
-    private Integer uniqueIdentifier;
+    private final Integer flags;
+    private final Boolean match;
+    private final Integer uniqueIdentifier;
 
     public AppTask(WeakReference<Context> context, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<AppListener> allListener) {
         this.contextWeakReference = context;

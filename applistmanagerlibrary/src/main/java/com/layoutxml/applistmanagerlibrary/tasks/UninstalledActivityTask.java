@@ -18,12 +18,12 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
 
     private final WeakReference<UninstalledActivityListener> uninstalledActivitiesTaskWeakReference;
     private final WeakReference<Context> contextWeakReference;
-    private List<AppData> receivedAppList;
-    private Integer uniqueIdentifier;
-    private Intent intent;
-    private Integer activityFlags;
-    private Integer applicationFlags;
-    private Boolean applicationFlagsMatch;
+    private final List<AppData> receivedAppList;
+    private final Integer uniqueIdentifier;
+    private final Intent intent;
+    private final Integer activityFlags;
+    private final Integer applicationFlags;
+    private final Boolean applicationFlagsMatch;
 
 
     public UninstalledActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier, WeakReference<UninstalledActivityListener> uninstalledListener) {

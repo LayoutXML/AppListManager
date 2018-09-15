@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class AppList extends BroadcastReceiver{
 
-    public static IntentFilter intentFilter = new IntentFilter();
+    public static final IntentFilter intentFilter = new IntentFilter();
 
     //Tasks
     private static AppTask appTask;

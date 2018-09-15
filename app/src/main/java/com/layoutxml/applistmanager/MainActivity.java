@@ -157,11 +157,6 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void appListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
         if (uniqueIdentifier==0) { //Could also be: if (filterFlags == null)
             getAllText.setText("There are now " + appDataList.size() + " apps installed.");

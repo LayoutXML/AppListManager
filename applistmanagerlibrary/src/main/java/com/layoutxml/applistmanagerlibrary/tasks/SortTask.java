@@ -16,10 +16,10 @@ import java.util.List;
 public class SortTask extends AsyncTask<Void,Void,List<AppData>> {
 
     private final WeakReference<SortListener> sortListener;
-    private List<AppData> appDataList;
-    private Integer sortBy;
-    private Integer inOrder;
-    private Integer uniqueIdentifier;
+    private final List<AppData> appDataList;
+    private final Integer sortBy;
+    private final Integer inOrder;
+    private final Integer uniqueIdentifier;
 
     public SortTask(List<AppData> appDataList, Integer sortBy, Integer inOrder, Integer uniqueIdentifier, WeakReference<SortListener> sortListener){
         this.sortListener = sortListener;

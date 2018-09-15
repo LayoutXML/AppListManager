@@ -18,11 +18,11 @@ public class ActivityTask extends AsyncTask<Void,Void,List<AppData>> {
 
     private final WeakReference<ActivityListener> activitiesListenerWeakReference;
     private final WeakReference<Context> contextWeakReference;
-    private Intent intent;
-    private Integer uniqueIdentifier;
-    private Integer flags;
-    private Integer activitiesFlags;
-    private Boolean match;
+    private final Intent intent;
+    private final Integer uniqueIdentifier;
+    private final Integer flags;
+    private final Integer activitiesFlags;
+    private final Boolean match;
 
     public ActivityTask(WeakReference<Context> context, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, Integer uniqueIdentifier, WeakReference<ActivityListener> activitiesListenerWeakReference) {
         this.contextWeakReference = context;

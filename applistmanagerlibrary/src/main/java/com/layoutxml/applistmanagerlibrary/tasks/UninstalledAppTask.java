@@ -19,10 +19,10 @@ public class UninstalledAppTask extends AsyncTask<Void,Void,List<AppData>>{
 
     private final WeakReference<UninstalledAppListener> allUninstalledAppsListener;
     private final WeakReference<Context> contextWeakReference;
-    private List<AppData> receivedAppList;
-    private Integer uniqueIdentifier;
-    private Integer applicationFlags;
-    private Boolean applicationFlagsMatch;
+    private final List<AppData> receivedAppList;
+    private final Integer uniqueIdentifier;
+    private final Integer applicationFlags;
+    private final Boolean applicationFlagsMatch;
 
 
     public UninstalledAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier,  WeakReference<UninstalledAppListener> uninstalledListener) {

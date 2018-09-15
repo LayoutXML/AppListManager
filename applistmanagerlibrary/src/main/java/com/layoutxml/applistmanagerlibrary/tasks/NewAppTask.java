@@ -19,10 +19,10 @@ public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
 
     private final WeakReference<NewAppListener> allNewAppsListener;
     private final WeakReference<Context> contextWeakReference;
-    private List<AppData> receivedAppList;
-    private Integer flags;
-    private Boolean match;
-    private Integer uniqueIdentifier;
+    private final List<AppData> receivedAppList;
+    private final Integer flags;
+    private final Boolean match;
+    private final Integer uniqueIdentifier;
 
 
     public NewAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewAppListener> newListener) {
