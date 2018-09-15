@@ -50,6 +50,7 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
                 app.setName(resolveInfo.loadLabel(packageManager).toString());
                 app.setPackageName(resolveInfo.activityInfo.packageName);
                 app.setIcon(resolveInfo.activityInfo.loadIcon(packageManager));
+                app.setActivityName(resolveInfo.activityInfo.name);
                 try {
                     ApplicationInfo appInfo = packageManager.getApplicationInfo(app.getPackageName(),0);
                     app.setFlags(appInfo.flags);

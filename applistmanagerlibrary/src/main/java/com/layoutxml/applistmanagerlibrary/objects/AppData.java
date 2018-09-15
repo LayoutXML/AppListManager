@@ -11,6 +11,16 @@ public class AppData {
     private String name;
     private Drawable icon;
     private Integer flags;
+    private String activityName;
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
     @NonNull
     private String packageName = "";
 

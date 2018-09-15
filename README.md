@@ -193,6 +193,7 @@ Sample app that showcases most of the features can be found in ["app" folder in 
     9. Receiving uninstalled activities (with launcher intent) (getAllUninstalledActivities and broadcast receiver).
     10. Updating the list on screen without uninstalled applications/activities.
     11. Sorting (sort).
+    12. Launching applications and activities.
 
 
 ### Donate

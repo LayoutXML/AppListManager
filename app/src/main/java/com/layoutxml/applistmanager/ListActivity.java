@@ -1,5 +1,6 @@
 package com.layoutxml.applistmanager;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -159,11 +160,11 @@ public class ListActivity extends AppCompatActivity implements ActivityListener,
         }
     }
 
-    public static class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+    public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         private List<AppData> appDataList0;
 
-        class MyViewHolder extends RecyclerView.ViewHolder {
+        class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             TextView name;
             TextView packageName;
@@ -171,9 +172,28 @@ public class ListActivity extends AppCompatActivity implements ActivityListener,
 
             MyViewHolder(View v) {
                 super(v);
+                v.setOnClickListener(this);
                 name = v.findViewById(R.id.itemName);
                 packageName = v.findViewById(R.id.itemPackageName);
                 logo = v.findViewById(R.id.itemLogo);
+            }
+
+            @Override
+            public void onClick(View v) {
+                if (!apps) {
+                    ComponentName name = new ComponentName(appDataList0.get(getAdapterPosition()).getPackageName(), appDataList0.get(getAdapterPosition()).getActivityName());
+                    Intent i = new Intent(Intent.ACTION_MAIN);
+
+                    i.addCategory(Intent.CATEGORY_LAUNCHER);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                    i.setComponent(name);
+
+                    startActivity(i);
+                } else {
+                    Intent i = getApplicationContext().getPackageManager().getLaunchIntentForPackage(appDataList0.get(getAdapterPosition()).getPackageName());
+                    if (i!=null)
+                        startActivity(i);
+                }
             }
         }
 

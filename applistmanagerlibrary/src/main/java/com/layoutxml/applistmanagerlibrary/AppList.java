@@ -243,6 +243,7 @@ public class AppList extends BroadcastReceiver{
                                     e.printStackTrace();
                                 }
                                 app.setIcon(resolveInfo.activityInfo.loadIcon(packageManager));
+                                app.setActivityName(resolveInfo.activityInfo.name);
                                 newApps.add(app);
                             }
                             newActivitiesListener.get().newActivityListener(newApps,null,0,null,false,true,-1);
