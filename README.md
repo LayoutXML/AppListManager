@@ -2,7 +2,25 @@
 
 App List Manager is easy to use Android library, which minimizes developing time when working on application or activity lists. You no longer have to worry about asynchronous tasks, memory leaks and intent receivers. This library provides a simple way to receive application and activity lists as they change.
 
-To receive application and activity lists you must implement listeners and invoke methods. Additionally, to receive these lists automatically you must also register a receiver (in the manifest file and code). All listeners must be registered, and all unfinished tasks must be destroyed. Guide below explains exactly how to do all that. You can also inspect the included sample app that uses most of the features.
+To receive application and activity lists using this library you must implement listeners and invoke methods. Additionally, to receive these lists automatically you must also register a receiver (in the manifest file and code). All listeners must be registered, and all unfinished tasks must be destroyed. Guide below explains exactly how to do all that. You can also inspect the included sample app that uses most of the features.
+
+
+**Step 1: Add the JitPack repository in your root build.gradle at the end of repositories:**
+```
+allprojects {
+    repositories {
+        ...
+  	    maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+**Step 2. Add the dependency:**
+```
+dependencies {
+    implementation 'com.github.LayoutXML:AppListManager:1.0.0'
+}
+```
 
 ## Table of Contents
 
@@ -72,7 +90,7 @@ For example, you can destroy unfinished tasks in activity's onPause method.
 
 ### Registering a receiver
 
-If your application supports Android versions 7.1.1 or lower (not necessarily limited to these versions), you must add this to your AndroidManifest.xml file between application tags:
+If your application supports Android versions 7.1.1 or lower (not necessarily limited to these versions) and you want to receive application and activity lists automatically, you must add this to your AndroidManifest.xml file between application tags:
 ```
 <receiver
     android:name="com.layoutxml.applistmanagerlibrary.AppList"
@@ -87,7 +105,7 @@ If your application supports Android versions 7.1.1 or lower (not necessarily li
 </receiver>
 ```
 
-If your application supports Android versions 8.0 and higher (not necessarily limited to these versions), you must add this to your application, for example to onCreate method:
+If your application supports Android versions 8.0 and higher (not necessarily limited to these versions) and you want to receive application and activity lists automatically, you must add this to your application, for example to onCreate method:
 ```
 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
     registerReceiver(new AppList(),AppList.intentFilter);
