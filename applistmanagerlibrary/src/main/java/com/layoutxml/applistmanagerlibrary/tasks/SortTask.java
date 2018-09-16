@@ -60,6 +60,20 @@ public class SortTask extends AsyncTask<Void,Void,List<AppData>> {
                     return t1.getPackageName().compareTo(t0.getPackageName());
                 }
             });
+        } else if (sortBy.equals(2) && inOrder.equals(0)) {
+            Collections.sort(appDataList, new Comparator<AppData>() {
+                @Override
+                public int compare(AppData t0, AppData t1) {
+                    return t0.getName().toLowerCase().compareTo(t1.getName().toLowerCase());
+                }
+            });
+        } else if (sortBy.equals(2) && inOrder.equals(1)) {
+            Collections.sort(appDataList, new Comparator<AppData>() {
+                @Override
+                public int compare(AppData t0, AppData t1) {
+                    return t1.getName().toLowerCase().compareTo(t0.getName().toLowerCase());
+                }
+            });
         }
         return appDataList;
     }

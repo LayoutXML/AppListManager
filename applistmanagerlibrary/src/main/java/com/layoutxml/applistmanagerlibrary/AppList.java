@@ -58,6 +58,7 @@ public class AppList extends BroadcastReceiver{
     //Values
     public static final Integer BY_APPNAME = 0;
     public static final Integer BY_PACKAGENAME = 1;
+    public static final Integer BY_APPNAME_IGNORE_CASE = 2;
     public static final Integer IN_ASCENDING = 0;
     public static final Integer IN_DESCENDING = 1;
 
