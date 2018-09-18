@@ -1,5 +1,6 @@
 # AppListManager (Android Library)
 
+[![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-AppListManager-green.svg?style=flat )]( https://android-arsenal.com/details/1/7143 )
 [![Build Status](https://travis-ci.org/LayoutXML/AppListManager.svg?branch=master)](https://travis-ci.org/LayoutXML/AppListManager)
 [![GitHub](https://img.shields.io/github/license/LayoutXML/AppListManager.svg)](https://github.com/LayoutXML/AppListManager/blob/master/LICENSE)
 [![Version](https://jitpack.io/v/LayoutXML/AppListManager.svg)](https://jitpack.io/#LayoutXML/AppListManager)
