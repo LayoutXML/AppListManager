@@ -139,7 +139,7 @@ All these variables except for PackageName can be null (and they will be null wh
 AppListManager library provides a method and a listener to sort your application and activity lists.
 
 Method `AppList.sort` takes 4 arguments - app list (what to sort), two integer arguments that describe how to sort and a unique identifier:
-1. Second argument describes by what - it can be `AppList.BY_APPNAME` or `AppList.BY_PACKAGENAME`.
+1. Second argument describes by what - it can be `AppList.BY_APPNAME`, `AppList.BY_APPNAME_IGNORE_CASE` or `AppList.BY_PACKAGENAME` (`BY_APPNAME` would sort {ab,AA,BA} as {AA,BA,ab} and `BY_APPNAME_IGNORE_CASE` as {AA,ab,BA}).
 2. Third argument describes in what order - it can be `AppList.IN_ASCENDING` or `AppList.IN_DESCENDING`.
 
 ### Comparing
