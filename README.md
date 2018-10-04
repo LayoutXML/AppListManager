@@ -26,7 +26,7 @@ allprojects {
 **Step 2. Add the dependency:**
 ```
 dependencies {
-    implementation 'com.github.LayoutXML:AppListManager:1.0.0'
+    implementation 'com.github.LayoutXML:AppListManager:1.1.0'
 }
 ```
 
