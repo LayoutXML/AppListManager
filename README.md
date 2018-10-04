@@ -53,6 +53,7 @@ dependencies {
     2. [Donate](https://github.com/LayoutXML/AppListManager#donate)
     3. [Author](https://github.com/LayoutXML/AppListManager#author)
     4. [License](https://github.com/LayoutXML/AppListManager#license)
+5. [Changelog](https://github.com/LayoutXML/AppListManager/blob/master/CHANGELOG.md) (in an external file)
 
 ## How to use - basic features
 
