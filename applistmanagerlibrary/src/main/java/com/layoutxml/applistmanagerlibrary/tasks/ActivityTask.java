@@ -3,6 +3,7 @@ package com.layoutxml.applistmanagerlibrary.tasks;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
@@ -23,8 +24,9 @@ public class ActivityTask extends AsyncTask<Void,Void,List<AppData>> {
     private final Integer flags;
     private final Integer activitiesFlags;
     private final Boolean match;
+    private final String[] permissions;
 
-    public ActivityTask(WeakReference<Context> context, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, Integer uniqueIdentifier, WeakReference<ActivityListener> activitiesListenerWeakReference) {
+    public ActivityTask(WeakReference<Context> context, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, String[] permissions, Integer uniqueIdentifier, WeakReference<ActivityListener> activitiesListenerWeakReference) {
         this.contextWeakReference = context;
         this.intent = intent;
         this.uniqueIdentifier = uniqueIdentifier;
@@ -32,6 +34,7 @@ public class ActivityTask extends AsyncTask<Void,Void,List<AppData>> {
         this.flags = appFlags;
         this.match = appMatch;
         this.activitiesFlags = activitiesFlags;
+        this.permissions = permissions;
     }
 
     @Override
@@ -47,18 +50,42 @@ public class ActivityTask extends AsyncTask<Void,Void,List<AppData>> {
                 app.setPackageName(resolveInfo.activityInfo.packageName);
                 app.setIcon(resolveInfo.activityInfo.loadIcon(packageManager));
                 app.setActivityName(resolveInfo.activityInfo.name);
+                Boolean containsPermission = false;
                 try {
                     ApplicationInfo appInfo = packageManager.getApplicationInfo(app.getPackageName(),0);
                     app.setFlags(appInfo.flags);
+                    PackageInfo packageInfo = packageManager.getPackageInfo(app.getPackageName(), PackageManager.GET_PERMISSIONS);
+                    String[] requestedPermissions = packageInfo.requestedPermissions;
+                    if (permissions!=null) {
+                        if (requestedPermissions != null) {
+                            for (String requestedPermission : requestedPermissions) {
+                                for (String permission : permissions) {
+                                    if (requestedPermission.equals(permission)) {
+                                        containsPermission = true;
+                                        break;
+                                    }
+                                }
+                                if (containsPermission)
+                                    break;
+                            }
+                        }
+                    } else {
+                        containsPermission = true;
+                    }
+                    app.setPermissions(requestedPermissions);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
+                    if (permissions==null)
+                        containsPermission=true;
                 }
-                if (match) {
-                    if ((flags == null) || ((app.getFlags() & flags) != 0))
-                        appDataList.add(app);
-                } else {
-                    if ((flags == null) || ((app.getFlags() & flags) == 0))
-                        appDataList.add(app);
+                if (containsPermission) {
+                    if (match) {
+                        if ((flags == null) || ((app.getFlags() & flags) != 0))
+                            appDataList.add(app);
+                    } else {
+                        if ((flags == null) || ((app.getFlags() & flags) == 0))
+                            appDataList.add(app);
+                    }
                 }
                 if (isCancelled())
                     break;
