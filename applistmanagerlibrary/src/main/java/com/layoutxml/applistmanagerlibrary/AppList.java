@@ -156,6 +156,21 @@ public class AppList extends BroadcastReceiver{
             return ((applicationFlags==null) || ((appData.getFlags() & applicationFlags) == 0));
     }
 
+    public static Boolean checkApplicationPermissions(AppData appData, String[] permissions) {
+        Boolean containsPermission = false;
+        for (String permission : permissions) {
+            for (String permissionReal : appData.getPermissions()) {
+                if (permission.equals(permissionReal)) {
+                    containsPermission = true;
+                    break;
+                }
+            }
+            if (containsPermission)
+                break;
+        }
+        return containsPermission;
+    }
+
     public static void sort(List<AppData> appDataList, Integer sortBy, Integer inOrder, Integer uniqueIdentifier) {
         sortTask = new SortTask(appDataList,sortBy,inOrder,uniqueIdentifier,sortListener);
         sortTask.execute();
