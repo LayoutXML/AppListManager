@@ -2,6 +2,7 @@ package com.layoutxml.applistmanagerlibrary.tasks;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
@@ -23,15 +24,17 @@ public class UninstalledAppTask extends AsyncTask<Void,Void,List<AppData>>{
     private final Integer uniqueIdentifier;
     private final Integer applicationFlags;
     private final Boolean applicationFlagsMatch;
+    private final String[] permissions;
 
 
-    public UninstalledAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier,  WeakReference<UninstalledAppListener> uninstalledListener) {
+    public UninstalledAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Integer uniqueIdentifier,  WeakReference<UninstalledAppListener> uninstalledListener) {
         contextWeakReference = context;
         this.allUninstalledAppsListener = uninstalledListener;
         this.receivedAppList = receivedAppList;
         this.uniqueIdentifier = uniqueIdentifier;
         this.applicationFlags = applicationFlags;
         this.applicationFlagsMatch = applicationFlagsMatch;
+        this.permissions = permissions;
     }
 
     @Override
@@ -48,13 +51,41 @@ public class UninstalledAppTask extends AsyncTask<Void,Void,List<AppData>>{
                 app.setPackageName(applicationInfo.packageName);
                 app.setIcon(applicationInfo.loadIcon(packageManager));
                 app.setFlags(applicationInfo.flags);
-                if (applicationFlagsMatch) {
-                    if ((applicationFlags == null) || ((app.getFlags() & applicationFlags) != 0)) {
-                        installedAppList.add(app);
+                Boolean containsPermission = false;
+                try {
+                    PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
+                    String[] requestedPermissions = packageInfo.requestedPermissions;
+                    if (permissions!=null) {
+                        if (requestedPermissions != null) {
+                            for (String requestedPermission : requestedPermissions) {
+                                for (String permission : permissions) {
+                                    if (requestedPermission.equals(permission)) {
+                                        containsPermission = true;
+                                        break;
+                                    }
+                                }
+                                if (containsPermission)
+                                    break;
+                            }
+                        }
+                    } else {
+                        containsPermission = true;
                     }
-                } else {
-                    if ((applicationFlags == null) || ((app.getFlags() & applicationFlags) == 0)) {
-                        installedAppList.add(app);
+                    app.setPermissions(requestedPermissions);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                    if (permissions==null)
+                        containsPermission=true;
+                }
+                if (containsPermission) {
+                    if (applicationFlagsMatch) {
+                        if ((applicationFlags == null) || ((app.getFlags() & applicationFlags) != 0)) {
+                            installedAppList.add(app);
+                        }
+                    } else {
+                        if ((applicationFlags == null) || ((app.getFlags() & applicationFlags) == 0)) {
+                            installedAppList.add(app);
+                        }
                     }
                 }
                 if (isCancelled())

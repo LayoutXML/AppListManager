@@ -2,6 +2,7 @@ package com.layoutxml.applistmanagerlibrary.tasks;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
@@ -23,15 +24,17 @@ public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
     private final Integer flags;
     private final Boolean match;
     private final Integer uniqueIdentifier;
+    private final String[] permissions;
 
 
-    public NewAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer flags, Boolean match, Integer uniqueIdentifier, WeakReference<NewAppListener> newListener) {
+    public NewAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer flags, Boolean match, String[] permissions, Integer uniqueIdentifier, WeakReference<NewAppListener> newListener) {
         contextWeakReference = context;
         this.allNewAppsListener = newListener;
         this.receivedAppList = receivedAppList;
         this.flags = flags;
         this.match = match;
         this.uniqueIdentifier = uniqueIdentifier;
+        this.permissions = permissions;
     }
 
     @Override
@@ -47,26 +50,54 @@ public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
                 app.setPackageName(applicationInfo.packageName);
                 app.setIcon(applicationInfo.loadIcon(packageManager));
                 app.setFlags(applicationInfo.flags);
-                if (receivedAppList != null) {
-                    if (match) {
-                        if ((flags == null) || ((applicationInfo.flags & flags) != 0)) {
-                            if (!receivedAppList.contains(app))
-                                appDataList.add(app);
+                Boolean containsPermission = false;
+                try {
+                    PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
+                    String[] requestedPermissions = packageInfo.requestedPermissions;
+                    if (permissions!=null) {
+                        if (requestedPermissions != null) {
+                            for (String requestedPermission : requestedPermissions) {
+                                for (String permission : permissions) {
+                                    if (requestedPermission.equals(permission)) {
+                                        containsPermission = true;
+                                        break;
+                                    }
+                                }
+                                if (containsPermission)
+                                    break;
+                            }
                         }
                     } else {
-                        if ((flags == null) || ((applicationInfo.flags & flags) == 0)) {
-                            if (!receivedAppList.contains(app))
-                                appDataList.add(app);
-                        }
+                        containsPermission = true;
                     }
-                } else {
-                    if (match) {
-                        if ((flags == null) || ((applicationInfo.flags & flags) != 0)) {
-                            appDataList.add(app);
+                    app.setPermissions(requestedPermissions);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                    if (permissions==null)
+                        containsPermission=true;
+                }
+                if (containsPermission) {
+                    if (receivedAppList != null) {
+                        if (match) {
+                            if ((flags == null) || ((applicationInfo.flags & flags) != 0)) {
+                                if (!receivedAppList.contains(app))
+                                    appDataList.add(app);
+                            }
+                        } else {
+                            if ((flags == null) || ((applicationInfo.flags & flags) == 0)) {
+                                if (!receivedAppList.contains(app))
+                                    appDataList.add(app);
+                            }
                         }
                     } else {
-                        if ((flags == null) || ((applicationInfo.flags & flags) == 0)) {
-                            appDataList.add(app);
+                        if (match) {
+                            if ((flags == null) || ((applicationInfo.flags & flags) != 0)) {
+                                appDataList.add(app);
+                            }
+                        } else {
+                            if ((flags == null) || ((applicationInfo.flags & flags) == 0)) {
+                                appDataList.add(app);
+                            }
                         }
                     }
                 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -78,13 +79,13 @@ public class AppList extends BroadcastReceiver{
 
     public static void getAllApps(Context context, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        appTask = new AppTask(context1,null, true, uniqueIdentifier, appListener);
+        appTask = new AppTask(context1,null, true,null, uniqueIdentifier, appListener);
         appTask.execute();
     }
 
-    public static void getSomeApps(Context context, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier){
+    public static void getSomeApps(Context context, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Integer uniqueIdentifier){
         WeakReference<Context> context1 = new WeakReference<>(context);
-        appTask = new AppTask(context1, applicationFlags, applicationFlagsMatch, uniqueIdentifier, appListener);
+        appTask = new AppTask(context1, applicationFlags, applicationFlagsMatch, permissions, uniqueIdentifier, appListener);
         appTask.execute();
     }
 
@@ -102,13 +103,13 @@ public class AppList extends BroadcastReceiver{
 
     public static void getAllNewApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newAppTask = new NewAppTask(context1, appDataList, null, false, uniqueIdentifier, newAppListener);
+        newAppTask = new NewAppTask(context1, appDataList, null, false, null, uniqueIdentifier, newAppListener);
         newAppTask.execute();
     }
 
-    public static void getSomeNewApps(Context context, List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+    public static void getSomeNewApps(Context context, List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        newAppTask = new NewAppTask(context1, appDataList, applicationFlags, applicationFlagsMatch, uniqueIdentifier, newAppListener);
+        newAppTask = new NewAppTask(context1, appDataList, applicationFlags, applicationFlagsMatch, permissions, uniqueIdentifier, newAppListener);
         newAppTask.execute();
     }
 
@@ -126,13 +127,13 @@ public class AppList extends BroadcastReceiver{
 
     public static void getAllUninstalledApps(Context context, List<AppData> appDataList, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        uninstalledAppTask = new UninstalledAppTask(context1, appDataList, null, false, uniqueIdentifier, uninstalledAppListener);
+        uninstalledAppTask = new UninstalledAppTask(context1, appDataList, null, false, null,uniqueIdentifier, uninstalledAppListener);
         uninstalledAppTask.execute();
     }
 
-    public static void getSomeUninstalledApps(Context context, List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+    public static void getSomeUninstalledApps(Context context, List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Integer uniqueIdentifier) {
         WeakReference<Context> context1 = new WeakReference<>(context);
-        uninstalledAppTask = new UninstalledAppTask(context1, appDataList, applicationFlags, applicationFlagsMatch, uniqueIdentifier, uninstalledAppListener);
+        uninstalledAppTask = new UninstalledAppTask(context1, appDataList, applicationFlags, applicationFlagsMatch, permissions, uniqueIdentifier, uninstalledAppListener);
         uninstalledAppTask.execute();
     }
 
@@ -216,6 +217,8 @@ public class AppList extends BroadcastReceiver{
                                 app.setIcon(applicationInfo.loadIcon(packageManager));
                                 app.setName(applicationInfo.loadLabel(packageManager).toString());
                                 app.setFlags(applicationInfo.flags);
+                                PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
+                                app.setPermissions(packageInfo.requestedPermissions);
                             } catch (PackageManager.NameNotFoundException e) {
                                 e.printStackTrace();
                             }

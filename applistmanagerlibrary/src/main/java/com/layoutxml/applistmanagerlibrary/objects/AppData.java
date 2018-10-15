@@ -14,6 +14,15 @@ public class AppData {
     private Drawable icon;
     private Integer flags;
     private String activityName;
+    private String[] permissions;
+
+    public String[] getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(String[] permissions) {
+        this.permissions = permissions;
+    }
 
     public String getActivityName() {
         return activityName;
