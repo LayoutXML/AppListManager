@@ -26,9 +26,10 @@ public class NewActivityTask extends AsyncTask<Void,Void,List<AppData>> {
     private final Intent intent;
     private final Integer activitiesFlags;
     private final String[] permissions;
+    private final Boolean matchPermissions;
 
 
-    public NewActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activitiesFlags, Integer flags, Boolean match, String[] permissions, Integer uniqueIdentifier, WeakReference<NewActivityListener> newActivitiesListener) {
+    public NewActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activitiesFlags, Integer flags, Boolean match, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier, WeakReference<NewActivityListener> newActivitiesListener) {
         contextWeakReference = context;
         this.newActivitiesListener = newActivitiesListener;
         this.receivedAppList = receivedAppList;
@@ -38,6 +39,7 @@ public class NewActivityTask extends AsyncTask<Void,Void,List<AppData>> {
         this.intent = intent;
         this.activitiesFlags = activitiesFlags;
         this.permissions = permissions;
+        this.matchPermissions = matchPermissions;
     }
 
     @Override
@@ -73,15 +75,15 @@ public class NewActivityTask extends AsyncTask<Void,Void,List<AppData>> {
                             }
                         }
                     } else {
-                        containsPermission = true;
+                        containsPermission = matchPermissions;
                     }
                     app.setPermissions(requestedPermissions);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                     if (permissions==null)
-                        containsPermission=true;
+                        containsPermission = matchPermissions;
                 }
-                if (containsPermission) {
+                if ((containsPermission && matchPermissions) || (!containsPermission && !matchPermissions)) {
                     if (receivedAppList != null) {
                         if (match) {
                             if ((flags == null) || ((app.getFlags() & flags) != 0))

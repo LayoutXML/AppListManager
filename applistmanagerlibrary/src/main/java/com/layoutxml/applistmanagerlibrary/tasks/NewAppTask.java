@@ -25,9 +25,10 @@ public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
     private final Boolean match;
     private final Integer uniqueIdentifier;
     private final String[] permissions;
+    private final Boolean matchPermissions;
 
 
-    public NewAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer flags, Boolean match, String[] permissions, Integer uniqueIdentifier, WeakReference<NewAppListener> newListener) {
+    public NewAppTask(WeakReference<Context> context, List<AppData> receivedAppList, Integer flags, Boolean match, String[] permissions, Boolean matchPermissions,  Integer uniqueIdentifier, WeakReference<NewAppListener> newListener) {
         contextWeakReference = context;
         this.allNewAppsListener = newListener;
         this.receivedAppList = receivedAppList;
@@ -35,6 +36,7 @@ public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
         this.match = match;
         this.uniqueIdentifier = uniqueIdentifier;
         this.permissions = permissions;
+        this.matchPermissions = matchPermissions;
     }
 
     @Override
@@ -68,15 +70,15 @@ public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
                             }
                         }
                     } else {
-                        containsPermission = true;
+                        containsPermission = matchPermissions;
                     }
                     app.setPermissions(requestedPermissions);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                     if (permissions==null)
-                        containsPermission=true;
+                        containsPermission = matchPermissions;
                 }
-                if (containsPermission) {
+                if ((containsPermission && matchPermissions) || (!containsPermission && !matchPermissions)) {
                     if (receivedAppList != null) {
                         if (match) {
                             if ((flags == null) || ((applicationInfo.flags & flags) != 0)) {

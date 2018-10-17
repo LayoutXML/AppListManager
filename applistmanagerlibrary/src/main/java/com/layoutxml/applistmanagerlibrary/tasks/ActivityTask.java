@@ -25,8 +25,9 @@ public class ActivityTask extends AsyncTask<Void,Void,List<AppData>> {
     private final Integer activitiesFlags;
     private final Boolean match;
     private final String[] permissions;
+    private final Boolean matchPermissions;
 
-    public ActivityTask(WeakReference<Context> context, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, String[] permissions, Integer uniqueIdentifier, WeakReference<ActivityListener> activitiesListenerWeakReference) {
+    public ActivityTask(WeakReference<Context> context, Intent intent, Integer activitiesFlags, Integer appFlags, Boolean appMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier, WeakReference<ActivityListener> activitiesListenerWeakReference) {
         this.contextWeakReference = context;
         this.intent = intent;
         this.uniqueIdentifier = uniqueIdentifier;
@@ -35,6 +36,7 @@ public class ActivityTask extends AsyncTask<Void,Void,List<AppData>> {
         this.match = appMatch;
         this.activitiesFlags = activitiesFlags;
         this.permissions = permissions;
+        this.matchPermissions = matchPermissions;
     }
 
     @Override
@@ -70,15 +72,15 @@ public class ActivityTask extends AsyncTask<Void,Void,List<AppData>> {
                             }
                         }
                     } else {
-                        containsPermission = true;
+                        containsPermission = matchPermissions;
                     }
                     app.setPermissions(requestedPermissions);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                     if (permissions==null)
-                        containsPermission=true;
+                        containsPermission=matchPermissions;
                 }
-                if (containsPermission) {
+                if ((containsPermission && matchPermissions) || (!containsPermission && !matchPermissions)) {
                     if (match) {
                         if ((flags == null) || ((app.getFlags() & flags) != 0))
                             appDataList.add(app);

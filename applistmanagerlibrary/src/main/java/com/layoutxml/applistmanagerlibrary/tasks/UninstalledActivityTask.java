@@ -26,8 +26,9 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
     private final Integer applicationFlags;
     private final Boolean applicationFlagsMatch;
     private final String[] permissions;
+    private final Boolean matchPermissions;
 
-    public UninstalledActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Integer uniqueIdentifier, WeakReference<UninstalledActivityListener> uninstalledListener) {
+    public UninstalledActivityTask(WeakReference<Context> context, List<AppData> receivedAppList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier, WeakReference<UninstalledActivityListener> uninstalledListener) {
         contextWeakReference = context;
         this.uninstalledActivitiesTaskWeakReference = uninstalledListener;
         this.receivedAppList = receivedAppList;
@@ -37,6 +38,7 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
         this.applicationFlags = applicationFlags;
         this.applicationFlagsMatch = applicationFlagsMatch;
         this.permissions = permissions;
+        this.matchPermissions = matchPermissions;
     }
 
     @Override
@@ -73,15 +75,15 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
                             }
                         }
                     } else {
-                        containsPermission = true;
+                        containsPermission = matchPermissions;
                     }
                     app.setPermissions(requestedPermissions);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                     if (permissions==null)
-                        containsPermission=true;
+                        containsPermission = matchPermissions;
                 }
-                if (containsPermission) {
+                if ((containsPermission && matchPermissions) || (!containsPermission && !matchPermissions)) {
                     if (applicationFlagsMatch) {
                         if ((applicationFlags == null) || ((app.getFlags() & applicationFlags) != 0)) {
                             installedAppList.add(app);

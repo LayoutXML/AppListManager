@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         getAllSystemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getSomeApps(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP, true, null,3);
+                AppList.getSomeApps(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP, true, null,false,3);
             }
         });
 

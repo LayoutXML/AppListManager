@@ -23,14 +23,16 @@ public class AppTask extends AsyncTask<Void,Void,List<AppData>> {
     private final Boolean match;
     private final Integer uniqueIdentifier;
     private final String[] permissions;
+    private final Boolean matchPermissions;
 
-    public AppTask(WeakReference<Context> context, Integer flags, Boolean match, String[] permissions, Integer uniqueIdentifier, WeakReference<AppListener> allListener) {
+    public AppTask(WeakReference<Context> context, Integer flags, Boolean match, String[] permissions,Boolean matchPermissions,  Integer uniqueIdentifier, WeakReference<AppListener> allListener) {
         this.contextWeakReference = context;
         this.allAppsListener = allListener;
         this.flags = flags;
         this.match = match;
         this.uniqueIdentifier = uniqueIdentifier;
         this.permissions = permissions;
+        this.matchPermissions = matchPermissions;
     }
 
     @Override
@@ -64,15 +66,15 @@ public class AppTask extends AsyncTask<Void,Void,List<AppData>> {
                             }
                         }
                     } else {
-                        containsPermission = true;
+                        containsPermission = matchPermissions;
                     }
                     app.setPermissions(requestedPermissions);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                     if (permissions==null)
-                        containsPermission=true;
+                        containsPermission = matchPermissions;
                 }
-                if (containsPermission) {
+                if ((containsPermission && matchPermissions) || (!containsPermission && !matchPermissions)) {
                     if (match) {
                         if ((flags == null) || ((applicationInfo.flags & flags) != 0))
                             appDataList.add(app);
