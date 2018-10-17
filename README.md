@@ -50,9 +50,10 @@ dependencies {
     2. [Listeners](https://github.com/LayoutXML/AppListManager#listeners)
 4. [Other Information](https://github.com/LayoutXML/AppListManager#other-information)
     1. [Sample app](https://github.com/LayoutXML/AppListManager#sample-app)
-    2. [Donate](https://github.com/LayoutXML/AppListManager#donate)
-    3. [Author](https://github.com/LayoutXML/AppListManager#author)
-    4. [License](https://github.com/LayoutXML/AppListManager#license)
+    2. [Versioning]()
+    3. [Donate](https://github.com/LayoutXML/AppListManager#donate)
+    4. [Author](https://github.com/LayoutXML/AppListManager#author)
+    5. [License](https://github.com/LayoutXML/AppListManager#license)
 5. [Changelog](https://github.com/LayoutXML/AppListManager/blob/master/CHANGELOG.md) (in an external file)
 
 ## How to use - basic features
@@ -128,6 +129,7 @@ AppData object contains these properties of applications and activities:
 3. Flags (*Integer*) - application flags. For activities it's still application flags.
 4. ActivityName (*String*) - activity name you would want to use for identifying or launching activities. For applications this variable is set to null.
 5. PackageName (*String*) - application package name. For activities it's still application package name.
+6. Permissions (*String[]*) - application permissions. For activities it's still application permissions.
 
 All these variables have getters and setters that can be used with `.set<Name>` and `.get<Name>`. For example, package name can be accesses with `.getPackageName()` and `.setPackageName(String)`.
 
@@ -147,13 +149,19 @@ Method `AppList.sort` takes 4 arguments - app list (what to sort), two integer a
 
 Because we can not get app names, icons and other data of already uninstalled apps, method `.equals()` is overridden to compare by package names. This includes `.contains()`, `.remove()`, `.removeAll()` and others.
 
-### Checking and filtering applications with flags
+### Checking and filtering applications by their permissions
 
-It is possible to filter applications lists received by `appListener`, `newAppListener`, `activityListener`, `newActivityListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags) and their opposites (if `FLAG_SYSTEM` filter returns a list of not updated systems apps, the opposite would be all user apps and updated system apps). You can also check individual application's flags and check if it contains any combination of them.
+It is possible to filter application lists received by `appListener`, `newAppListener`, `activityListener`, `newActivityListener` by permissions lists. If application contains at least one given permission, it is returned to these listeners. You can also access individual application's permissions list using `getPermissions` method.
 
-Additionally, you can check whether an individual application has flags by using `AppList.checkFlags(...)` with 3 arguments - application (or activity) list, flags ([these](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags)) and whether to match them or not. Alternatively, you can check flags  yourself by accessing app's flags using `.getFlags`. When checking an activity, method checks its application flags and not activity flags.
+Additionally, you can check whether an individual application uses (i.e. has it in its manifest file) at least one of the given permissions by using `AppList.checkApplicationPermissions(...)` with 2 arguments - application (or activity) and permissions. When checking an activity, method checks its application permissions.
 
-### Filtering activities with flags
+### Checking and filtering applications by their flags
+
+It is possible to filter application lists received by `appListener`, `newAppListener`, `activityListener`, `newActivityListener` by any combination of [these flags](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags) and their opposites (if `FLAG_SYSTEM` filter returns a list of not updated systems apps, the opposite would be all user apps and updated system apps). You can also access individual application's flags using `.getFlags` method.
+
+Additionally, you can check whether an individual application contains any combination of flags by using `AppList.checkFlags(...)` with 3 arguments - application (or activity), flags ([these](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags)) and whether to match them or not. When checking an activity, method checks its application flags and not activity flags.
+
+### Filtering activities by their flags
 
 It is also possible to filter activity lists received by `activityListener`, `newActivityListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/PackageManager#queryIntentActivities(android.content.Intent,%20int)).
 
@@ -236,6 +244,9 @@ Sample app that showcases most of the features can be found in ["app" folder in 
     11. Sorting (sort).
     12. Launching applications and activities.
 
+### Versioning
+
+AppListManager library uses [Semantic Versioning 2.0.0](https://semver.org/). Sample application however, does not.
 
 ### Donate
 You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/store/apps/details?id=com.layoutxml.support)** or **[PayPal](https://www.paypal.me/RJankunas)**.
