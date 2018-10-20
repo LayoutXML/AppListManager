@@ -133,7 +133,7 @@ AppData object contains these properties of applications and activities:
 5. PackageName (*String*) - application package name. For activities it's still application package name.
 6. Permissions (*String[]*) - application permissions. For activities it's still application permissions.
 
-All these variables have getters and setters that can be used with `.set<Name>` and `.get<Name>`. For example, package name can be accesses with `.getPackageName()` and `.setPackageName(String)`.
+All these variables have getters and setters that can be used with `.set<Name>` and `.get<Name>`. For example, package name can be accessed with `.getPackageName()` and `.setPackageName(String)`.
 
 All these variables except for PackageName can be null (for example received from broadcast receivers).
 
