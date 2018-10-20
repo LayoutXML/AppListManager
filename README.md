@@ -44,19 +44,19 @@ dependencies {
 2. [How to use - advanced features](https://github.com/LayoutXML/AppListManager#how-to-use---advanced-features)
     1. [Sorting](https://github.com/LayoutXML/AppListManager#sorting)
     2. [Comparing](https://github.com/LayoutXML/AppListManager#comparing)
-    3. [Checking and filtering applications with flags](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-with-flags)
-    4. [Filtering activities with flags](https://github.com/LayoutXML/AppListManager#filtering-activities-with-flags)
+    3. [Checking and filtering applications by their flags](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-by-their-flags)
+    4. [Checking and filtering applications by their permissions](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-by-their-permissions)
     5. [More on flags](https://github.com/LayoutXML/AppListManager#more-on-flags)
 3. [More on each method and listener](https://github.com/LayoutXML/AppListManager#more-on-each-method-and-listener)
     1. [Methods](https://github.com/LayoutXML/AppListManager#methods)
     2. [Listeners](https://github.com/LayoutXML/AppListManager#listeners)
 4. [Other Information](https://github.com/LayoutXML/AppListManager#other-information)
     1. [Sample app](https://github.com/LayoutXML/AppListManager#sample-app)
-    2. [Versioning]()
+    2. [Versioning](https://github.com/LayoutXML/AppListManager#versioning)
     3. [Donate](https://github.com/LayoutXML/AppListManager#donate)
     4. [Author](https://github.com/LayoutXML/AppListManager#author)
     5. [License](https://github.com/LayoutXML/AppListManager#license)
-5. [Changelog](https://github.com/LayoutXML/AppListManager/blob/master/CHANGELOG.md) (in an external file)
+5. [Changelog](https://github.com/LayoutXML/AppListManager/blob/master/CHANGELOG.md) (external file)
 
 ## How to use - basic features
 
@@ -194,9 +194,9 @@ Methods for activities:
 6. **getSomeUninstalledActivities**. <br><br>Takes 9 arguments: *Context*, *List<AppData>* (current application list), *Intent*, *Integer* (activity flags), *Integer* (application flags), *Boolean* (whether to find **applications** that match the flags or not), *String[]* (permissions), *Boolean* (whether to find **applications** that contain at least one of the permissions or not) and *Integer* (unique identifier). <br><br>Used to receive a list of activities that are not in the filtered currently installed activity list . If "activity flags" not applicable - write 0, for other non applicable parameters use null or false (for booleans).
 
 Other methods:
-1. **registerListeners**. <br><br>Takes 7 arguments: *AppListener, ActivityListener, NewAppListener, NewActivityListener, UninstalledAppListener, UninstalledActivityListener, SortListener*. Must be listener names or classes names that implement these listeners. If listener is not used then write null. <br><br>Explained in more detail in "Registering listeners" section [here](https://github.com/LayoutXML/AppListManager#registering-a-receiver).
-2. **checkApplicationFlags**. <br><br>Takes 3 arguments: *AppData* (single application or activity), *Integer* (**application** flags), and *Boolean* (whether the **application** must match the flags or not). <br><br>Explained in more detail in "Checking and filtering applications with flags" section [here](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-with-flags).
-3. **checkApplicationPermissions**. <br><br>Takes 3 arguments: *AppData* (single application or activity), *String[]* (**application** permissions) and *Boolean* (whether the **application** must contain at least one of the permissions or not). <br><br>Explained in more detail in "Checking and filtering applications with flags" section [here](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-with-flags).
+1. **registerListeners**. <br><br>Takes 7 arguments: *AppListener, ActivityListener, NewAppListener, NewActivityListener, UninstalledAppListener, UninstalledActivityListener, SortListener*. Must be listener names or classes names that implement these listeners. If listener is not used then write null. <br><br>Explained in more detail in "Registering listeners" section [here](https://github.com/LayoutXML/AppListManager#registering-listeners).
+2. **checkApplicationPermissions**. <br><br>Takes 3 arguments: *AppData* (single application or activity), *String[]* (**application** permissions) and *Boolean* (whether the **application** must contain at least one of the permissions or not). <br><br>Explained in more detail in "Checking and filtering applications by their permissions" section [here](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-by-their-permissions).
+3. **checkApplicationFlags**. <br><br>Takes 3 arguments: *AppData* (single application or activity), *Integer* (**application** flags), and *Boolean* (whether the **application** must match the flags or not). <br><br>Explained in more detail in "Checking and filtering applications by their flags" section [here](https://github.com/LayoutXML/AppListManager#checking-and-filtering-applications-by-their-flags).
 4. **sort**. <br><br>Takes 4 arguments: *List<AppData>* (application or activity lists that you want to be sorted), *Integer* (explains how to sort), *Integer* (explains how to sort), and *Integer* (unique identifier). <br><br>Explained in more detail in "Sorting" section [here](https://github.com/LayoutXML/AppListManager#sorting).
 
 Note: New application/activity list methods could be used to get application/activity list with different filters - method compares given (filtered) list with currently installed application/activity list and returns applications/activities that are in a currently installed application/activity list but not in the given (filtered) list.
@@ -248,7 +248,7 @@ Sample app that showcases most of the features can be found in ["app" folder in 
 
 ### Versioning
 
-AppListManager library uses [Semantic Versioning 2.0.0](https://semver.org/). Sample application however, does not.
+AppListManager library uses [Semantic Versioning 2.0.0](https://semver.org/). Sample application version name matches library version used and version code matches number of commits at the moment of release.
 
 ### Donate
 You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/store/apps/details?id=com.layoutxml.support)** or **[PayPal](https://www.paypal.me/RJankunas)**.
