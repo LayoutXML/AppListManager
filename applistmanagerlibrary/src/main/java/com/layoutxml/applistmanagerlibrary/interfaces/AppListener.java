@@ -8,5 +8,5 @@ import java.util.List;
  * Created by LayoutXML on 22/08/2018
  */
 public interface AppListener {
-    void appListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier);
+    void appListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier);
 }

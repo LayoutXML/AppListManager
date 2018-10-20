@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
         getAllSystemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppList.getSomeApps(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP, true, 3);
+                AppList.getSomeApps(getApplicationContext(), ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP, true, null,false,3);
             }
         });
 
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void appListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+    public void appListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         if (uniqueIdentifier==0) { //Could also be: if (filterFlags == null)
             getAllText.setText("There are now " + appDataList.size() + " apps installed.");
             AppList.sort(appDataList,AppList.BY_APPNAME,AppList.IN_ASCENDING,0);
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void newAppListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void newAppListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         getNewText.setText(appDataList.size()+" new apps installed.");
         if (AllAppsList != null) {
             AllAppsList.addAll(appDataList);
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void uninstalledAppListener(List<AppData> appDataList, Boolean fromReceiver, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+    public void uninstalledAppListener(List<AppData> appDataList, Boolean fromReceiver, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         getUninstalledText.setText(appDataList.size()+" apps uninstalled.");
         if (AllAppsList!=null) {
             AllAppsList.removeAll(appDataList);
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void activityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+    public void activityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         if (uniqueIdentifier==4) {
             getActivitiesText.setText("There are now " + appDataList.size() + " activities");
             AllActivitiesList = appDataList;
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void newActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void newActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         getNewActivitiesText.setText(appDataList.size()+" activities added");
         if (AllActivitiesList!=null) {
             AllActivitiesList.addAll(appDataList);
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements AppListener, NewA
     }
 
     @Override
-    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         getUninstalledActivitiesText.setText(appDataList.size()+" activities removed");
         if (AllActivitiesList!=null){
             AllActivitiesList.removeAll(appDataList);

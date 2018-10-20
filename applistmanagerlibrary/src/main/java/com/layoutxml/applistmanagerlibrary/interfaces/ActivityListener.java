@@ -7,5 +7,5 @@ import com.layoutxml.applistmanagerlibrary.objects.AppData;
 import java.util.List;
 
 public interface ActivityListener {
-    void activityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier);
+    void activityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier);
 }
