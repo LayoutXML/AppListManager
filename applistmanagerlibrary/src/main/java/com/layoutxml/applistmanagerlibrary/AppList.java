@@ -168,7 +168,10 @@ public class AppList extends BroadcastReceiver{
             if (containsPermission)
                 break;
         }
-        return !containsPermission;
+        if (matchPermissions)
+            return containsPermission;
+        else
+            return !containsPermission;
     }
 
     public static void sort(List<AppData> appDataList, Integer sortBy, Integer inOrder, Integer uniqueIdentifier) {
