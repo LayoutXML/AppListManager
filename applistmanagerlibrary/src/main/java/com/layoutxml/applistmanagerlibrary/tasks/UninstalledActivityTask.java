@@ -115,7 +115,7 @@ public class UninstalledActivityTask extends AsyncTask<Void,Void,List<AppData>> 
     protected void onPostExecute(List<AppData> appDataList){
         final UninstalledActivityListener listener = uninstalledActivitiesTaskWeakReference.get();
         if (listener!=null) {
-            listener.uninstalledActivityListener(appDataList, intent, activityFlags, applicationFlags, applicationFlagsMatch, false, uniqueIdentifier);
+            listener.uninstalledActivityListener(appDataList, intent, activityFlags, applicationFlags, applicationFlagsMatch, false, permissions, matchPermissions, uniqueIdentifier);
         }
     }
 

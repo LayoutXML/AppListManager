@@ -111,7 +111,7 @@ public class UninstalledAppTask extends AsyncTask<Void,Void,List<AppData>>{
     protected void onPostExecute(List<AppData> appDataList){
         final UninstalledAppListener listener = allUninstalledAppsListener.get();
         if (listener!=null) {
-            listener.uninstalledAppListener(appDataList, false, applicationFlags, applicationFlagsMatch, uniqueIdentifier);
+            listener.uninstalledAppListener(appDataList, false, applicationFlags, applicationFlagsMatch, permissions, matchPermissions, uniqueIdentifier);
         }
     }
 

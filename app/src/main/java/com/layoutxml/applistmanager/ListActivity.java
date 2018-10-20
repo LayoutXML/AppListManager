@@ -108,12 +108,12 @@ public class ListActivity extends AppCompatActivity implements ActivityListener,
     }
 
     @Override
-    public void activityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+    public void activityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         AppList.sort(appDataList,AppList.BY_APPNAME_IGNORE_CASE,AppList.IN_ASCENDING,uniqueIdentifier);
     }
 
     @Override
-    public void appListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+    public void appListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         AppList.sort(appDataList,AppList.BY_APPNAME_IGNORE_CASE,AppList.IN_ASCENDING,uniqueIdentifier);
     }
 
@@ -131,7 +131,7 @@ public class ListActivity extends AppCompatActivity implements ActivityListener,
     }
 
     @Override
-    public void newActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void newActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         if (!apps) {
             appDataList.addAll(this.appDataList);
             AppList.sort(appDataList,AppList.BY_APPNAME_IGNORE_CASE,AppList.IN_ASCENDING,3);
@@ -139,7 +139,7 @@ public class ListActivity extends AppCompatActivity implements ActivityListener,
     }
 
     @Override
-    public void newAppListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void newAppListener(List<AppData> appDataList, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         if (apps) {
             appDataList.addAll(this.appDataList);
             AppList.sort(appDataList,AppList.BY_APPNAME_IGNORE_CASE,AppList.IN_ASCENDING,2);
@@ -147,14 +147,14 @@ public class ListActivity extends AppCompatActivity implements ActivityListener,
     }
 
     @Override
-    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, Integer uniqueIdentifier) {
+    public void uninstalledActivityListener(List<AppData> appDataList, Intent intent, Integer activityFlags, Integer applicationFlags, Boolean applicationFlagsMatch, Boolean fromReceiver, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         if (this.appDataList!=null){
             this.appDataList.removeAll(appDataList);
         }
     }
 
     @Override
-    public void uninstalledAppListener(List<AppData> appDataList, Boolean fromReceiver, Integer applicationFlags, Boolean applicationFlagsMatch, Integer uniqueIdentifier) {
+    public void uninstalledAppListener(List<AppData> appDataList, Boolean fromReceiver, Integer applicationFlags, Boolean applicationFlagsMatch, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier) {
         if (this.appDataList!=null){
             this.appDataList.removeAll(appDataList);
         }

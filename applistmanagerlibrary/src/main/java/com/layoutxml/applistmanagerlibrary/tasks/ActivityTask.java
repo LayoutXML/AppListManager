@@ -101,7 +101,7 @@ public class ActivityTask extends AsyncTask<Void,Void,List<AppData>> {
     protected void onPostExecute(List<AppData> appDataList) {
         final ActivityListener listener = activitiesListenerWeakReference.get();
         if (listener!=null) {
-            listener.activityListener(appDataList, intent, activitiesFlags, flags, match, uniqueIdentifier);
+            listener.activityListener(appDataList, intent, activitiesFlags, flags, match, permissions, matchPermissions, uniqueIdentifier);
         }
     }
 }

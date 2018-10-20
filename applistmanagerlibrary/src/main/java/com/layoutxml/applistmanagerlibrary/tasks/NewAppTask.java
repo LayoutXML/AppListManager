@@ -115,7 +115,7 @@ public class NewAppTask extends AsyncTask<Void,Void,List<AppData>>{
     protected void onPostExecute(List<AppData> appDataList) {
         final NewAppListener listener = allNewAppsListener.get();
         if (listener!=null) {
-            listener.newAppListener(appDataList, flags, match, false, uniqueIdentifier);
+            listener.newAppListener(appDataList, flags, match, false, permissions, matchPermissions, uniqueIdentifier);
         }
     }
 

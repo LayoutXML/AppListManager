@@ -25,7 +25,7 @@ public class AppTask extends AsyncTask<Void,Void,List<AppData>> {
     private final String[] permissions;
     private final Boolean matchPermissions;
 
-    public AppTask(WeakReference<Context> context, Integer flags, Boolean match, String[] permissions,Boolean matchPermissions,  Integer uniqueIdentifier, WeakReference<AppListener> allListener) {
+    public AppTask(WeakReference<Context> context, Integer flags, Boolean match, String[] permissions, Boolean matchPermissions, Integer uniqueIdentifier, WeakReference<AppListener> allListener) {
         this.contextWeakReference = context;
         this.allAppsListener = allListener;
         this.flags = flags;
@@ -95,7 +95,7 @@ public class AppTask extends AsyncTask<Void,Void,List<AppData>> {
     protected void onPostExecute(List<AppData> appDataList) {
         final AppListener listener = allAppsListener.get();
         if (listener!=null) {
-            listener.appListener(appDataList,  flags, match, uniqueIdentifier);
+            listener.appListener(appDataList,  flags, match, permissions, matchPermissions, uniqueIdentifier);
         }
     }
 

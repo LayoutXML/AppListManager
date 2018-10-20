@@ -238,7 +238,7 @@ public class AppList extends BroadcastReceiver{
                                 e.printStackTrace();
                             }
                             newApp.add(app);
-                            newAppListener.get().newAppListener(newApp, null, false, true, -1);
+                            newAppListener.get().newAppListener(newApp, null, false, true,null,false, -1);
                         }
                     }
                 }
@@ -267,7 +267,7 @@ public class AppList extends BroadcastReceiver{
                                 app.setActivityName(resolveInfo.activityInfo.name);
                                 newApps.add(app);
                             }
-                            newActivitiesListener.get().newActivityListener(newApps,null,0,null,false,true,-1);
+                            newActivitiesListener.get().newActivityListener(newApps,null,0,null,false,true,null,false,-1);
                         }
                     }
                 }
@@ -281,7 +281,7 @@ public class AppList extends BroadcastReceiver{
                         if (data != null) {
                             app.setPackageName(data.getEncodedSchemeSpecificPart());
                             newApp.add(app);
-                            uninstalledAppListener.get().uninstalledAppListener(newApp, true,null,false, -1);
+                            uninstalledAppListener.get().uninstalledAppListener(newApp, true,null,false, null,false,-1);
                         }
                     }
                 }
@@ -293,7 +293,7 @@ public class AppList extends BroadcastReceiver{
                         if (data != null) {
                             app.setPackageName(data.getEncodedSchemeSpecificPart());
                             newApp.add(app);
-                            uninstalledActivitiesListener.get().uninstalledActivityListener(newApp, null, 0, null, false, true, -1);
+                            uninstalledActivitiesListener.get().uninstalledActivityListener(newApp, null, 0, null, false, true,null,false, -1);
                         }
                     }
                 }
