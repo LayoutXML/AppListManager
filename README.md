@@ -161,7 +161,7 @@ Additionally, you can check whether an individual application uses (i.e. has it 
 
 * Application flags: <br>
 It is possible to filter application lists received by `appListener`, `newAppListener`, `activityListener`, `newActivityListener` by any combination of [these flags](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags) and their opposites (if `FLAG_SYSTEM` filter returns a list of not updated systems apps, the opposite would be all user apps and updated system apps). <br>
-Additionally, you can check whether an individual application contains any combination of flags by using `AppList.checkFlags(...)` with 3 arguments - application (or activity), flags ([these](https://developer.android.com/refrence/android/content/pm/ApplicationInfo#flags)) and whether to match them or not. When checking an activity, method checks its application flags and not activity flags.
+Additionally, you can check whether an individual application contains any combination of flags by using `AppList.checkFlags(...)` with 3 arguments - application (or activity), flags ([these](https://developer.android.com/reference/android/content/pm/ApplicationInfo#flags)) and whether to match them or not. When checking an activity, method checks its application flags and not activity flags.
 
 * Activity flags:<br>
 You can also access individual application's flags using `.getFlags` method. It is also possible to filter activity lists received by `activityListener`, `newActivityListener` with any combination of [these flags](https://developer.android.com/reference/android/content/pm/PackageManager#queryIntentActivities(android.content.Intent,%20int)).
