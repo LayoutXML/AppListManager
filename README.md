@@ -11,8 +11,6 @@ AppListManager is easy to use Android library, which minimizes developing time w
 
 To receive application and activity lists using this library you must implement listeners and invoke methods. Additionally, to receive these lists automatically you must also register a receiver (in the manifest file and code). All listeners must be registered, and all unfinished tasks must be destroyed. Guide below explains exactly how to do all that. You can also inspect the included sample app that uses most of the features.
 
-**NOTE**: Version 2.0.0 introduces backwards incompatible changes. Check the steps in [CHANGELOG.md](https://github.com/LayoutXML/AppListManager/blob/master/CHANGELOG.md) on how to solve issues.
-
 [Download sample app from the Google Play store](https://play.google.com/store/apps/details?id=com.layoutxml.applistmanager).
 
 **Step 1: Add the JitPack repository in your root build.gradle at the end of repositories:**
@@ -132,6 +130,7 @@ AppData object contains these properties of applications and activities:
 4. ActivityName (*String*) - activity name you would want to use for identifying or launching activities. For applications this variable is set to null.
 5. PackageName (*String*) - application package name. For activities it's still application package name.
 6. Permissions (*String[]*) - application permissions. For activities it's still application permissions.
+7. Object (*Object* (any object type)) - additional variable that you can use for your own needs. If you need multiple variables, create a new wrapper object (new type) to hold those variables.
 
 All these variables have getters and setters that can be used with `.set<Name>` and `.get<Name>`. For example, package name can be accessed with `.getPackageName()` and `.setPackageName(String)`.
 
