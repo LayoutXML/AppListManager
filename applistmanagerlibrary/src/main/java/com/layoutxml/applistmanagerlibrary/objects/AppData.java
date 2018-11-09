@@ -15,6 +15,7 @@ public class AppData {
     private Integer flags;
     private String activityName;
     private String[] permissions;
+    private Object object;
 
     public String[] getPermissions() {
         return permissions;
@@ -63,6 +64,14 @@ public class AppData {
 
     public void setIcon(Drawable icon) {
         this.icon = icon;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
     }
 
     @Override
