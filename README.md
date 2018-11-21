@@ -1,8 +1,5 @@
 # AppListManager (Android Library)
 
-<img src="Banner.png" />
-<sup>Logo by @mansia</sup>
-
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-AppListManager-green.svg?style=flat )]( https://android-arsenal.com/details/1/7143 )
 [![Build Status](https://travis-ci.org/LayoutXML/AppListManager.svg?branch=master)](https://travis-ci.org/LayoutXML/AppListManager)
 [![GitHub](https://img.shields.io/github/license/LayoutXML/AppListManager.svg)](https://github.com/LayoutXML/AppListManager/blob/master/LICENSE)
@@ -247,6 +244,8 @@ Sample app that showcases most of the features can be found in ["app" folder in 
     10. Updating the list on screen without uninstalled applications/activities.
     11. Sorting (sort).
     12. Launching applications and activities.
+
+Logo by @mansia
 
 ### Versioning
 
