@@ -1,6 +1,7 @@
 # AppListManager (Android Library)
 
-<img src="Banner.svg" width="60%" height="60%" />
+<img src="Banner.png" />
+<sup>Logo by @mansia</sup>
 
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-AppListManager-green.svg?style=flat )]( https://android-arsenal.com/details/1/7143 )
 [![Build Status](https://travis-ci.org/LayoutXML/AppListManager.svg?branch=master)](https://travis-ci.org/LayoutXML/AppListManager)
