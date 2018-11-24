@@ -7,6 +7,8 @@
 ![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)
 [![Donate](https://img.shields.io/badge/%24-Donate-blue.svg)](https://github.com/LayoutXML/AppListManager#donate)
 
+![Logo](https://raw.githubusercontent.com/LayoutXML/AppListManager/master/Banner.png)
+
 AppListManager is easy to use Android library, which minimizes developing time when working on application or activity lists. You no longer have to worry about asynchronous tasks, memory leaks and intent receivers. This library provides a simple way to receive application and activity lists as they change.
 
 To receive application and activity lists using this library you must implement listeners and invoke methods. Additionally, to receive these lists automatically you must also register a receiver (in the manifest file and code). All listeners must be registered, and all unfinished tasks must be destroyed. Guide below explains exactly how to do all that. You can also inspect the included sample app that uses most of the features.
