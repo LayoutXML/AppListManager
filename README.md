@@ -7,7 +7,7 @@
 ![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)
 [![Donate](https://img.shields.io/badge/%24-Donate-blue.svg)](https://github.com/LayoutXML/AppListManager#donate)
 
-![Logo](Banner.png)
+![Logo](https://raw.githubusercontent.com/LayoutXML/AppListManager/master/Banner.png)
 
 AppListManager is easy to use Android library, which minimizes developing time when working on application or activity lists. You no longer have to worry about asynchronous tasks, memory leaks and intent receivers. This library provides a simple way to receive application and activity lists as they change.
 
