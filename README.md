@@ -257,9 +257,8 @@ AppListManager library uses [Semantic Versioning 2.0.0](https://semver.org/). Sa
 You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/store/apps/details?id=com.layoutxml.support)** or **[PayPal](https://www.paypal.me/RJankunas)**.
 
 ### Author
-More information about me: https://rokasjankunas.com
 
-More information about my projects: https://layoutxml.com
+More information about me and my projects: https://rokasjankunas.com
 
 ### License
 AppListManager and a sample app are licensed under "MIT" license. Copyright laws apply.
