@@ -247,7 +247,7 @@ Sample app that showcases most of the features can be found in ["app" folder in 
     11. Sorting (sort).
     12. Launching applications and activities.
 
-Logo by @mansia
+Logo by @mansya
 
 ### Versioning
 
