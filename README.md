@@ -57,9 +57,8 @@ Project was started before learning any best practises or gaining experiance thr
 4. [Other Information](https://github.com/LayoutXML/AppListManager#other-information)
     1. [Sample app](https://github.com/LayoutXML/AppListManager#sample-app)
     2. [Versioning](https://github.com/LayoutXML/AppListManager#versioning)
-    3. [Donate](https://github.com/LayoutXML/AppListManager#donate)
-    4. [Author](https://github.com/LayoutXML/AppListManager#author)
-    5. [License](https://github.com/LayoutXML/AppListManager#license)
+    3. [Author](https://github.com/LayoutXML/AppListManager#author)
+    4. [License](https://github.com/LayoutXML/AppListManager#license)
 5. [Changelog](https://github.com/LayoutXML/AppListManager/blob/master/CHANGELOG.md) (external file)
 
 ## How to use - basic features
