@@ -32,6 +32,10 @@ dependencies {
 }
 ```
 
+## Foreword
+
+Project was started before learning any best practises or gaining experiance through work or studies and was intended to gain this experience. There are many things I would change and refactor if I were to start this project again. For now, it stays as a reminder of where it all started.
+
 ## Table of Contents
 
 1. [How to use - basic features](https://github.com/LayoutXML/AppListManager#how-to-use---basic-features)
@@ -252,9 +256,6 @@ Logo by @mansya
 ### Versioning
 
 AppListManager library uses [Semantic Versioning 2.0.0](https://semver.org/). Sample application version name matches library version used and version code matches number of commits at the moment of release.
-
-### Donate
-You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/store/apps/details?id=com.layoutxml.support)** or **[PayPal](https://www.paypal.me/RJankunas)**.
 
 ### Author
 
